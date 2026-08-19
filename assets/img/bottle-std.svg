@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 420" fill="none">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B2345"/>
+      <stop offset="100%" stop-color="#008C95"/>
+    </linearGradient>
+  </defs>
+  <path d="M58 78c0-22 18-40 42-40s42 18 42 40v230c0 36-20 62-42 62s-42-26-42-62V78z" fill="url(#g1)"/>
+  <rect x="70" y="118" width="60" height="88" rx="10" fill="#EAF5F5"/>
+  <text x="100" y="152" text-anchor="middle" font-family="Montserrat, Arial" font-size="11" font-weight="800" fill="#0B2345">HOTEL</text>
+  <text x="100" y="168" text-anchor="middle" font-family="Montserrat, Arial" font-size="12" font-weight="800" fill="#008C95">EXPERT</text>
+  <text x="100" y="186" text-anchor="middle" font-family="Montserrat, Arial" font-size="8" font-weight="700" fill="#0B2345">2 L · ESTÁNDAR</text>
+  <rect x="86" y="42" width="28" height="28" rx="6" fill="#52C8C8"/>
+  <rect x="92" y="28" width="16" height="18" rx="4" fill="#0B2345"/>
+</svg>

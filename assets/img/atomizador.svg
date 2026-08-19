@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 360" fill="none">
+  <rect x="58" y="86" width="64" height="210" rx="22" fill="#008C95"/>
+  <rect x="70" y="108" width="40" height="70" rx="8" fill="#0B2345"/>
+  <text x="90" y="140" text-anchor="middle" font-family="Montserrat, Arial" font-size="9" font-weight="800" fill="#52C8C8">1 L</text>
+  <text x="90" y="154" text-anchor="middle" font-family="Montserrat, Arial" font-size="7" font-weight="700" fill="#EAF5F5">ÁREA</text>
+  <path d="M78 58h24c8 0 14 6 14 14v18H64V72c0-8 6-14 14-14z" fill="#0B2345"/>
+  <path d="M118 78c22-4 36 18 28 34" stroke="#52C8C8" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <circle cx="90" cy="48" r="10" fill="#52C8C8"/>
+</svg>

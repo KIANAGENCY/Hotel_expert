@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotel Expert — Mockup Web 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --expert: #0B2345;
+      --turquesa: #008C95;
+      --aqua: #52C8C8;
+      --hielo: #EAF5F5;
+      --arena: #F3F0EA;
+      --charcoal: #222326;
+      --eco: #4D7C4D;
+      --white: #FFFFFF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    @page { size: A4 landscape; margin: 0; }
+    body {
+      font-family: "Source Sans 3", sans-serif;
+      color: var(--charcoal);
+      background: #ddd;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page {
+      width: 297mm;
+      height: 210mm;
+      background: var(--white);
+      page-break-after: always;
+      overflow: hidden;
+      position: relative;
+    }
+    .page:last-child { page-break-after: auto; }
+
+    /* Cover */
+    .cover {
+      background: linear-gradient(135deg, var(--expert) 0%, var(--turquesa) 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18mm 22mm;
+    }
+    .cover-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .cover-logo .mark {
+      width: 52px; height: 52px;
+      background: var(--aqua);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+    }
+    .cover-logo .mark svg { width: 28px; height: 28px; }
+    .cover-logo .word {
+      font-family: Montserrat, sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+    .cover-logo .word span { color: var(--aqua); }
+    .cover-main h1 {
+      font-family: Montserrat, sans-serif;
+      font-weight: 800;
+      font-size: 42px;
+      line-height: 1.05;
+      max-width: 520px;
+      letter-spacing: -0.03em;
+    }
+    .cover-main h1 em { color: var(--aqua); font-style: normal; }
+    .cover-main p {
+      margin-top: 16px;
+      font-size: 16px;
+      opacity: 0.82;
+      max-width: 440px;
+      line-height: 1.5;
+    }
+    .cover-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 11px;
+      opacity: 0.65;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-family: Montserrat, sans-serif;
+      font-weight: 600;
+    }
+
+    /* Brand page */
+    .brand { padding: 14mm 18mm; }
+    .page-label {
+      font-family: Montserrat, sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--turquesa);
+      margin-bottom: 6px;
+    }
+    .page-title {
+      font-family: Montserrat, sans-serif;
+      font-weight: 800;
+      font-size: 26px;
+      color: var(--expert);
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+    .brand-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .swatch {
+      width: 72px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .swatch-color { height: 44px; }
+    .swatch-label {
+      padding: 5px 6px;
+      font-size: 8px;
+      font-family: Montserrat, sans-serif;
+      font-weight: 600;
+      background: var(--hielo);
+    }
+    .type-sample h3 {
+      font-family: Montserrat, sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--expert);
+    }
+    .type-sample p { margin-top: 6px; font-size: 12px; line-height: 1.55; color: #555; }
+    .type-meta { font-size: 9px; color: #888; margin-top: 8px; font-family: Montserrat, sans-serif; font-weight: 600; }
+    .sitemap {
+      background: var(--hielo);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 10px;
+      line-height: 1.7;
+      font-family: monospace;
+      color: var(--expert);
+    }
+    .card-mini {
+      background: var(--arena);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 10px;
+    }
+    .card-mini strong {
+      display: block;
+      font-family: Montserrat, sans-serif;
+      font-size: 11px;
+      color: var(--expert);
+      margin-bottom: 4px;
+    }
+
+    /* Screen mockups */
+    .screen-page { padding: 10mm 14mm; background: #eef2f4; }
+    .screen-page .page-title { font-size: 18px; margin-bottom: 8px; }
+    .browser {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 8px 40px rgba(11,35,69,0.15);
+      overflow: hidden;
+      height: calc(210mm - 28mm);
+    }
+    .browser-bar {
+      background: #e8ecef;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .url-bar {
+      flex: 1;
+      background: white;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 8px;
+      color: #666;
+      margin-left: 6px;
+    }
+    .screen-body { height: calc(100% - 28px); overflow: hidden; position: relative; }
+
+    /* Mini UI components */
+    .nav-mock {
+      background: rgba(11,35,69,0.92);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-mock .logo-sm {
+      font-family: Montserrat, sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      color: white;
+    }
+    .nav-mock .logo-sm span { color: var(--aqua); }
+    .nav-links { display: flex; gap: 8px; }
+    .nav-links span {
+      font-family: Montserrat, sans-serif;
+      font-size: 7px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      padding: 3px 7px;
+      border-radius: 20px;
+    }
+    .nav-links span.active { background: rgba(82,200,200,0.2); color: white; }
+    .btn-sm {
+      background: var(--turquesa);
+      color: white;
+      font-family: Montserrat, sans-serif;
+      font-size: 7px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .hero-mock {
+      position: relative;
+      height: 130px;
+      background: var(--expert);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .hero-mock::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=70') center/cover;
+      opacity: 0.45;
+    }
+    .hero-mock::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--expert), transparent 70%);
+    }
+    .hero-mock * { position: relative; z-index: 1; }
+    .hero-mock .eyebrow {
+      font-family: Montserrat, sans-serif;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--aqua);
+    }
+    .hero-mock h2 {
+      font-family: Montserrat, sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: white;
+      line-height: 1.1;
+      margin-top: 4px;
+    }
+    .hero-mock h2 em { color: var(--aqua); font-style: normal; }
+    .hero-mock p { font-size: 8px; color: rgba(255,255,255,0.75); margin-top: 5px; max-width: 280px; }
+    .hero-btns { display: flex; gap: 5px; margin-top: 8px; }
+    .btn-ghost-sm {
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      font-family: Montserrat, sans-serif;
+      font-size: 7px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .stats-row {
+      display: flex;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .stat { color: white; }
+    .stat b {
+      font-family: Montserrat, sans-serif;
+      font-size: 14px;
+      color: var(--aqua);
+      display: block;
+    }
+    .stat span { font-size: 6px; opacity: 0.65; }
+
+    .section-mock {
+      padding: 10px 14px;
+    }
+    .section-mock.alt { background: var(--hielo); }
+    .section-mock.arena { background: var(--arena); }
+    .sec-title {
+      font-family: Montserrat, sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      color: var(--expert);
+    }
+    .sec-sub { font-size: 7px; color: #666; margin-top: 2px; }
+    .cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+    .cards-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 8px;
+      border: 1px solid rgba(11,35,69,0.06);
+    }
+    .card.dark { background: var(--expert); color: white; }
+    .card.teal { background: var(--turquesa); color: white; }
+    .card h4 {
+      font-family: Montserrat, sans-serif;
+      font-weight: 700;
+      font-size: 8px;
+      color: var(--expert);
+    }
+    .card.dark h4, .card.teal h4 { color: white; }
+    .card p { font-size: 6.5px; color: #666; margin-top: 3px; line-height: 1.4; }
+    .card.dark p, .card.teal p { color: rgba(255,255,255,0.7); }
+    .badge {
+      display: inline-block;
+      background: rgba(77,124,77,0.15);
+      color: var(--eco);
+      font-family: Montserrat, sans-serif;
+      font-size: 6px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+    .bottle-icon {
+      width: 28px;
+      height: 50px;
+      background: linear-gradient(180deg, var(--turquesa), var(--expert));
+      border-radius: 6px 6px 10px 10px;
+      margin: 4px auto;
+    }
+
+    .form-mock {
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid rgba(11,35,69,0.08);
+    }
+    .field-mock {
+      height: 14px;
+      background: var(--hielo);
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+    .field-mock.tall { height: 28px; }
+    .progress-steps {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .step {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--turquesa);
+      border: 2px solid var(--turquesa);
+    }
+    .step.pending { background: white; border-color: #ccc; }
+    .step-line { flex: 1; height: 2px; background: var(--turquesa); }
+    .step-line.pending { background: #ddd; }
+
+    .page-num {
+      position: absolute;
+      bottom: 8mm;
+      right: 12mm;
+      font-family: Montserrat, sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE 1: Cover -->
+<div class="page cover">
+  <div class="cover-logo">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 4s-5 4.5-5 8.5A5 5 0 0 0 12 18a5 5 0 0 0 5-4.9C17 8.5 12 4 12 4z" fill="#0B2345"/></svg>
+    </div>
+    <div class="word">HOTEL <span>EXPERT</span></div>
+  </div>
+  <div class="cover-main">
+    <h1>Mockup Web<br><em>2026</em></h1>
+    <p>Sistema B2B de limpieza, desinfección e identidad olfativa para hoteles boutique. Frescura que se siente. Marca que se recuerda.</p>
+  </div>
+  <div class="cover-footer">
+    <span>HTML · CSS · JS · PHP · Tailwind</span>
+    <span>www.hotelexpert.mx · Agosto 2026</span>
+  </div>
+</div>
+
+<!-- PAGE 2: Brand -->
+<div class="page brand">
+  <div class="page-label">Guía de marca</div>
+  <div class="page-title">Branding & arquitectura</div>
+  <div class="brand-grid">
+    <div>
+      <div class="page-label" style="margin-top:0">Paleta corporativa</div>
+      <div class="swatch-row" style="margin-top:8px">
+        <div class="swatch"><div class="swatch-color" style="background:#0B2345"></div><div class="swatch-label">#0B2345 Azul Expert</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#008C95"></div><div class="swatch-label">#008C95 Turquesa</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#52C8C8"></div><div class="swatch-label">#52C8C8 Aqua</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#EAF5F5"></div><div class="swatch-label">#EAF5F5 Hielo</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#F3F0EA"></div><div class="swatch-label">#F3F0EA Arena</div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#4D7C4D"></div><div class="swatch-label">#4D7C4D Eco</div></div>
+      </div>
+      <div class="type-sample" style="margin-top:14px">
+        <div class="page-label">Tipografías</div>
+        <h3>Montserrat — Titulares</h3>
+        <p>Pesos 600, 700 y 800 para headings, banners y botones CTA.</p>
+        <div class="type-meta">GOOGLE FONTS · MONTSERRAT</div>
+        <p style="margin-top:10px;font-size:12px">Source Sans 3 — Cuerpo de texto y fichas técnicas. Pesos 400, 500 y 600.</p>
+      </div>
+    </div>
+    <div>
+      <div class="page-label">Mapa del sitio</div>
+      <div class="sitemap">
+1. HOME — Hero, valor B2B, productos, rendimiento, sustentabilidad<br>
+2. CATÁLOGO — Estándar, Dual, accesorios, envases retornables<br>
+3. CÓMO FUNCIONA — Dilución 1L/20L, superficies, FAQ<br>
+4. RASTREO — ID + correo, barra de estado<br>
+5. NOSOTROS — Historia, marketing sensorial<br>
+6. BLOG — SEO higiene y olfato<br>
+7. CONTACTO — Formulario B2B + WhatsApp
+      </div>
+      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="card-mini"><strong>Claim</strong>Frescura que se siente. Marca que se recuerda.</div>
+        <div class="card-mini"><strong>Valor</strong>Más que limpieza, estandarizamos experiencias.</div>
+        <div class="card-mini"><strong>WhatsApp</strong>+52 81 1249 7481</div>
+        <div class="card-mini"><strong>Email</strong>ventas@hotelexpert.mx</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">02 / 07</div>
+</div>
+
+<!-- PAGE 3: Home -->
+<div class="page screen-page">
+  <div class="page-label">Pantalla 01</div>
+  <div class="page-title">Home — Inicio</div>
+  <div class="browser">
+    <div class="browser-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="url-bar">localhost/hotel_expert/</div>
+    </div>
+    <div class="screen-body">
+      <div class="nav-mock">
+        <div class="logo-sm">HOTEL <span>EXPERT</span></div>
+        <div class="nav-links">
+          <span class="active">Inicio</span><span>Catálogo</span><span>Cómo funciona</span><span>Rastreo</span><span>Contacto</span>
+        </div>
+        <div class="btn-sm">Solicitar cotización</div>
+      </div>
+      <div class="hero-mock">
+        <div class="eyebrow">Sistema profesional B2B · Hospitalidad</div>
+        <h2>Frescura que se siente.<br><em>Marca que se recuerda.</em></h2>
+        <p>Concentrado 100% biodegradable. Limpia, desinfecta y refuerza el aroma insignia en una sola rutina.</p>
+        <div class="hero-btns">
+          <div class="btn-sm">Solicitar cotización</div>
+          <div class="btn-ghost-sm">Ver catálogo</div>
+        </div>
+        <div class="stats-row">
+          <div class="stat"><b>2 L</b><span>Retornable</span></div>
+          <div class="stat"><b>20 L</b><span>Listo para usar</span></div>
+          <div class="stat"><b>100%</b><span>Biodegradable</span></div>
+          <div class="stat"><b>1</b><span>Rutina única</span></div>
+        </div>
+      </div>
+      <div class="section-mock alt">
+        <div class="sec-title">Propuesta de valor B2B</div>
+        <div class="cards-3">
+          <div class="card dark"><h4>Limpieza + desinfección</h4><p>Multitarget: pisos, mármol, acero, baños.</p></div>
+          <div class="card"><h4>Aroma insignia</h4><p>Cada trapeado refuerza la firma olfativa.</p></div>
+          <div class="card"><h4>Una sola rutina</h4><p>Menos productos, menos errores operativos.</p></div>
+        </div>
+      </div>
+      <div class="section-mock">
+        <div class="sec-title">Catálogo insignia</div>
+        <div class="cards-2">
+          <div class="card"><span class="badge">Biodegradable</span><h4 style="margin-top:4px">Concentrado Estándar</h4><div class="bottle-icon"></div><p>Limpieza + aroma insignia. 2L → 20L.</p></div>
+          <div class="card"><span class="badge">Neutraliza</span><h4 style="margin-top:4px">Hotel Expert Dual</h4><div class="bottle-icon" style="background:linear-gradient(180deg,#52C8C8,#008C95)"></div><p>Neutralizador + aroma. Textiles y alto tráfico.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">03 / 07</div>
+</div>
+
+<!-- PAGE 4: Catalog -->
+<div class="page screen-page">
+  <div class="page-label">Pantalla 02</div>
+  <div class="page-title">Catálogo B2B</div>
+  <div class="browser">
+    <div class="browser-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="url-bar">localhost/hotel_expert/catalogo.php</div>
+    </div>
+    <div class="screen-body">
+      <div class="nav-mock">
+        <div class="logo-sm">HOTEL <span>EXPERT</span></div>
+        <div class="nav-links">
+          <span>Inicio</span><span class="active">Catálogo</span><span>Cómo funciona</span><span>Contacto</span>
+        </div>
+        <div class="btn-sm">Cotizar</div>
+      </div>
+      <div style="background:var(--expert);padding:14px 18px;color:white">
+        <div class="eyebrow" style="color:var(--aqua);font-size:7px;font-family:Montserrat;font-weight:700;letter-spacing:0.18em">CATÁLOGO / TIENDA B2B</div>
+        <div style="font-family:Montserrat;font-weight:800;font-size:16px;margin-top:4px">Dos productos insignia. Un sistema retornable.</div>
+      </div>
+      <div class="section-mock alt">
+        <div class="sec-title">Concentrados 2 L</div>
+        <div class="cards-2">
+          <div class="card">
+            <div style="display:flex;gap:8px">
+              <div class="bottle-icon" style="width:22px;height:40px;margin:0"></div>
+              <div>
+                <div style="font-size:6px;color:var(--turquesa);font-family:Montserrat;font-weight:700">HE-STD-2L</div>
+                <h4>Concentrado Estándar</h4>
+                <p>Limpieza + desinfección + aroma insignia.</p>
+              </div>
+            </div>
+            <div style="margin-top:6px;display:flex;gap:4px"><span class="badge">Biodegradable</span><span class="badge">Reutilizable</span></div>
+          </div>
+          <div class="card">
+            <div style="display:flex;gap:8px">
+              <div class="bottle-icon" style="width:22px;height:40px;margin:0;background:linear-gradient(180deg,#52C8C8,#008C95)"></div>
+              <div>
+                <div style="font-size:6px;color:var(--turquesa);font-family:Montserrat;font-weight:700">HE-DUAL-2L</div>
+                <h4>Hotel Expert Dual</h4>
+                <p>Neutralizador de olores + aroma insignia.</p>
+              </div>
+            </div>
+            <div style="margin-top:6px;display:flex;gap:4px"><span class="badge">Textiles</span><span class="badge">Alto tráfico</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="section-mock arena">
+        <div class="sec-title">Accesorios + ciclo retornable</div>
+        <div class="cards-3">
+          <div class="card"><h4>Porrón 20 L</h4><p>18 L agua + 2 L concentrado. Graduado.</p></div>
+          <div class="card"><h4>Atomizador 1 L</h4><p>100 ml + 900 ml. Rotulado por área.</p></div>
+          <div class="card teal"><h4>Envase retornable</h4><p>Recolectamos bidones vacíos en el siguiente pedido.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">04 / 07</div>
+</div>
+
+<!-- PAGE 5: How it works -->
+<div class="page screen-page">
+  <div class="page-label">Pantalla 03</div>
+  <div class="page-title">Cómo funciona — Manual de dilución</div>
+  <div class="browser">
+    <div class="browser-bar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="url-bar">localhost/hotel_expert/como-funciona.php</div>
+    </div>
+    <div class="screen-body">
+      <div class="nav-mock">
+        <div class="logo-sm">HOTEL <span>EXPERT</span></div>
+        <div class="nav-links">
+          <span>Inicio</span><span>Catálogo</span><span class="active">Cómo funciona</span><span>Contacto</span>
+        </div>
+      </div>
+      <div class="section-mock arena" style="padding-top:14px">
+        <div class="sec-title">Manual digital de uso</div>
+        <div class="sec-sub">Dilución exacta. Experiencia repetible.</div>
+      </div>
+      <div style="margin:0 14px;background:var(--expert);color:white;border-radius:8px;padding:10px 12px;display:flex;gap:8px;align-items:flex-start">
+        <span style="font-size:14px">⚠️</span>
+        <div>
+          <div style="font-family:Montserrat;font-weight:800;font-size:9px">Regla de oro</div>
+          <div style="font-size:7px;opacity:0.8;margin-top:2px">Siempre verter primero el agua y después el concentrado. Evita espuma excesiva.</div>
+        </div>
+      </div>
+      <div class="section-mock">
+        <div class="sec-title">Proporciones oficiales</div>
+        <div class="cards-2">
+          <div class="card"><h4>Atomizador 1 L</h4><p style="font-family:Montserrat;font-weight:800;font-size:11px;color:var(--turquesa)">100 ml + 900 ml</p></div>
+          <div class="card" style="background:var(--hielo)"><h4>Porrón 20 L</h4><p style="font-family:Montserrat;font-weight:800;font-size:11px;color:var(--turquesa)">2 L + 18 L</p></div>
+        </div>
+      </div>
+      <div class="section-mock alt">
+        <div class="sec-title">Calculadora de mezcla</div>
+        <div class="form-mock" style="margin-top:6px">
+          <div class="field-mock"></div>
+          <div class="field-mock"></div>
+          <div style="background:var(--hielo);border-radius:4px;padding:6px;font-size:7px;color:var(--expert)">Porrón 20 L: 18 L agua + 2 L concentrado</div>
+        </div>
+      </div>
+      <div class="section-mock">
+        <div class="cards-2">
+          <div class="card"><h4>Superficies aptas</h4><p>Pisos, mármol, granito, acero, madera, baños, textiles (Dual).</p></div>
+          <div class="card dark"><h4>⚠ Nunca en vidrio</h4><p>Excepción estricta: no usar en vidrios ni espejos.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">05 / 07</div>
+</div>
+
+<!-- PAGE 6: Tracking + Contact -->
+<div class="page screen-page">
+  <div class="page-label">Pantallas 04 & 05</div>
+  <div class="page-title">Rastreo de pedido · Contacto B2B</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;height:calc(210mm - 28mm)">
+    <div class="browser" style="height:100%">
+      <div class="browser-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <div class="url-bar">…/rastreo.php</div>
+      </div>
+      <div class="screen-body">
+        <div class="nav-mock"><div class="logo-sm">HOTEL <span>EXPERT</span></div></div>
+        <div class="section-mock alt" style="padding-top:14px">
+          <div class="sec-title">Rastreo de pedido</div>
+          <div class="sec-sub">ID + correo electrónico</div>
+          <div class="form-mock" style="margin-top:10px">
+            <div class="field-mock"></div>
+            <div class="field-mock"></div>
+            <div class="btn-sm" style="display:inline-block;margin-top:4px">Consultar estado</div>
+          </div>
+          <div class="card" style="margin-top:10px">
+            <div style="font-size:6px;color:var(--turquesa);font-family:Montserrat;font-weight:700">HE-2026-00481</div>
+            <h4 style="margin-top:2px">En tránsito</h4>
+            <p>4× Estándar · 2× Dual · 1× Porrón</p>
+            <div class="progress-steps">
+              <div class="step"></div><div class="step-line"></div>
+              <div class="step"></div><div class="step-line"></div>
+              <div class="step"></div><div class="step-line pending"></div>
+              <div class="step pending"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:5px;margin-top:4px;color:#888;font-family:Montserrat;font-weight:600">
+              <span>Procesando</span><span>Preparación</span><span>Tránsito</span><span>Entregado</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="browser" style="height:100%">
+      <div class="browser-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <div class="url-bar">…/contacto.php</div>
+      </div>
+      <div class="screen-body">
+        <div class="nav-mock"><div class="logo-sm">HOTEL <span>EXPERT</span></div><div class="btn-sm">Cotizar</div></div>
+        <div class="section-mock alt" style="padding-top:10px">
+          <div class="sec-title">Contacto B2B</div>
+          <div class="sec-sub">Cotización, muestra o demo</div>
+          <div style="margin-top:8px;font-size:7px">
+            <strong style="color:var(--expert);font-family:Montserrat">WhatsApp</strong> +52 81 1249 7481<br>
+            <strong style="color:var(--expert);font-family:Montserrat">Email</strong> ventas@hotelexpert.mx
+          </div>
+          <div class="form-mock" style="margin-top:8px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+              <div class="field-mock"></div><div class="field-mock"></div>
+            </div>
+            <div class="field-mock"></div>
+            <div class="field-mock"></div>
+            <div class="field-mock tall"></div>
+            <div class="btn-sm" style="display:block;text-align:center;margin-top:4px;padding:5px">Enviar solicitud</div>
+          </div>
+          <div style="position:absolute;bottom:14px;right:14px;width:28px;height:28px;background:#25D366;border-radius:50%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">06 / 07</div>
+</div>
+
+<!-- PAGE 7: Summary -->
+<div class="page brand">
+  <div class="page-label">Resumen del proyecto</div>
+  <div class="page-title">Entregables & stack técnico</div>
+  <div class="brand-grid">
+    <div>
+      <div class="page-label">Páginas implementadas</div>
+      <div style="margin-top:8px;font-size:11px;line-height:1.9">
+        ✓ index.php — Home con hero, valor, productos, rendimiento<br>
+        ✓ catalogo.php + producto.php — Fichas técnicas<br>
+        ✓ como-funciona.php — Manual + calculadora<br>
+        ✓ rastreo.php — Portal de seguimiento<br>
+        ✓ nosotros.php — Historia y filosofía<br>
+        ✓ blog.php + articulo.php — SEO orgánico<br>
+        ✓ contacto.php — Formulario B2B + WhatsApp
+      </div>
+      <div style="margin-top:14px" class="page-label">Integraciones preparadas</div>
+      <div style="margin-top:6px;font-size:10px;line-height:1.7;color:#555">
+        HubSpot CRM (tracking + webhooks)<br>
+        Stripe / Mercado Pago (pasarela B2B)<br>
+        OpenGraph para WhatsApp<br>
+        Meta tags SEO optimizados
+      </div>
+    </div>
+    <div>
+      <div class="page-label">Stack</div>
+      <div class="cards-2" style="margin-top:8px">
+        <div class="card"><h4>Frontend</h4><p>HTML5, Tailwind CSS, JavaScript vanilla, animaciones CSS.</p></div>
+        <div class="card"><h4>Backend</h4><p>PHP 8.3, formularios CSRF, leads JSON, datos demo.</p></div>
+        <div class="card dark"><h4>Marca</h4><p>Montserrat + Source Sans 3. Paleta corporativa oficial.</p></div>
+        <div class="card teal"><h4>Deploy</h4><p>Laragon local → hotelexpert.mx producción.</p></div>
+      </div>
+      <div style="margin-top:16px;padding:14px;background:linear-gradient(135deg,var(--expert),var(--turquesa));border-radius:12px;color:white">
+        <div style="font-family:Montserrat;font-weight:800;font-size:14px">Frescura que se siente.<br>Marca que se recuerda.</div>
+        <div style="font-size:9px;opacity:0.75;margin-top:6px">localhost/hotel_expert/ · Agosto 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-num">07 / 07</div>
+</div>
+
+</body>
+</html>
