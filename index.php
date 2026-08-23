@@ -2,242 +2,173 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 $productos = require __DIR__ . '/data/productos.php';
-$page_title = 'Hotel Expert — Frescura que se siente. Marca que se recuerda.';
-$page_description = 'Sistema B2B de limpieza, desinfección e identidad olfativa para hoteles boutique. Concentrado 100% biodegradable en envase de 2 litros retornable.';
+$posts = require __DIR__ . '/data/blog.php';
+$page_title = 'Sistema ELAH — Limpieza y aroma estandarizado para hoteles';
+$page_description = 'Sistema integral de limpieza, desinfección y aroma insignia para hoteles. Multiusos, sprays y difusores bajo una sola identidad olfativa.';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
 <main id="contenido">
-    <section class="relative min-h-[100svh] flex items-end overflow-hidden bg-expert noise">
-        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2000&q=80"
-             alt="Lobby de hotel boutique"
-             class="absolute inset-0 h-full w-full object-cover hero-ken opacity-60"
-             width="2000" height="1333">
-        <div class="absolute inset-0 bg-gradient-to-t from-expert via-expert/70 to-expert/30"></div>
-        <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 pb-20 pt-36 w-full">
-            <p class="eyebrow text-aqua reveal">Sistema profesional B2B · Hospitalidad</p>
-            <h1 class="display mt-4 max-w-4xl text-4xl sm:text-6xl lg:text-[4.6rem] text-white reveal reveal-d1">
-                Frescura que se siente.<br><span class="text-aqua">Marca que se recuerda.</span>
-            </h1>
-            <p class="mt-6 max-w-xl text-lg sm:text-xl text-white/80 reveal reveal-d2">
-                Más que limpieza, estandarizamos experiencias. Un concentrado 100% biodegradable que limpia, desinfecta y refuerza el aroma insignia del hotel en una sola rutina.
-            </p>
-            <div class="mt-8 flex flex-wrap gap-3 reveal reveal-d3">
-                <a class="btn-primary" href="<?= e(url('contacto.php')) ?>">Solicitar cotización</a>
-                <a class="btn-ghost" href="<?= e(url('catalogo.php')) ?>">Ver catálogo</a>
-                <a class="btn-ghost" href="<?= e(url('como-funciona.php')) ?>">Manual de dilución</a>
+    <section id="inicio" data-nav-section="inicio" class="elah-hero nav-section relative min-h-[100svh] flex items-center overflow-hidden bg-expert noise">
+        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2200&q=85"
+             alt="Lobby de hotel con identidad y ambiente distintivo"
+             class="absolute inset-0 h-full w-full object-cover hero-ken opacity-45">
+        <div class="absolute inset-0 bg-gradient-to-r from-expert via-expert/90 to-expert/20"></div>
+        <div class="absolute inset-0 grid-dots opacity-20"></div>
+        <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 py-44 w-full">
+            <div class="max-w-4xl">
+                <p class="eyebrow reveal">Sistema ELAH de Hotel Expert</p>
+                <h1 class="display mt-5 text-4xl sm:text-6xl lg:text-[4.8rem] text-white reveal reveal-d1">
+                    Estandarización de<br><span class="text-aqua">Limpieza y Aroma</span><br>de Hoteles.
+                </h1>
+                <p class="mt-7 max-w-2xl text-lg sm:text-2xl text-white/80 reveal reveal-d2">
+                    Unimos dos mundos: limpieza y aromatización. Vendemos la identidad olfativa completa de tu hotel.
+                </p>
+                <div class="mt-9 flex flex-wrap gap-3 reveal reveal-d3">
+                    <a class="btn-primary btn-lg" href="#tienda">Conocer los paquetes</a>
+                    <a class="btn-ghost btn-lg" href="#como-funciona">Cómo funciona</a>
+                </div>
+                <div class="mt-12 flex flex-wrap gap-x-8 gap-y-3 text-sm text-white/65 font-heading reveal reveal-d4">
+                    <span>Envío nacional</span>
+                    <span>100% biodegradable</span>
+                    <span>Precios + IVA</span>
+                </div>
             </div>
-            <dl class="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl text-white reveal reveal-d4">
-                <div>
-                    <dt class="text-3xl font-heading font-extrabold text-aqua" data-count="2" data-suffix=" L">2 L</dt>
-                    <dd class="text-sm text-white/65 mt-1">Envase concentrado retornable</dd>
-                </div>
-                <div>
-                    <dt class="text-3xl font-heading font-extrabold text-aqua" data-count="20" data-suffix=" L">20 L</dt>
-                    <dd class="text-sm text-white/65 mt-1">Producto listo para usar</dd>
-                </div>
-                <div>
-                    <dt class="text-3xl font-heading font-extrabold text-aqua">100%</dt>
-                    <dd class="text-sm text-white/65 mt-1">Biodegradable</dd>
-                </div>
-                <div>
-                    <dt class="text-3xl font-heading font-extrabold text-aqua">1</dt>
-                    <dd class="text-sm text-white/65 mt-1">Rutina: limpia + aroma</dd>
-                </div>
-            </dl>
         </div>
     </section>
 
-    <div class="bg-expert py-4 overflow-hidden border-y border-white/5">
-        <div class="marquee">
-            <div class="marquee-track text-aqua/90 font-heading font-semibold text-sm tracking-[0.18em] uppercase">
-                <?php for ($i = 0; $i < 2; $i++): ?>
-                    <span>100% biodegradable</span><span>·</span>
-                    <span>Envase 2 L retornable</span><span>·</span>
-                    <span>2 L ? 20 L</span><span>·</span>
-                    <span>Aroma insignia</span><span>·</span>
-                    <span>Nunca en vidrio ni espejos</span><span>·</span>
-                    <span>Agua primero, concentrado después</span><span>·</span>
-                <?php endfor; ?>
-            </div>
-        </div>
-    </div>
-
-    <section class="bg-hielo py-20 lg:py-28">
+    <section id="tienda" data-nav-section="tienda" class="nav-section py-20 lg:py-28 bg-hielo">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <div class="max-w-2xl io-reveal">
-                <p class="eyebrow">Propuesta de valor B2B</p>
-                <h2 class="display mt-3 text-3xl sm:text-5xl">Limpieza + identidad olfativa, sin fragmentar el carrito.</h2>
-                <p class="mt-4 text-lg text-charcoal/70">El huésped no separa higiene de marca. Housekeeping tampoco debería hacerlo. Hotel Expert concentra ambas en un solo protocolo medible.</p>
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                <div class="max-w-3xl io-reveal">
+                    <p class="eyebrow">Tienda ELAH</p>
+                    <h2 class="display mt-3 text-3xl sm:text-5xl">Prueba. Instala. Reabastece.</h2>
+                    <p class="mt-5 text-lg text-charcoal/70">Comienza con una prueba en tu hotel o instala el sistema completo con multiusos, difusores, spray y aroma.</p>
+                </div>
+                <a class="btn-outline io-reveal" href="<?= e(url('catalogo.php')) ?>">Ver toda la tienda</a>
             </div>
-            <div class="mt-12 grid lg:grid-cols-3 gap-5">
-                <article class="bento lg:col-span-2 min-h-[280px] bg-expert text-white p-8 sm:p-10 io-reveal">
-                    <p class="text-aqua text-xs font-heading font-bold tracking-[0.2em] uppercase">01 · Limpieza y desinfección</p>
-                    <h3 class="mt-4 font-heading font-extrabold text-3xl max-w-md">Multitarget sobre pisos, mármol, acero, madera y baños.</h3>
-                    <p class="mt-4 max-w-lg text-white/70">Una dilución. Un tiempo de contacto. Un estándar entre la 201 y la 412. Sin improvisar químicos en el turno de las 14:00.</p>
+            <div class="mt-12 grid lg:grid-cols-3 gap-6">
+                <article class="elah-offer bg-white p-8 io-reveal">
+                    <p class="eyebrow">Paquete Muestra</p>
+                    <h3 class="font-heading font-extrabold text-2xl text-expert mt-3">Pruébalo en tu hotel</h3>
+                    <p class="price-display mt-5">$1,999 <small>+ IVA</small></p>
+                    <p class="mt-4 text-charcoal/70">1 Dual + 1 Estándar + 1 caja de aromas.</p>
+                    <button class="btn-primary mt-7" type="button" data-cart-add="paquete-muestra">Agregar</button>
                 </article>
-                <article class="bento min-h-[280px] bg-white p-8 io-reveal border border-expert/5">
-                    <p class="eyebrow">02 · Aroma insignia</p>
-                    <h3 class="mt-4 font-heading font-extrabold text-2xl text-expert">Cada trapeado refuerza la firma, no la apaga.</h3>
-                    <p class="mt-3 text-charcoal/70">El olfato es memoria. Si el ambientador pelea con el cloro, no hay marca: hay ruido.</p>
+                <article class="elah-offer bg-expert text-white p-8 ring-4 ring-aqua/30 io-reveal">
+                    <span class="inline-flex rounded-full bg-aqua text-expert px-3 py-1 text-xs font-heading font-bold">SISTEMA COMPLETO</span>
+                    <h3 class="font-heading font-extrabold text-2xl mt-4">Paquete de Entrada ELAH</h3>
+                    <p class="price-display text-white mt-5">$8,999 <small>+ IVA</small></p>
+                    <p class="mt-2 text-white/45 line-through">Precio de lista $10,496</p>
+                    <p class="mt-4 text-white/70">2 Dual + 2 Estándar, difusores, spray, aroma y envío.</p>
+                    <button class="btn-primary mt-7" type="button" data-cart-add="paquete-entrada">Agregar</button>
                 </article>
-                <article class="bento bg-arena p-8 io-reveal">
-                    <p class="eyebrow">03 · Una sola rutina</p>
-                    <h3 class="mt-3 font-heading font-extrabold text-2xl text-expert">Menos decisiones en el carrito.</h3>
-                    <p class="mt-3 text-charcoal/70">Menos productos extra significan menos sobredosis, menos piso pegajoso y más consistencia operativa.</p>
-                </article>
-                <article class="bento lg:col-span-2 relative min-h-[240px] io-reveal">
-                    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1400&q=80" alt="Habitación de hotel" class="absolute inset-0 h-full w-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-r from-expert/90 to-expert/20"></div>
-                    <div class="relative p-8 sm:p-10 text-white max-w-lg">
-                        <p class="text-aqua text-xs font-heading font-bold tracking-[0.2em] uppercase">Hospitalidad boutique</p>
-                        <h3 class="mt-3 font-heading font-extrabold text-2xl sm:text-3xl">Diseñado para propiedades que venden experiencia, no litros de químico.</h3>
-                    </div>
+                <article class="elah-offer bg-white p-8 io-reveal">
+                    <p class="eyebrow">Reabasto</p>
+                    <h3 class="font-heading font-extrabold text-2xl text-expert mt-3">Compra según tu consumo</h3>
+                    <p class="mt-5 text-xl font-heading font-extrabold text-turquesa">A precio de lista</p>
+                    <p class="mt-4 text-charcoal/70">Concentrados, aromas y equipos según el tamaño de tu hotel.</p>
+                    <a class="btn-outline mt-7" href="<?= e(url('catalogo.php#productos')) ?>">Ver productos</a>
                 </article>
             </div>
         </div>
     </section>
 
-    <section class="py-20 lg:py-28 bg-white">
+    <section id="como-funciona" data-nav-section="como-funciona" class="nav-section py-20 lg:py-28 bg-white">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6">
+            <div class="max-w-3xl io-reveal">
+                <p class="eyebrow">Cómo funciona</p>
+                <h2 class="display mt-3 text-3xl sm:text-5xl">Tres capas. Un solo aroma.</h2>
+                <p class="mt-5 text-lg text-charcoal/70">ELAH integra limpieza operativa, refuerzo ambiental y presencia continua bajo la misma identidad olfativa.</p>
+            </div>
+            <div class="mt-12 grid md:grid-cols-3 gap-5">
+                <?php
+                $capas = [
+                    ['01', 'Motor diario', 'Multiusos concentrado', 'Limpia, desinfecta y aromatiza en cada uso.'],
+                    ['02', 'Refuerzo puntual', 'Spray ambiental', 'Refuerza el aroma en zonas específicas.'],
+                    ['03', 'Presencia constante', 'Difusor eléctrico', 'Aromatización pasiva y continua.'],
+                ];
+                foreach ($capas as $c): ?>
+                    <article class="elah-card bg-hielo p-8 io-reveal">
+                        <span class="text-aqua font-heading font-extrabold text-4xl"><?= e($c[0]) ?></span>
+                        <p class="eyebrow mt-6"><?= e($c[1]) ?></p>
+                        <h3 class="mt-2 font-heading font-extrabold text-2xl text-expert"><?= e($c[2]) ?></h3>
+                        <p class="mt-3 text-charcoal/70"><?= e($c[3]) ?></p>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+            <div class="mt-12 rounded-[1.75rem] bg-expert text-white p-8 sm:p-10 grid md:grid-cols-3 gap-8 items-center io-reveal">
+                <div>
+                    <p class="font-heading font-extrabold text-4xl text-aqua">2 L → 20 L</p>
+                    <p class="mt-2 text-white/65">2 L de concentrado + 18 L de agua.</p>
+                </div>
+                <div>
+                    <p class="font-heading font-extrabold text-4xl text-aqua">100%</p>
+                    <p class="mt-2 text-white/65">Biodegradable y eficiente.</p>
+                </div>
+                <a class="btn-primary justify-center" href="<?= e(url('como-funciona.php')) ?>">Ver funcionamiento completo</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="nosotros" data-nav-section="nosotros" class="nav-section py-20 lg:py-28 bg-expert text-white relative overflow-hidden">
+        <div class="absolute inset-0 grid-dots opacity-35"></div>
+        <div class="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-12 items-center">
+            <div class="io-reveal">
+                <p class="eyebrow text-aqua">Nosotros</p>
+                <h2 class="display mt-3 text-3xl sm:text-5xl text-white">No son productos separados. Es el Sistema ELAH.</h2>
+                <p class="mt-6 text-lg text-white/70">Resolvemos bajo una sola oferta dos necesidades del hotel: la limpieza de sus instalaciones y la ambientación aromática de su marca.</p>
+                <p class="mt-4 text-lg text-white/70">Funciona para hoteles independientes y cadenas que buscan una experiencia consistente entre habitaciones, áreas y propiedades.</p>
+                <a class="btn-ghost mt-8" href="<?= e(url('nosotros.php')) ?>">Conocer Hotel Expert</a>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-5 io-reveal">
+                <article class="elah-compare bg-white text-charcoal p-7">
+                    <p class="eyebrow">Estándar</p>
+                    <h3 class="font-heading font-extrabold text-xl text-expert mt-2">Áreas abiertas</h3>
+                    <p class="mt-4 text-charcoal/70">Limpia, desinfecta y deja el aroma insignia en zonas de alto tránsito.</p>
+                </article>
+                <article class="elah-compare bg-aqua text-expert p-7">
+                    <p class="eyebrow !text-expert">Dual</p>
+                    <h3 class="font-heading font-extrabold text-xl mt-2">Habitaciones</h3>
+                    <p class="mt-4 text-expert/75">Elimina malos olores en su origen, especialmente en textiles y espacios cerrados.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" data-nav-section="blog" class="nav-section py-20 lg:py-28 bg-arena">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                 <div class="io-reveal">
-                    <p class="eyebrow">Catálogo insignia</p>
-                    <h2 class="display mt-3 text-3xl sm:text-5xl">Dos concentrados.<br>Un sistema.</h2>
+                    <p class="eyebrow">Blog y recursos</p>
+                    <h2 class="display mt-3 text-3xl sm:text-5xl">Conoce mejor el Sistema ELAH.</h2>
                 </div>
-                <a class="btn-outline io-reveal" href="<?= e(url('catalogo.php')) ?>">Ir al catálogo completo</a>
+                <a class="btn-outline io-reveal" href="<?= e(url('blog.php')) ?>">Ver todos los recursos</a>
             </div>
-            <div class="mt-12 grid md:grid-cols-2 gap-6">
-                <?php foreach (['estandar', 'dual'] as $slug): $p = $productos[$slug]; ?>
-                <article class="group rounded-[1.6rem] border border-expert/10 bg-hielo p-6 sm:p-8 io-reveal hover:shadow-lift transition">
-                    <div class="flex items-start justify-between gap-4">
-                        <div>
-                            <span class="inline-flex rounded-full bg-eco/15 text-eco px-3 py-1 text-xs font-heading font-bold">100% biodegradable</span>
-                            <h3 class="mt-4 font-heading font-extrabold text-2xl text-expert"><?= e($p['nombre']) ?></h3>
-                            <p class="mt-1 text-turquesa font-heading font-semibold"><?= e($p['subtitulo']) ?></p>
+            <div class="mt-12 grid md:grid-cols-3 gap-6">
+                <?php foreach (array_slice($posts, 0, 3) as $post): ?>
+                    <article class="product-card bg-white overflow-hidden io-reveal">
+                        <img src="<?= e($post['cover']) ?>" alt="" class="h-48 w-full object-cover">
+                        <div class="p-6">
+                            <p class="eyebrow"><?= e($post['categoria']) ?></p>
+                            <h3 class="mt-3 font-heading font-extrabold text-xl text-expert"><?= e($post['titulo']) ?></h3>
+                            <p class="mt-3 text-charcoal/65"><?= e($post['extracto']) ?></p>
+                            <a class="btn-outline mt-6" href="<?= e(url('articulo.php?slug=' . $post['slug'])) ?>">Leer artículo</a>
                         </div>
-                        <img src="<?= e(url('assets/img/bottle-' . ($slug === 'dual' ? 'dual' : 'std') . '.svg')) ?>" alt="" class="h-36 w-auto bottle-float">
-                    </div>
-                    <p class="mt-4 text-charcoal/70"><?= e($p['resumen']) ?></p>
-                    <p class="mt-3 text-sm font-heading font-semibold text-expert"><?= e($p['rendimiento']) ?></p>
-                    <a class="btn-primary mt-6" href="<?= e(url('producto.php?slug=' . $slug)) ?>">Ficha técnica</a>
-                </article>
+                    </article>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <section class="relative py-20 lg:py-28 bg-expert text-white overflow-hidden noise">
-        <div class="absolute inset-0 grid-dots opacity-40"></div>
-        <div class="relative mx-auto max-w-7xl px-4 sm:px-6">
-            <p class="eyebrow text-aqua io-reveal">Rendimiento</p>
-            <h2 class="display mt-3 text-3xl sm:text-5xl text-white io-reveal">2 litros de concentrado.<br>20 litros de operación.</h2>
-            <p class="mt-4 max-w-xl text-white/70 io-reveal">No transportamos agua. El hotel diluye en sitio y obtiene diez veces el volumen, con la proporción que conserva desinfección y aroma insignia.</p>
-            <div class="mt-14 grid md:grid-cols-3 gap-6 items-stretch">
-                <div class="rounded-3xl bg-white/5 border border-white/10 p-8 text-center io-reveal">
-                    <img src="<?= e(url('assets/img/bottle-std.svg')) ?>" alt="Concentrado 2 litros" class="mx-auto h-40">
-                    <p class="mt-4 font-heading font-extrabold text-xl">2 L concentrado</p>
-                    <p class="text-white/60 text-sm">1 envase retornable</p>
-                </div>
-                <div class="rounded-3xl bg-white/5 border border-white/10 p-8 text-center io-reveal flex flex-col justify-center">
-                    <p class="text-aqua font-heading font-extrabold text-5xl">+</p>
-                    <p class="mt-2 font-heading font-extrabold text-xl">18 L de agua</p>
-                    <p class="text-white/60 text-sm mt-2">Siempre el agua primero. Después el concentrado. Evita espuma excesiva.</p>
-                </div>
-                <div class="rounded-3xl bg-turquesa p-8 text-center io-reveal">
-                    <img src="<?= e(url('assets/img/porron.svg')) ?>" alt="Porrón 20 litros" class="mx-auto h-40">
-                    <p class="mt-4 font-heading font-extrabold text-xl">20 L listos</p>
-                    <p class="text-white/80 text-sm">O 20 cargas de atomizador de 1 L (100 ml + 900 ml)</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 lg:py-28 bg-arena">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <div class="max-w-2xl io-reveal">
-                <p class="eyebrow">Ciclo sustentable</p>
-                <h2 class="display mt-3 text-3xl sm:text-5xl">El bidón vuelve. El agua se queda.</h2>
-                <p class="mt-4 text-lg text-charcoal/70">Sistema concentrado en envase de 2 litros retornable y reutilizable: menos plástico, menos flete de agua, misma ficha técnica.</p>
-            </div>
-            <ol class="mt-12 grid md:grid-cols-3 gap-6">
-                <?php
-                $ciclo = [
-                    ['01', 'Usas', 'Diluyes en porrón o atomizador y operas el protocolo de housekeeping.'],
-                    ['02', 'Recolectamos', 'En el siguiente pedido se recogen los bidones de 2 L vacíos.'],
-                    ['03', 'Rehacemos', 'Se higienizan y rellenan. El envase sigue en ciclo; el residuo no.'],
-                ];
-                foreach ($ciclo as $i => $c): ?>
-                <li class="rounded-[1.6rem] bg-white p-8 io-reveal border border-expert/5">
-                    <span class="font-heading font-extrabold text-5xl text-aqua/80"><?= $c[0] ?></span>
-                    <h3 class="mt-4 font-heading font-extrabold text-2xl text-expert"><?= e($c[1]) ?></h3>
-                    <p class="mt-2 text-charcoal/70"><?= e($c[2]) ?></p>
-                </li>
-                <?php endforeach; ?>
-            </ol>
-            <div class="mt-8 inline-flex items-center gap-2 rounded-full bg-eco text-white px-4 py-2 text-sm font-heading font-semibold io-reveal">
-                100% biodegradable · Envases retornables
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 lg:py-28 bg-white">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <p class="eyebrow io-reveal">Aplicación</p>
-            <h2 class="display mt-3 text-3xl sm:text-5xl io-reveal">Donde el huésped siente el hotel.</h2>
-            <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <?php
-                $zonas = [
-                    ['Lobbies', 'Primera impresión olfativa y piso de alto tráfico.', 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80'],
-                    ['Cuartos', 'Estandariza la llegada a cada habitación.', 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=80'],
-                    ['Baños', 'Desinfección y frescura sin improvisar químicos.', 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80'],
-                    ['Textiles', 'Dual para cortinas, tapicería y alfombras.', 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=900&q=80'],
-                ];
-                foreach ($zonas as $z): ?>
-                <article class="group relative h-72 rounded-[1.4rem] overflow-hidden io-reveal">
-                    <img src="<?= e($z[2]) ?>" alt="<?= e($z[0]) ?>" class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-expert via-expert/30 to-transparent"></div>
-                    <div class="absolute bottom-0 p-5 text-white">
-                        <h3 class="font-heading font-extrabold text-xl"><?= e($z[0]) ?></h3>
-                        <p class="text-sm text-white/75 mt-1"><?= e($z[1]) ?></p>
-                    </div>
-                </article>
-                <?php endforeach; ?>
-            </div>
-            <p class="mt-6 text-sm text-charcoal/55 io-reveal">Excepción estricta: no usar en vidrios ni espejos.</p>
-        </div>
-    </section>
-
-    <section class="py-20 bg-hielo">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <p class="eyebrow io-reveal">Operación real</p>
-            <h2 class="display mt-3 text-3xl sm:text-5xl io-reveal">Lo que gerencia y housekeeping alinean.</h2>
-            <div class="mt-12 grid lg:grid-cols-3 gap-5">
-                <?php
-                $tes = [
-                    ['Casa Luna Boutique · 28 llaves', 'El Dual cortó el olor a humedad en cortinas del patio interior. El Estándar unificó el lobby y los cuartos. Ya no compramos ambientador aparte.'],
-                    ['Grand Plaza · Compras', 'El porrón de 20 L eliminó las mezclas “a ojo”. Bajaron las quejas de piso pegajoso en un mes.'],
-                    ['Hotel Sierra · Ama de llaves', 'Rotular atomizadores por área fue el detalle que el equipo sí adoptó. El protocolo dejó de vivir en un PDF.'],
-                ];
-                foreach ($tes as $t): ?>
-                <blockquote class="rounded-[1.6rem] bg-white p-8 border border-expert/5 io-reveal">
-                    <p class="text-lg text-charcoal/80 leading-relaxed">“<?= e($t[1]) ?>”</p>
-                    <footer class="mt-6 font-heading font-bold text-expert text-sm"><?= e($t[0]) ?></footer>
-                </blockquote>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
-    <section class="relative py-20 overflow-hidden">
-        <div class="absolute inset-0 bg-brand"></div>
-        <div class="relative mx-auto max-w-4xl px-4 text-center text-white">
-            <p class="eyebrow text-aqua io-reveal">Siguiente paso</p>
-            <h2 class="display mt-3 text-3xl sm:text-5xl text-white io-reveal">¿Probamos en tu piso?</h2>
-            <p class="mt-4 text-white/75 io-reveal">Cotización, muestra o demo operativa. WhatsApp Business o formulario: el mismo equipo B2B responde.</p>
+    <section id="contacto" data-nav-section="contacto" class="nav-section relative py-24 overflow-hidden bg-brand">
+        <div class="mx-auto max-w-4xl px-4 text-center text-white">
+            <p class="eyebrow text-aqua io-reveal">Contacto</p>
+            <h2 class="display mt-3 text-3xl sm:text-5xl text-white io-reveal">Instala la identidad olfativa completa.</h2>
+            <p class="mt-5 text-xl text-white/70 io-reveal">Diseñamos el sistema según las áreas, habitaciones y necesidades de tu hotel.</p>
             <div class="mt-8 flex flex-wrap justify-center gap-3 io-reveal">
-                <a class="btn-light" href="<?= e(url('contacto.php')) ?>">Solicitar cotización</a>
-                <a class="btn-ghost" href="https://wa.me/<?= WHATSAPP ?>?text=<?= WHATSAPP_MSG ?>" target="_blank" rel="noopener">WhatsApp <?= WHATSAPP_DISPLAY ?></a>
+                <a class="btn-light btn-lg" href="<?= e(url('contacto.php')) ?>">Hablar con un asesor</a>
+                <a class="btn-ghost btn-lg" href="https://wa.me/<?= WHATSAPP ?>?text=<?= WHATSAPP_MSG ?>" target="_blank" rel="noopener">WhatsApp <?= WHATSAPP_DISPLAY ?></a>
             </div>
         </div>
     </section>

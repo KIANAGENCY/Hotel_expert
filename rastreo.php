@@ -7,7 +7,7 @@ $resultado = null;
 $error = '';
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if (!csrf_ok($_POST['csrf'] ?? null)) {
-        $error = 'Sesi�n expirada. Recarga la p�gina e int�ntalo de nuevo.';
+        $error = 'Sesión expirada. Recarga la página e inténtalo de nuevo.';
     } else {
         $id = strtoupper(trim((string) ($_POST['pedido'] ?? '')));
         $email = strtolower(trim((string) ($_POST['email'] ?? '')));
@@ -18,21 +18,21 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             }
         }
         if (!$resultado) {
-            $error = 'No encontramos un pedido con esa combinaci�n de ID y correo. Verifica may�sculas del folio o escribe a ventas@hotelexpert.mx.';
+            $error = 'No encontramos un pedido con esa combinación de ID y correo. Verifica el folio o escribe a ventas@hotelexpert.mx.';
         }
     }
 }
 
 $pasos = [
     'procesando' => 'Procesando',
-    'preparacion' => 'En preparaci�n',
-    'transito' => 'En tr�nsito',
+    'preparacion' => 'En preparación',
+    'transito' => 'En tránsito',
     'entregado' => 'Entregado',
 ];
 $orden = array_keys($pasos);
 
-$page_title = 'Rastreo de pedido � Hotel Expert';
-$page_description = 'Consulta el progreso de env�o de insumos Hotel Expert con tu ID de pedido y correo electr�nico.';
+$page_title = 'Rastreo de pedido — Sistema ELAH';
+$page_description = 'Consulta el progreso de envío de tu pedido ELAH con el folio y correo electrónico.';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 
@@ -55,9 +55,9 @@ function step_state(array $orden, string $actual, string $slug): string
 <main id="contenido" class="pt-28">
     <section class="bg-hielo py-16 sm:py-20">
         <div class="mx-auto max-w-3xl px-4 sm:px-6">
-            <p class="eyebrow">Portal de clientes</p>
+            <p class="eyebrow">Clientes ELAH</p>
             <h1 class="display mt-3 text-4xl sm:text-5xl">Rastreo de pedido</h1>
-            <p class="mt-4 text-lg text-charcoal/70">Ingresa el ID de pedido y el correo con el que se registr� la orden. Estados: Procesando ? En preparaci�n ? En tr�nsito ? Entregado.</p>
+            <p class="mt-4 text-lg text-charcoal/70">Ingresa el folio y el correo con el que se registró la orden.</p>
 
             <form method="post" class="mt-10 rounded-[1.6rem] bg-white p-8 shadow-glass grid gap-4">
                 <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
@@ -66,8 +66,8 @@ function step_state(array $orden, string $actual, string $slug): string
                     <input class="field" name="pedido" required placeholder="HE-2026-00481" value="<?= e($_POST['pedido'] ?? '') ?>">
                 </label>
                 <label>
-                    <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Correo electr�nico</span>
-                    <input class="field" type="email" name="email" required placeholder="george.a@example.org" value="<?= e($_POST['email'] ?? '') ?>">
+                    <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Correo electrónico</span>
+                    <input class="field" type="email" name="email" required placeholder="compras@hotel.com" value="<?= e($_POST['email'] ?? '') ?>">
                 </label>
                 <button class="btn-primary justify-center py-3" type="submit">Consultar estado</button>
             </form>
@@ -78,10 +78,10 @@ function step_state(array $orden, string $actual, string $slug): string
 
             <?php if ($resultado): ?>
                 <article class="mt-8 rounded-[1.6rem] bg-white p-8 border border-expert/10">
-                    <p class="text-sm font-heading font-bold text-turquesa"><?= e($resultado['id']) ?> � <?= e($resultado['hotel']) ?></p>
+                    <p class="text-sm font-heading font-bold text-turquesa"><?= e($resultado['id']) ?> · <?= e($resultado['hotel']) ?></p>
                     <h2 class="font-heading font-extrabold text-2xl text-expert mt-1"><?= e($pasos[$resultado['estado']]) ?></h2>
                     <p class="mt-2 text-charcoal/70"><?= e($resultado['items']) ?></p>
-                    <p class="mt-1 text-sm text-charcoal/50">Pedido <?= e($resultado['fecha']) ?> � ETA <?= e($resultado['eta']) ?> � Gu�a <?= e($resultado['guia']) ?></p>
+                    <p class="mt-1 text-sm text-charcoal/50">Pedido <?= e($resultado['fecha']) ?> · Entrega estimada <?= e($resultado['eta']) ?> · Guía <?= e($resultado['guia']) ?></p>
 
                     <div class="mt-8 flex items-center gap-1">
                         <?php foreach ($orden as $idx => $slug):
@@ -104,11 +104,8 @@ function step_state(array $orden, string $actual, string $slug): string
             <?php endif; ?>
 
             <aside class="mt-10 rounded-2xl bg-arena p-6 text-sm text-charcoal/70">
-                <p class="font-heading font-bold text-expert mb-2">Pedidos de demostraci�n</p>
-                <p>HE-2026-00481 � maria.gerente@casaluna.mx</p>
-                <p>HE-2026-00412 � compras@grandplaza.mx</p>
-                <p>HE-2026-00502 � ops@hotelsierra.mx</p>
-                <p>HE-2026-00518 � gerencia@atelierhabita.mx</p>
+                <p class="font-heading font-bold text-expert mb-2">¿Necesitas ayuda con tu envío?</p>
+                <p>Escríbenos a <a class="font-semibold text-turquesa" href="mailto:<?= EMAIL_VENTAS ?>"><?= EMAIL_VENTAS ?></a> o por WhatsApp al <?= WHATSAPP_DISPLAY ?>.</p>
             </aside>
         </div>
     </section>

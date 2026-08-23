@@ -3,23 +3,37 @@ const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 const fs = require('fs');
 const path = require('path');
 
-const BASE = 'http://localhost/hotel_expert';
+const BASE = 'http://hotel_expert.test';
 const OUT_DIR = path.join(__dirname, 'screenshots');
-const PDF_OUT = path.join(__dirname, '..', 'Hotel_Expert_Capturas_2026.pdf');
-const PDF_DOWNLOADS = path.join(process.env.USERPROFILE || '', 'Downloads', 'Hotel_Expert_Capturas_2026.pdf');
+const PDF_NAME = 'Hotel_Expert_Sistema_ELAH_Mockup.pdf';
+const PDF_OUT = path.join(__dirname, '..', PDF_NAME);
+const PDF_DOWNLOADS = path.join(process.env.USERPROFILE || '', 'Downloads', PDF_NAME);
 
 const VIEWPORT = { width: 1440, height: 900, deviceScaleFactor: 1 };
 
 const PAGES = [
-  { title: 'Home — Inicio', url: '/index.php' },
-  { title: 'Catálogo B2B', url: '/catalogo.php' },
-  { title: 'Producto — Concentrado Estándar', url: '/producto.php?slug=estandar' },
-  { title: 'Producto — Hotel Expert Dual', url: '/producto.php?slug=dual' },
-  { title: 'Cómo funciona — Manual de dilución', url: '/como-funciona.php' },
-  { title: 'Rastreo de pedido', url: '/rastreo.php' },
-  { title: 'Sobre nosotros', url: '/nosotros.php' },
-  { title: 'Blog y recursos', url: '/blog.php' },
-  { title: 'Contacto y cotización', url: '/contacto.php' },
+  { title: 'Inicio — Sistema ELAH', url: '/index.php', slug: 'inicio' },
+  { title: 'Tienda B2B', url: '/catalogo.php', slug: 'tienda' },
+  { title: 'Producto — Hotel Expert Estándar', url: '/producto.php?slug=estandar', slug: 'producto-estandar' },
+  { title: 'Producto — Hotel Expert Dual', url: '/producto.php?slug=dual', slug: 'producto-dual' },
+  { title: 'Producto — Descontaminador de habitaciones', url: '/producto.php?slug=descontaminador', slug: 'producto-descontaminador' },
+  { title: 'Producto — Aroma para difusor', url: '/producto.php?slug=aroma-difusor', slug: 'producto-aroma-difusor' },
+  { title: 'Producto — Caja de aromas', url: '/producto.php?slug=caja-aromas', slug: 'producto-caja-aromas' },
+  { title: 'Producto — Difusor pequeño', url: '/producto.php?slug=difusor-pequeno', slug: 'producto-difusor-pequeno' },
+  { title: 'Producto — Difusor grande', url: '/producto.php?slug=difusor-grande', slug: 'producto-difusor-grande' },
+  { title: 'Paquete Muestra', url: '/producto.php?slug=paquete-muestra', slug: 'paquete-muestra' },
+  { title: 'Paquete de Entrada ELAH', url: '/producto.php?slug=paquete-entrada', slug: 'paquete-entrada' },
+  { title: 'Cotización — Estado vacío', url: '/cotizacion.php', slug: 'cotizacion-vacia', cart: 'empty' },
+  { title: 'Cotización — Con productos', url: '/cotizacion.php', slug: 'cotizacion-productos', cart: 'filled' },
+  { title: 'Cómo funciona el Sistema ELAH', url: '/como-funciona.php', slug: 'como-funciona' },
+  { title: 'Nosotros — Hotel Expert', url: '/nosotros.php', slug: 'nosotros' },
+  { title: 'Blog y recursos', url: '/blog.php', slug: 'blog' },
+  { title: 'Artículo — Qué es el Sistema ELAH', url: '/articulo.php?slug=que-es-sistema-elah', slug: 'articulo-sistema-elah' },
+  { title: 'Artículo — Hotel Expert Dual', url: '/articulo.php?slug=dual-elimina-no-disfraza', slug: 'articulo-dual' },
+  { title: 'Artículo — Eficiencia del concentrado', url: '/articulo.php?slug=eficiencia-concentrado-hoteles', slug: 'articulo-eficiencia' },
+  { title: 'Contacto y asesoría', url: '/contacto.php', slug: 'contacto' },
+  { title: 'Rastreo de pedido', url: '/rastreo.php', slug: 'rastreo' },
+  { title: 'Confirmación de solicitud', url: '/gracias.php', slug: 'gracias' },
 ];
 
 async function waitForPageReady(page) {
@@ -88,7 +102,7 @@ async function addCoverPage(pdf, fontBold, fontReg) {
     color: rgb(0.322, 0.784, 0.784),
   });
 
-  page.drawText('Mockup con capturas reales', {
+  page.drawText('Sistema ELAH', {
     x: 48,
     y: height - 130,
     size: 32,
@@ -98,7 +112,7 @@ async function addCoverPage(pdf, fontBold, fontReg) {
     lineHeight: 36,
   });
 
-  page.drawText('Frescura que se siente. Marca que se recuerda.', {
+  page.drawText('Mockup completo con capturas reales del e-commerce B2B', {
     x: 48,
     y: height - 175,
     size: 13,
@@ -199,10 +213,24 @@ async function addScreenshotPage(pdf, pngBytes, clipHeight) {
   await addCoverPage(pdf, fontBold, fontReg);
 
   for (const entry of PAGES) {
-    const slug = entry.url.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+    const slug = entry.slug || entry.url.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
     console.log('Capturing:', entry.title);
 
     await page.goto(BASE + entry.url, { waitUntil: 'networkidle0', timeout: 60000 });
+    if (entry.cart) {
+      await page.evaluate((cartMode) => {
+        if (cartMode === 'filled') {
+          localStorage.setItem('hotelExpertElahCart', JSON.stringify({
+            'paquete-entrada': 1,
+            'paquete-muestra': 1,
+            dual: 2,
+          }));
+        } else {
+          localStorage.removeItem('hotelExpertElahCart');
+        }
+      }, entry.cart);
+      await page.reload({ waitUntil: 'networkidle0', timeout: 60000 });
+    }
     await waitForPageReady(page);
 
     await page.evaluate(() => {

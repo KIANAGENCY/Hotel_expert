@@ -2,17 +2,17 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 $posts = require __DIR__ . '/data/blog.php';
-$page_title = 'Blog y recursos — Hotel Expert';
-$page_description = 'Artículos sobre higiene hotelera, estandarización y marketing olfativo. Manual digital de uso y recursos B2B.';
+$page_title = 'Recursos Sistema ELAH — Hotel Expert';
+$page_description = 'Conoce el Sistema ELAH, su tecnología de eliminación de olores y la eficiencia del concentrado para hoteles.';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
 <main id="contenido" class="pt-28">
     <section class="bg-expert text-white py-16 sm:py-20">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <p class="eyebrow text-aqua">Blog & recursos</p>
-            <h1 class="display mt-3 text-4xl sm:text-6xl text-white">Higiene, estandarización y olfato de marca.</h1>
-            <p class="mt-4 max-w-xl text-white/70">SEO orgánico al servicio de operaciones: lo que compras, gerencia y housekeeping pueden aplicar el mismo día.</p>
+            <p class="eyebrow text-aqua">Conoce ELAH</p>
+            <h1 class="display mt-3 text-4xl sm:text-6xl text-white">Limpieza y aroma como un solo sistema.</h1>
+            <p class="mt-4 max-w-xl text-white/70">Información para gerencia, compras y housekeeping sobre la operación y el valor de ELAH.</p>
         </div>
     </section>
 
@@ -33,10 +33,10 @@ require __DIR__ . '/includes/header.php';
         <div class="mx-auto max-w-7xl px-4 sm:px-6 mt-10">
             <div class="rounded-[1.6rem] bg-arena p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 io-reveal">
                 <div>
-                    <h2 class="font-heading font-extrabold text-2xl text-expert">Manual de uso ilustrado</h2>
-                    <p class="mt-2 text-charcoal/70">La versión digital está en Cómo funciona. El PDF se envía a cuentas activas y pruebas en piso.</p>
+                    <h2 class="font-heading font-extrabold text-2xl text-expert">Cómo funciona el sistema completo</h2>
+                    <p class="mt-2 text-charcoal/70">Conoce las tres capas de ELAH, sus proporciones y la cobertura dentro del hotel.</p>
                 </div>
-                <a class="btn-primary" href="<?= e(url('como-funciona.php')) ?>">Abrir manual digital</a>
+                <a class="btn-primary" href="<?= e(url('como-funciona.php')) ?>">Entender ELAH</a>
             </div>
         </div>
     </section>

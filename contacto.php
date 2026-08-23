@@ -1,19 +1,23 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$page_title = 'Contacto y cotización mayoreo — Hotel Expert';
-$page_description = 'Solicita cotización B2B, muestra o prueba en piso. WhatsApp +52 81 1249 7481 · ventas@hotelexpert.mx';
+$page_title = 'Contacto Sistema ELAH — Hotel Expert';
+$page_description = 'Habla con un asesor del Sistema ELAH para diseñar la solución de limpieza y aroma de tu hotel.';
 $pref = preg_replace('/[^a-z]/', '', strtolower((string) ($_GET['tipo'] ?? '')));
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
 <main id="contenido" class="pt-28">
-    <section class="py-16 lg:py-22 bg-hielo">
+    <section class="py-16 lg:py-24 bg-hielo">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-12 gap-12">
             <div class="lg:col-span-5">
-                <p class="eyebrow">Contacto B2B</p>
-                <h1 class="display mt-3 text-4xl sm:text-5xl">Cotización, muestra o demo. El mismo canal.</h1>
-                <p class="mt-4 text-lg text-charcoal/70">Formulario directo a ventas. Preparado para conectarse a HubSpot cuando el portal esté activo.</p>
+                <p class="eyebrow">Asesoría especializada</p>
+                <h1 class="display mt-3 text-4xl sm:text-5xl">Diseñemos el Sistema ELAH para tu hotel.</h1>
+                <p class="mt-4 text-lg text-charcoal/70">Cuéntanos el tamaño, las áreas y las necesidades de tu propiedad. Te ayudamos a elegir concentrados, aromas y difusores.</p>
+                <div class="mt-7 rounded-2xl bg-expert text-white p-5">
+                    <p class="font-heading font-bold text-aqua">Cobertura nacional</p>
+                    <p class="mt-2 text-white/70">Enviamos a cualquier punto de la República y confirmamos los tiempos según tu ubicación.</p>
+                </div>
                 <ul class="mt-8 space-y-4">
                     <li class="rounded-2xl bg-white p-5">
                         <p class="text-xs uppercase tracking-wider text-charcoal/40 font-heading font-bold">WhatsApp Business</p>

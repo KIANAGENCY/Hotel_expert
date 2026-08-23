@@ -4,7 +4,7 @@ declare(strict_types=1);
 /** @var string $page_description */
 /** @var string $page_og */
 $page_title = $page_title ?? SITE_NAME;
-$page_description = $page_description ?? (SITE_TAGLINE . ' Sistema B2B de limpieza, desinfección e identidad olfativa para hoteles boutique.');
+$page_description = $page_description ?? (SITE_TAGLINE . ' Sistema integral de limpieza, desinfección y aroma insignia para hoteles.');
 $page_og = $page_og ?? 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80';
 $canonical = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? SITE_DOMAIN) . ($_SERVER['REQUEST_URI'] ?? '/');
 ?>
@@ -15,7 +15,7 @@ $canonical = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($page_title) ?></title>
     <meta name="description" content="<?= e($page_description) ?>">
-    <meta name="keywords" content="limpieza para hoteles, marketing olfativo hoteles, aroma insignia para hoteles, desinfectante biodegradable hotelería, Hotel Expert">
+    <meta name="keywords" content="Sistema ELAH, limpieza para hoteles, aroma para hoteles, identidad olfativa, Hotel Expert Dual, difusores para hoteles">
     <meta name="author" content="Hotel Expert">
     <link rel="canonical" href="<?= e($canonical) ?>">
     <meta property="og:type" content="website">
@@ -29,6 +29,7 @@ $canonical = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' 
     <meta name="twitter:title" content="<?= e($page_title) ?>">
     <meta name="twitter:description" content="<?= e($page_description) ?>">
     <link rel="icon" type="image/svg+xml" href="<?= e(url('assets/img/favicon.svg')) ?>">
+    <link rel="apple-touch-icon" href="<?= e(url('assets/img/logo-mark-256.png')) ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
@@ -61,7 +62,7 @@ $canonical = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' 
             }
         }
     </script>
-    <link rel="stylesheet" href="<?= e(url('assets/css/custom.css')) ?>">
+    <link rel="stylesheet" href="<?= e(url('assets/css/custom.css')) ?>?v=<?= (int) filemtime(ROOT_PATH . '/assets/css/custom.css') ?>">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -70,7 +71,7 @@ $canonical = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' 
       "url": "https://www.hotelexpert.mx",
       "email": "<?= EMAIL_VENTAS ?>",
       "telephone": "<?= WHATSAPP_DISPLAY ?>",
-      "description": "<?= e(SITE_TAGLINE) ?>",
+      "description": "Sistema ELAH: <?= e(SITE_TAGLINE) ?>",
       "areaServed": "MX"
     }
     </script>

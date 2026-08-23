@@ -8,9 +8,34 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
 }
 
 if (!csrf_ok($_POST['csrf'] ?? null)) {
-    $_SESSION['form_error'] = 'Sesi�n expirada. Vuelve a enviar el formulario.';
-    header('Location: ' . url('contacto.php'));
+    $_SESSION['form_error'] = 'Sesión expirada. Vuelve a enviar el formulario.';
+    $returnPage = ($_POST['origen'] ?? '') === 'cotizacion' ? 'cotizacion.php' : 'contacto.php';
+    header('Location: ' . url($returnPage));
     exit;
+}
+
+$productos = require ROOT_PATH . '/data/productos.php';
+$carritoRaw = json_decode((string) ($_POST['carrito'] ?? '[]'), true);
+$carrito = [];
+$subtotal = 0;
+if (is_array($carritoRaw)) {
+    foreach ($carritoRaw as $item) {
+        $slug = preg_replace('/[^a-z0-9-]/', '', (string) ($item['slug'] ?? ''));
+        $cantidad = max(1, min(99, (int) ($item['qty'] ?? 1)));
+        if (!isset($productos[$slug])) {
+            continue;
+        }
+        $producto = $productos[$slug];
+        $lineTotal = $producto['precio'] * $cantidad;
+        $subtotal += $lineTotal;
+        $carrito[] = [
+            'slug' => $slug,
+            'nombre' => $producto['nombre'],
+            'cantidad' => $cantidad,
+            'precio_unitario' => $producto['precio'],
+            'subtotal' => $lineTotal,
+        ];
+    }
 }
 
 $lead = [
@@ -24,13 +49,23 @@ $lead = [
     'telefono' => trim((string) ($_POST['telefono'] ?? '')),
     'interes' => trim((string) ($_POST['interes'] ?? '')),
     'habitaciones' => trim((string) ($_POST['habitaciones'] ?? '')),
+    'rfc' => strtoupper(trim((string) ($_POST['rfc'] ?? ''))),
     'mensaje' => trim((string) ($_POST['mensaje'] ?? '')),
+    'carrito' => $carrito,
+    'subtotal_sin_iva' => $subtotal,
     'ip' => $_SERVER['REMOTE_ADDR'] ?? '',
 ];
 
 if ($lead['nombre'] === '' || $lead['hotel'] === '' || !filter_var($lead['email'], FILTER_VALIDATE_EMAIL)) {
-    $_SESSION['form_error'] = 'Revisa nombre, hotel y un correo v�lido.';
-    header('Location: ' . url('contacto.php'));
+    $_SESSION['form_error'] = 'Revisa nombre, hotel y un correo válido.';
+    $returnPage = $lead['origen'] === 'cotizacion' ? 'cotizacion.php' : 'contacto.php';
+    header('Location: ' . url($returnPage));
+    exit;
+}
+
+if ($lead['origen'] === 'cotizacion' && empty($carrito)) {
+    $_SESSION['form_error'] = 'Agrega al menos un producto antes de solicitar la cotización.';
+    header('Location: ' . url('cotizacion.php'));
     exit;
 }
 
@@ -43,9 +78,9 @@ if (is_file($file)) {
     }
 }
 $all[] = $lead;
-file_put_contents($file, json_encode($all, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+file_put_contents($file, json_encode($all, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
 
-$subject = 'Lead Hotel Expert � ' . $lead['hotel'];
+$subject = 'Solicitud Sistema ELAH — ' . $lead['hotel'];
 $body = "Nuevo lead B2B\n\n" . json_encode($lead, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 $headers = 'From: noreply@' . SITE_DOMAIN . "\r\nReply-To: " . $lead['email'];
 @mail(EMAIL_VENTAS, $subject, $body, $headers);
@@ -57,5 +92,6 @@ $hubspot = [
 ];
 */
 
+$_SESSION['last_request_type'] = $lead['origen'];
 header('Location: ' . url('gracias.php'));
 exit;
