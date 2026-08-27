@@ -20,8 +20,8 @@ if (!$post) {
     exit;
 }
 $page = 'blog';
-$page_title = $post['titulo'] . ' — Hotel Expert';
-$page_description = $post['extracto'];
+$page_title = $post['seo_titulo'] ?? ($post['titulo'] . ' — Hotel Expert');
+$page_description = $post['meta_descripcion'] ?? $post['extracto'];
 $page_og = $post['cover'];
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
@@ -34,6 +34,9 @@ require __DIR__ . '/includes/header.php';
             <div class="relative mx-auto max-w-3xl px-4 sm:px-6 pb-12 w-full">
                 <p class="eyebrow text-aqua"><?= e($post['categoria']) ?> · <?= e(date('d M Y', strtotime($post['fecha']))) ?> · <?= e($post['lectura']) ?></p>
                 <h1 class="display mt-3 text-3xl sm:text-5xl text-white"><?= e($post['titulo']) ?></h1>
+                <?php if (!empty($post['bajada'])): ?>
+                    <p class="mt-4 text-xl text-white/75"><?= e($post['bajada']) ?></p>
+                <?php endif; ?>
             </div>
         </header>
         <div class="mx-auto max-w-3xl px-4 sm:px-6 py-14 space-y-5 text-lg text-charcoal/80 leading-relaxed">

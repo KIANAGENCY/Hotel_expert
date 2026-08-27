@@ -2,8 +2,8 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 $productos = require __DIR__ . '/data/productos.php';
-$page_title = 'Tienda Sistema ELAH — Hotel Expert';
-$page_description = 'Compra el Sistema ELAH, concentrados Hotel Expert, difusores, aromas y paquetes para hoteles. Precios base más IVA.';
+$page_title = 'Catálogo de Limpieza y Aromatización para Hoteles | Tienda B2B Sistema ELAH';
+$page_description = 'Cotiza paquetes, concentrados, difusores y aromas para la limpieza y aromatización de tu hotel. Sistema ELAH: 100% biodegradable, precios + IVA, envío nacional.';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 
@@ -19,6 +19,7 @@ $grupos = [
             <div class="lg:col-span-8">
                 <p class="eyebrow text-aqua">Tienda B2B · Sistema ELAH</p>
                 <h1 class="display mt-4 text-4xl sm:text-6xl text-white">Una identidad olfativa.<br>Todo el sistema.</h1>
+                <h2 class="mt-5 max-w-2xl font-heading font-extrabold text-2xl text-aqua">Catálogo de limpieza y aromatización para hoteles</h2>
                 <p class="mt-5 max-w-2xl text-lg text-white/70">Elige una puerta de entrada o arma el reabasto según el consumo real de tu hotel. Todos los precios son base + IVA.</p>
             </div>
             <div class="lg:col-span-4 rounded-3xl bg-white/5 border border-white/10 p-6">
@@ -44,6 +45,9 @@ $grupos = [
                 <div>
                     <p class="eyebrow"><?= $groupId === 'paquetes' ? 'Escalera de venta ELAH' : 'Compra por separado' ?></p>
                     <h2 class="display mt-3 text-3xl sm:text-5xl"><?= e($grupo['titulo']) ?></h2>
+                    <?php if ($groupId === 'paquetes'): ?>
+                        <p class="mt-5 max-w-2xl text-lg text-charcoal/70">Desde una muestra de bajo riesgo hasta el sistema completo instalado en tu propiedad.</p>
+                    <?php endif; ?>
                 </div>
                 <?php if ($groupId === 'productos'): ?>
                     <p class="hidden md:block max-w-sm text-right text-charcoal/60">El reabasto se compra a precio de lista según consumo. Los difusores son compra única.</p>

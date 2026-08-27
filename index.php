@@ -3,8 +3,8 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 $productos = require __DIR__ . '/data/productos.php';
 $posts = require __DIR__ . '/data/blog.php';
-$page_title = 'Sistema ELAH — Limpieza y aroma estandarizado para hoteles';
-$page_description = 'Sistema integral de limpieza, desinfección y aroma insignia para hoteles. Multiusos, sprays y difusores bajo una sola identidad olfativa.';
+$page_title = 'Limpieza y Aromatización para Hoteles en México | Sistema ELAH – Hotel Expert';
+$page_description = 'Sistema ELAH de Hotel Expert: limpieza biodegradable y aromatización profesional en un solo sistema para hoteles boutique, auto hoteles y cadenas en México. Cotiza tu paquete.';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
@@ -17,12 +17,12 @@ require __DIR__ . '/includes/header.php';
         <div class="absolute inset-0 grid-dots opacity-20"></div>
         <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 py-44 w-full">
             <div class="max-w-4xl">
-                <p class="eyebrow reveal">Sistema ELAH de Hotel Expert</p>
+                <p class="eyebrow reveal">Sistema ELAH de Hotel Expert · Marketing olfativo y limpieza biodegradable</p>
                 <h1 class="display mt-5 text-4xl sm:text-6xl lg:text-[4.8rem] text-white reveal reveal-d1">
                     Estandarización de<br><span class="text-aqua">Limpieza y Aroma</span><br>de Hoteles.
                 </h1>
                 <p class="mt-7 max-w-2xl text-lg sm:text-2xl text-white/80 reveal reveal-d2">
-                    Unimos dos mundos: limpieza y aromatización. Vendemos la identidad olfativa completa de tu hotel.
+                    Unimos dos mundos: limpieza y aromatización. Vendemos la identidad olfativa completa de tu hotel, con productos 100% biodegradables y cobertura nacional.
                 </p>
                 <div class="mt-9 flex flex-wrap gap-3 reveal reveal-d3">
                     <a class="btn-primary btn-lg" href="#tienda">Conocer los paquetes</a>

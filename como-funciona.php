@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$page_title = 'Cómo funciona el Sistema ELAH — Hotel Expert';
-$page_description = 'Conoce cómo ELAH integra limpieza, refuerzo puntual y difusión continua para estandarizar el aroma de un hotel.';
+$page_title = 'Cómo Funciona el Marketing Olfativo en Hoteles | Sistema ELAH';
+$page_description = 'Descubre cómo el Sistema ELAH integra limpieza biodegradable, aromatización y presencia continua en un solo sistema de marketing olfativo para hoteles en México.';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
@@ -16,6 +16,13 @@ require __DIR__ . '/includes/header.php';
         </div>
     </section>
 
+    <section class="py-16 bg-white">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6">
+            <h2 class="display text-3xl sm:text-5xl max-w-4xl">¿Cómo funciona el marketing olfativo en un hotel?</h2>
+            <p class="mt-5 max-w-4xl text-lg text-charcoal/70 leading-relaxed">El marketing olfativo hotelero combina limpieza biodegradable con un aroma de marca (odotipo) que se repite en cada punto de contacto del huésped. El Sistema ELAH de Hotel Expert integra estas tres capas —limpieza, refuerzo ambiental y presencia continua— bajo un mismo aroma insignia, sin que tu equipo de operaciones tenga que gestionarlo por separado.</p>
+        </div>
+    </section>
+
     <section class="py-20 lg:py-28 bg-hielo">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <p class="eyebrow">El sistema completo</p>
@@ -23,9 +30,9 @@ require __DIR__ . '/includes/header.php';
             <div class="mt-12 grid lg:grid-cols-3 gap-6">
                 <?php
                 $capas = [
-                    ['01', 'Motor diario', 'Hotel Expert Estándar + Dual', 'Los multiusos limpian, desinfectan y aromatizan cada vez que housekeeping opera.'],
-                    ['02', 'Refuerzo puntual', 'Caja de aromas', 'Los atomizadores ambientales refuerzan el aroma en habitaciones, recepción y momentos específicos.'],
-                    ['03', 'Presencia constante', 'Difusores eléctricos', 'Los equipos mantienen aromatización pasiva y continua en lobby, baños y espacios abiertos.'],
+                    ['01', 'Motor diario', '¿Qué hace el multiusos concentrado?', 'Limpia, desinfecta y aromatiza en cada uso. Es el motor del sistema para áreas abiertas y de alto tránsito.'],
+                    ['02', 'Refuerzo puntual', '¿Para qué sirve el spray ambiental?', 'Refuerza el aroma insignia en momentos y zonas específicas, como el check-in o una habitación recién liberada.'],
+                    ['03', 'Presencia constante', '¿Cómo mantiene el difusor la presencia constante?', 'Difunde el aroma de marca de forma pasiva y continua en lobby, pasillos y espacios compactos, sin intervención diaria del personal.'],
                 ];
                 foreach ($capas as $c): ?>
                 <article class="elah-card bg-white p-8 io-reveal">

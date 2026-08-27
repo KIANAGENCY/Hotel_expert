@@ -5,6 +5,9 @@ return [
     [
         'slug' => 'que-es-sistema-elah',
         'titulo' => '¿Qué es el Sistema ELAH?',
+        'seo_titulo' => '¿Qué es el Sistema ELAH? Marketing Olfativo y Limpieza para Hoteles',
+        'meta_descripcion' => 'El Sistema ELAH une limpieza biodegradable y aromatización de marca en un solo sistema para hoteles. Descubre cómo funciona y para qué tipo de propiedad es ideal.',
+        'bajada' => 'Marketing olfativo y limpieza biodegradable para hoteles',
         'extracto' => 'Cómo una sola oferta integra limpieza, desinfección y aroma insignia en cada punto de contacto del huésped.',
         'categoria' => 'Sistema ELAH',
         'fecha' => '2026-08-22',
@@ -20,6 +23,9 @@ return [
     [
         'slug' => 'dual-elimina-no-disfraza',
         'titulo' => 'Hotel Expert Dual: elimina, no disfraza',
+        'seo_titulo' => 'Cómo Eliminar Malos Olores en Habitaciones de Hotel | Hotel Expert Dual',
+        'meta_descripcion' => 'Hotel Expert Dual limpia, desinfecta y elimina malos olores en habitaciones de hotel desde su origen, sin disfrazarlos. Conoce cómo funciona.',
+        'bajada' => 'Cómo eliminar malos olores en habitaciones de hotel',
         'extracto' => 'La diferencia entre cubrir un mal olor con fragancia y neutralizarlo en su origen.',
         'categoria' => 'Tecnología del producto',
         'fecha' => '2026-08-15',
@@ -35,6 +41,9 @@ return [
     [
         'slug' => 'eficiencia-concentrado-hoteles',
         'titulo' => 'Eficiencia hotelera: 2 litros que rinden 20',
+        'seo_titulo' => 'Rendimiento de Productos de Limpieza Concentrados para Hoteles',
+        'meta_descripcion' => 'Cómo un concentrado biodegradable de 2 litros rinde 20 litros listos para usar, reduciendo plástico, transporte y espacio de almacenamiento en tu hotel.',
+        'bajada' => 'Rendimiento de productos de limpieza concentrados para hoteles',
         'extracto' => 'Concentrado, biodegradable y eficiente: menos agua transportada y más espacio disponible.',
         'categoria' => 'Operación',
         'fecha' => '2026-08-08',

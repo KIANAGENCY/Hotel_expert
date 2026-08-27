@@ -30,7 +30,7 @@ require __DIR__ . '/includes/header.php';
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div class="product-visual min-h-[30rem] bg-white shadow-glass">
                     <?php if ($p['imagen']): ?>
-                        <img src="<?= e(url('assets/img/' . $p['imagen'])) ?>" alt="<?= e($p['nombre']) ?>" class="!max-h-[25rem] bottle-float">
+                        <img src="<?= e(url('assets/img/' . $p['imagen'])) ?>" alt="<?= e($p['alt'] ?? $p['nombre']) ?>" class="!max-h-[25rem] bottle-float">
                     <?php else: ?>
                         <span class="product-monogram !text-7xl"><?= e($p['icono']) ?></span>
                     <?php endif; ?>

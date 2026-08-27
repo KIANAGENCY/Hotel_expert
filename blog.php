@@ -2,8 +2,8 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 $posts = require __DIR__ . '/data/blog.php';
-$page_title = 'Recursos Sistema ELAH — Hotel Expert';
-$page_description = 'Conoce el Sistema ELAH, su tecnología de eliminación de olores y la eficiencia del concentrado para hoteles.';
+$page_title = 'Blog Hotel Expert | Marketing Olfativo y Limpieza para Hoteles';
+$page_description = 'Artículos sobre marketing olfativo, limpieza biodegradable y operación hotelera. Recursos del Sistema ELAH para gerencia, compras y housekeeping.';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
@@ -24,6 +24,7 @@ require __DIR__ . '/includes/header.php';
                 <div class="p-7 flex flex-col">
                     <p class="text-xs font-heading font-bold uppercase tracking-wider text-turquesa"><?= e($post['categoria']) ?> · <?= e($post['lectura']) ?></p>
                     <h2 class="mt-2 font-heading font-extrabold text-xl text-expert"><?= e($post['titulo']) ?></h2>
+                    <p class="mt-2 font-heading font-semibold text-turquesa"><?= e($post['bajada']) ?></p>
                     <p class="mt-2 text-charcoal/70 flex-1"><?= e($post['extracto']) ?></p>
                     <a class="btn-outline mt-5 self-start" href="<?= e(url('articulo.php?slug=' . $post['slug'])) ?>">Leer</a>
                 </div>

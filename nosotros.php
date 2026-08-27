@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$page_title = 'Sistema ELAH para hoteles — Hotel Expert';
-$page_description = 'ELAH integra limpieza, desinfección y aroma de marca para hoteles independientes y cadenas en México.';
+$page_title = 'Quiénes Somos | Hotel Expert – Sistema ELAH de Limpieza y Aromatización';
+$page_description = 'Hotel Expert diseña sistemas de limpieza biodegradable y aromatización de marca para hoteles en todo México. Conoce el Sistema ELAH.';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
@@ -21,6 +21,7 @@ require __DIR__ . '/includes/header.php';
             <div class="lg:col-span-7">
                 <p class="eyebrow">Nuestra propuesta</p>
                 <h2 class="display mt-3 text-3xl sm:text-5xl">No son productos separados. Es el Sistema ELAH.</h2>
+                <p class="mt-6 text-xl text-charcoal/70 leading-relaxed">Cobertura nacional, productos 100% biodegradables y un mismo aroma insignia en cada punto de contacto del huésped.</p>
                 <p class="mt-6 text-xl text-charcoal/70 leading-relaxed">ELAH responde a dos necesidades que los hoteles resolvían por separado: limpiar sus instalaciones y ambientar el aroma de su marca.</p>
                 <p class="mt-5 text-lg text-charcoal/70 leading-relaxed">Integramos multiusos concentrados, sprays ambientales, aromas y difusores eléctricos para que cada punto de contacto refuerce la misma identidad olfativa.</p>
             </div>

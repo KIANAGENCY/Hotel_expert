@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$page_title = 'Contacto Sistema ELAH — Hotel Expert';
-$page_description = 'Habla con un asesor del Sistema ELAH para diseñar la solución de limpieza y aroma de tu hotel.';
+$page_title = 'Cotiza el Sistema ELAH para tu Hotel | Contacto Hotel Expert';
+$page_description = 'Solicita asesoría para diseñar el sistema de limpieza y aromatización de tu hotel. Cobertura nacional en México. Respuesta por WhatsApp o correo.';
 $pref = preg_replace('/[^a-z]/', '', strtolower((string) ($_GET['tipo'] ?? '')));
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
