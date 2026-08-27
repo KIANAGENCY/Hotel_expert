@@ -4,6 +4,7 @@ require_once __DIR__ . '/includes/config.php';
 $productos = require __DIR__ . '/data/productos.php';
 $page_title = 'Catálogo de Limpieza y Aromatización para Hoteles | Tienda B2B Sistema ELAH';
 $page_description = 'Cotiza paquetes, concentrados, difusores y aromas para la limpieza y aromatización de tu hotel. Sistema ELAH: 100% biodegradable, precios + IVA, envío nacional.';
+$page = 'productos';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 
@@ -102,9 +103,14 @@ $grupos = [
                 <p class="eyebrow text-aqua">¿Necesitas ayuda?</p>
                 <h2 class="font-heading font-extrabold text-2xl mt-2">Diseñamos tu sistema</h2>
                 <p class="mt-3 text-white/65">Un asesor te ayuda a elegir equipos y consumo según las áreas de tu hotel.</p>
-                <a class="btn-primary mt-5" href="<?= e(url('contacto.php')) ?>">Hablar con ventas</a>
+                <a class="btn-primary mt-5" href="<?= e(url('contacto/')) ?>">Hablar con ventas</a>
             </article>
         </div>
     </section>
 </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>
+
+
+
+
+

@@ -13,19 +13,31 @@ if (!isset($productos[$slug])) {
     exit;
 }
 $p = $productos[$slug];
-$page = 'catalogo';
-$page_title = $p['nombre'] . ' — Sistema ELAH';
-$page_description = $p['resumen'];
+$page = 'productos';
+if ($slug === 'estandar') {
+    $page_title = 'Hotel Expert: limpieza profesional con el aroma insignia de tu hotel';
+    $page_description = 'Hotel Expert limpia, desinfecta y aromatiza con concentrado 1:9 para múltiples superficies del hotel. Solicita una muestra.';
+} elseif ($slug === 'dual') {
+    $page_title = 'Hotel Expert Dual: limpieza profesional y neutralización de malos olores';
+    $page_description = 'Hotel Expert Dual limpia, desinfecta, aromatiza y neutraliza malos olores en habitaciones y espacios cerrados.';
+} else {
+    $page_title = $p['nombre'] . ' — Sistema ELAH';
+    $page_description = $p['resumen'];
+}
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
 <main id="contenido" class="pt-28">
     <section class="py-12 lg:py-20 bg-hielo">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <nav class="text-sm text-charcoal/50 mb-8" aria-label="Ruta">
-                <a class="hover:text-turquesa" href="<?= e(url('catalogo.php')) ?>">Tienda</a>
-                <span class="mx-2">/</span>
-                <span><?= e($p['nombre']) ?></span>
+            <nav class="text-sm text-charcoal/50 mb-8" aria-label="Ruta de navegación">
+                <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <li><a class="hover:text-turquesa" href="<?= e(url('')) ?>">Inicio</a></li>
+                    <li aria-hidden="true">/</li>
+                    <li><a class="hover:text-turquesa" href="<?= e(url('productos/')) ?>">Productos</a></li>
+                    <li aria-hidden="true">/</li>
+                    <li><span class="text-charcoal/70"><?= e($p['nombre']) ?></span></li>
+                </ol>
             </nav>
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div class="product-visual min-h-[30rem] bg-white shadow-glass">
@@ -37,7 +49,15 @@ require __DIR__ . '/includes/header.php';
                 </div>
                 <div>
                     <p class="eyebrow"><?= e($p['categoria']) ?> · <?= e($p['sku']) ?></p>
-                    <h1 class="display mt-3 text-4xl sm:text-6xl"><?= e($p['nombre']) ?></h1>
+                    <h1 class="display mt-3 text-4xl sm:text-6xl">
+                        <?php if ($slug === 'estandar'): ?>
+                            Hotel Expert: limpieza profesional con el aroma insignia de tu hotel
+                        <?php elseif ($slug === 'dual'): ?>
+                            Hotel Expert Dual: limpieza profesional y neutralización de malos olores
+                        <?php else: ?>
+                            <?= e($p['nombre']) ?>
+                        <?php endif; ?>
+                    </h1>
                     <p class="mt-4 text-xl text-turquesa font-heading font-semibold"><?= e($p['subtitulo']) ?></p>
                     <p class="mt-5 text-lg text-charcoal/70 leading-relaxed"><?= e($p['resumen']) ?></p>
                     <div class="mt-7 flex flex-wrap gap-2">
@@ -46,22 +66,13 @@ require __DIR__ . '/includes/header.php';
                         <?php endforeach; ?>
                     </div>
                     <div class="mt-9 border-y border-expert/10 py-7">
-                        <p class="price-display"><?= e($p['precio_texto']) ?> <small>+ IVA</small></p>
-                        <?php if (!empty($p['precio_lista'])): ?>
-                            <p class="mt-2 text-charcoal/45 line-through">Precio de lista <?= e($p['precio_lista']) ?></p>
-                        <?php endif; ?>
-                        <p class="mt-3 font-heading font-semibold text-expert"><?= e($p['presentacion']) ?> · <?= e($p['rendimiento']) ?></p>
+                        <p class="font-heading text-xl font-bold text-expert"><?= e($p['presentacion']) ?></p>
+                        <p class="mt-2 text-charcoal/65"><?= e($p['rendimiento']) ?></p>
                     </div>
-                    <div class="mt-7 flex flex-wrap items-center gap-3">
-                        <div class="quantity-control" aria-label="Cantidad">
-                            <button type="button" data-qty-minus aria-label="Reducir cantidad">−</button>
-                            <input id="product-qty" type="number" min="1" max="99" value="1" aria-label="Cantidad">
-                            <button type="button" data-qty-plus aria-label="Aumentar cantidad">+</button>
-                        </div>
-                        <button class="btn-primary btn-lg" type="button" data-cart-add="<?= e($slug) ?>" data-quantity-source="product-qty">Agregar a cotización</button>
-                        <a class="btn-outline btn-lg" href="<?= e(url('cotizacion.php')) ?>">Ver cotización</a>
+                    <div class="mt-7 flex flex-wrap gap-3">
+                        <a class="btn-primary btn-lg" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar muestra</a>
+                        <a class="btn-outline btn-lg" href="<?= e(whatsapp_url()) ?>" target="_blank" rel="noopener noreferrer">Hablar con un asesor</a>
                     </div>
-                    <p class="mt-4 text-sm text-charcoal/50">La solicitud no genera un cobro. Confirmaremos disponibilidad, IVA y entrega antes de cerrar el pedido.</p>
                 </div>
             </div>
         </div>
@@ -93,9 +104,67 @@ require __DIR__ . '/includes/header.php';
                 <?php if ($p['no_usar']): ?>
                     <p class="mt-7 rounded-2xl border border-aqua/30 bg-aqua/10 p-4"><strong class="text-aqua">Excepción:</strong> no usar en <?= e(implode(' ni ', $p['no_usar'])) ?>.</p>
                 <?php endif; ?>
-                <a class="btn-primary mt-7" href="<?= e(url('como-funciona.php')) ?>">Cómo funciona ELAH</a>
+                <a class="btn-primary mt-7" href="<?= e(url('sistema-elah/')) ?>">Cómo funciona ELAH</a>
             </aside>
         </div>
     </section>
+
+    <?php if ($slug === 'estandar'): ?>
+    <section class="py-16 lg:py-24 bg-hielo">
+        <div class="mx-auto max-w-3xl px-4 sm:px-6 space-y-12">
+            <article>
+                <h2 class="display text-3xl">Limpia, desinfecta y aromatiza</h2>
+                <p class="mt-4 text-lg text-charcoal/70">Hotel Expert limpia, desinfecta e incorpora el aroma insignia del hotel en cada aplicación.</p>
+            </article>
+            <article>
+                <h2 class="display text-3xl">Concentrado 1:9</h2>
+                <p class="mt-4 text-lg text-charcoal/70">100 ml de producto + 900 ml de agua producen 1 litro listo para usar.</p>
+            </article>
+            <article>
+                <h2 class="display text-3xl">Un producto, múltiples superficies</h2>
+                <p class="mt-4 text-lg text-charcoal/70">Pisos, mármol, granito, acero inoxidable, baños, cromo, madera, textiles, sillones y alfombras.</p>
+                <p class="mt-4 text-charcoal/70"><strong>No utilizar en vidrio.</strong></p>
+            </article>
+            <article>
+                <h2 class="display text-3xl">Cada limpieza también aplica el aroma insignia</h2>
+                <p class="mt-4 text-lg text-charcoal/70">Integra el aroma de marca en una actividad que ocurre todos los días en el hotel.</p>
+            </article>
+            <article>
+                <h2 class="display text-3xl">¿Dónde recomendamos Hotel Expert?</h2>
+                <p class="mt-4 text-lg text-charcoal/70">Especialmente en áreas abiertas y de alto tránsito dentro de la lógica actual del sistema.</p>
+                <a class="btn-primary mt-6" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar muestra</a>
+            </article>
+        </div>
+    </section>
+    <?php elseif ($slug === 'dual'): ?>
+    <section class="py-16 lg:py-24 bg-hielo">
+        <div class="mx-auto max-w-3xl px-4 sm:px-6 space-y-12">
+            <article>
+                <h2 class="display text-3xl">Limpia, desinfecta, aromatiza y neutraliza</h2>
+                <p class="mt-4 text-lg text-charcoal/70">Hotel Expert Dual limpia, desinfecta, aromatiza e incorpora neutralización de malos olores.</p>
+            </article>
+            <article>
+                <h2 class="display text-3xl">Cuando cubrir el olor no es suficiente</h2>
+                <p class="mt-4 text-lg text-charcoal/70">Cuando el problema no es la falta de fragancia sino la presencia de malos olores, cubrirlos con un aroma más intenso no resuelve la necesidad operativa.</p>
+            </article>
+            <article>
+                <h2 class="display text-3xl">Especialmente útil en habitaciones y espacios cerrados</h2>
+                <p class="mt-4 text-lg text-charcoal/70">Dual se orienta a espacios donde los olores pueden retenerse y la percepción del huésped es crítica.</p>
+            </article>
+            <article>
+                <h2 class="display text-3xl">Textiles, alfombras y tapicería</h2>
+                <p class="mt-4 text-lg text-charcoal/70">Apoyo específico para el control de malos olores en superficies textiles dentro de la operación de limpieza.</p>
+            </article>
+            <article>
+                <h2 class="display text-3xl">También lleva el aroma insignia de tu hotel</h2>
+                <p class="mt-4 text-lg text-charcoal/70">Además de neutralizar, Dual incorpora el aroma insignia del establecimiento.</p>
+                <a class="btn-primary mt-6" href="<?= e(url('contacto/?tipo=muestra')) ?>">Probar Hotel Expert Dual</a>
+            </article>
+        </div>
+    </section>
+    <?php endif; ?>
 </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>
+
+
+

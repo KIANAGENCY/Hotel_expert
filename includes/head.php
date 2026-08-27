@@ -6,7 +6,21 @@ declare(strict_types=1);
 $page_title = $page_title ?? SITE_NAME;
 $page_description = $page_description ?? (SITE_TAGLINE . ' Sistema integral de limpieza, desinfección y aroma insignia para hoteles.');
 $page_og = $page_og ?? 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80';
-$canonical = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? SITE_DOMAIN) . ($_SERVER['REQUEST_URI'] ?? '/');
+$canonical_routes = [
+    'index' => '/', 'sistema-elah' => '/sistema-elah/', 'productos' => '/productos/',
+    'aroma-insignia' => '/aroma-insignia/', 'recursos' => '/recursos/', 'blog' => '/blog/',
+    'manual-de-uso' => '/manual-de-uso/', 'nosotros' => '/nosotros/', 'contacto' => '/contacto/',
+];
+$route_page = basename((string) ($_SERVER['PHP_SELF'] ?? 'index.php'), '.php');
+$canonical_path = $canonical_path ?? ($canonical_routes[$route_page] ?? parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH));
+if ($route_page === 'producto') {
+    $canonical_path = match ((string) ($_GET['slug'] ?? '')) {
+        'estandar' => '/productos/hotel-expert/',
+        'dual' => '/productos/hotel-expert-dual/',
+        default => '/productos/',
+    };
+}
+$canonical = SITE_ORIGIN . '/' . ltrim((string) $canonical_path, '/');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -15,7 +29,6 @@ $canonical = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($page_title) ?></title>
     <meta name="description" content="<?= e($page_description) ?>">
-    <meta name="keywords" content="Sistema ELAH, limpieza para hoteles, aroma para hoteles, identidad olfativa, Hotel Expert Dual, difusores para hoteles">
     <meta name="author" content="Hotel Expert">
     <link rel="canonical" href="<?= e($canonical) ?>">
     <meta property="og:type" content="website">
@@ -75,6 +88,9 @@ $canonical = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' 
       "areaServed": "MX"
     }
     </script>
+    <?php if (!empty($structured_data)): ?>
+    <script type="application/ld+json"><?= json_encode($structured_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?></script>
+    <?php endif; ?>
     <?php /* HubSpot: sustituir PORTAL_ID cuando el CRM esté activo
     <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/PORTAL_ID.js"></script>
     */ ?>

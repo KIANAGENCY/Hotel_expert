@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.hotelexpert.mx/</loc></url>
-  <url><loc>https://www.hotelexpert.mx/catalogo.php</loc></url>
-  <url><loc>https://www.hotelexpert.mx/como-funciona.php</loc></url>
-  <url><loc>https://www.hotelexpert.mx/rastreo.php</loc></url>
-  <url><loc>https://www.hotelexpert.mx/nosotros.php</loc></url>
-  <url><loc>https://www.hotelexpert.mx/blog.php</loc></url>
-  <url><loc>https://www.hotelexpert.mx/contacto.php</loc></url>
+  <url><loc>https://www.hotelexpert.mx/sistema-elah/</loc></url>
+  <url><loc>https://www.hotelexpert.mx/productos/</loc></url>
+  <url><loc>https://www.hotelexpert.mx/productos/hotel-expert/</loc></url>
+  <url><loc>https://www.hotelexpert.mx/productos/hotel-expert-dual/</loc></url>
+  <url><loc>https://www.hotelexpert.mx/aroma-insignia/</loc></url>
+  <url><loc>https://www.hotelexpert.mx/recursos/</loc></url>
+  <url><loc>https://www.hotelexpert.mx/blog/</loc></url>
+  <url><loc>https://www.hotelexpert.mx/manual-de-uso/</loc></url>
+  <url><loc>https://www.hotelexpert.mx/nosotros/</loc></url>
+  <url><loc>https://www.hotelexpert.mx/contacto/</loc></url>
 </urlset>
+

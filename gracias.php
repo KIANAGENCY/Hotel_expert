@@ -14,7 +14,7 @@ require __DIR__ . '/includes/header.php';
         <h1 class="display mt-3 text-4xl sm:text-5xl">Recibimos tu solicitud ELAH.</h1>
         <p class="mt-4 text-lg text-charcoal/70">Revisaremos productos, cantidades, IVA y entrega para responderte por correo o WhatsApp.</p>
         <div class="mt-8 flex flex-wrap justify-center gap-3">
-            <a class="btn-primary" href="https://wa.me/<?= WHATSAPP ?>?text=<?= WHATSAPP_MSG ?>">Abrir WhatsApp</a>
+            <a class="btn-primary" href="<?= e(whatsapp_url()) ?>">Abrir WhatsApp</a>
             <a class="btn-outline" href="<?= e(url('catalogo.php')) ?>">Volver a la tienda</a>
         </div>
     </div>

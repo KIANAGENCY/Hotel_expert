@@ -1,175 +1,210 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$productos = require __DIR__ . '/data/productos.php';
-$posts = require __DIR__ . '/data/blog.php';
-$page_title = 'Limpieza y Aromatización para Hoteles en México | Sistema ELAH – Hotel Expert';
-$page_description = 'Sistema ELAH de Hotel Expert: limpieza biodegradable y aromatización profesional en un solo sistema para hoteles boutique, auto hoteles y cadenas en México. Cotiza tu paquete.';
+$page_title = 'Sistema ELAH | Limpieza + Aroma para hoteles — Hotel Expert';
+$page_description = 'ELAH significa Estandarización de Limpieza y Aroma en Hoteles. Integra limpieza cotidiana, refuerzo y difusión bajo una misma identidad olfativa.';
+$home_faq = [
+    ['¿Qué significa ELAH?', 'ELAH significa Estandarización de Limpieza y Aroma en Hoteles.'],
+    ['¿Qué es el Sistema ELAH?', 'Es el sistema de Hotel Expert para integrar limpieza y aromatización bajo una misma identidad olfativa.'],
+    ['¿Hotel Expert es solamente un aromatizante?', 'No. Hotel Expert es un producto profesional concentrado que limpia, desinfecta y deja el aroma insignia del hotel.'],
+    ['¿Cuál es la diferencia entre Hotel Expert y Hotel Expert Dual?', 'Ambos limpian, desinfectan y llevan el aroma insignia. Hotel Expert Dual añade neutralización de malos olores.'],
+    ['¿Cómo se diluye Hotel Expert?', '100 ml de concentrado + 900 ml de agua para preparar un litro listo para usar.'],
+    ['¿Se puede utilizar en vidrio?', 'No utilizar Hotel Expert en vidrio o espejos.'],
+];
+$structured_data = [
+    '@context' => 'https://schema.org',
+    '@type' => 'FAQPage',
+    'mainEntity' => array_map(static fn(array $item): array => [
+        '@type' => 'Question', 'name' => $item[0],
+        'acceptedAnswer' => ['@type' => 'Answer', 'text' => $item[1]],
+    ], $home_faq),
+];
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
-<main id="contenido">
-    <section id="inicio" data-nav-section="inicio" class="elah-hero nav-section relative min-h-[100svh] flex items-center overflow-hidden bg-expert noise">
-        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2200&q=85"
-             alt="Lobby de hotel con identidad y ambiente distintivo"
-             class="absolute inset-0 h-full w-full object-cover hero-ken opacity-45">
-        <div class="absolute inset-0 bg-gradient-to-r from-expert via-expert/90 to-expert/20"></div>
-        <div class="absolute inset-0 grid-dots opacity-20"></div>
-        <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 py-44 w-full">
-            <div class="max-w-4xl">
-                <p class="eyebrow reveal">Sistema ELAH de Hotel Expert · Marketing olfativo y limpieza biodegradable</p>
-                <h1 class="display mt-5 text-4xl sm:text-6xl lg:text-[4.8rem] text-white reveal reveal-d1">
-                    Estandarización de<br><span class="text-aqua">Limpieza y Aroma</span><br>de Hoteles.
-                </h1>
-                <p class="mt-7 max-w-2xl text-lg sm:text-2xl text-white/80 reveal reveal-d2">
-                    Unimos dos mundos: limpieza y aromatización. Vendemos la identidad olfativa completa de tu hotel, con productos 100% biodegradables y cobertura nacional.
-                </p>
-                <div class="mt-9 flex flex-wrap gap-3 reveal reveal-d3">
-                    <a class="btn-primary btn-lg" href="#tienda">Conocer los paquetes</a>
-                    <a class="btn-ghost btn-lg" href="#como-funciona">Cómo funciona</a>
+<main id="contenido" data-scroll-flow>
+    <section class="home-hero home-scroll-step" data-nav-section="sistema-elah">
+        <div class="hero-hotel-image" role="img" aria-label="Interior contemporáneo de un hotel"></div>
+        <div class="home-hero-overlay"></div>
+        <div class="relative mx-auto grid min-h-[100svh] max-w-7xl items-center gap-12 px-4 pb-20 pt-36 sm:px-6 lg:grid-cols-12 lg:pt-40">
+            <div class="lg:col-span-7">
+                <p class="eyebrow text-aqua">Sistema</p>
+                <h1 class="elah-wordmark">ELAH</h1>
+                <p class="mt-6 max-w-2xl font-heading text-xl font-bold leading-snug text-white sm:text-3xl">Estandarización de Limpieza y Aroma en Hoteles</p>
+                <p class="elah-equation mt-8">Limpieza <span>+</span> Aroma <span>=</span> ELAH</p>
+                <p class="mt-7 max-w-2xl text-lg leading-relaxed text-white/75 sm:text-xl">Hotel Expert integra la limpieza profesional y el aroma insignia de tu hotel dentro de un mismo sistema.</p>
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a class="btn-primary" href="<?= e(url('sistema-elah/')) ?>">Conoce el Sistema ELAH</a>
+                    <a class="btn-ghost" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicita una muestra</a>
                 </div>
-                <div class="mt-12 flex flex-wrap gap-x-8 gap-y-3 text-sm text-white/65 font-heading reveal reveal-d4">
-                    <span>Envío nacional</span>
-                    <span>100% biodegradable</span>
-                    <span>Precios + IVA</span>
-                </div>
+                <p class="mt-7 text-sm font-semibold tracking-wide text-white/55">Limpieza · Aroma insignia · Estandarización</p>
+            </div>
+            <div class="hidden lg:col-span-5 lg:block" aria-hidden="true">
+                <div class="scent-orbit"><span></span><span></span><span></span></div>
             </div>
         </div>
     </section>
 
-    <section id="tienda" data-nav-section="tienda" class="nav-section py-20 lg:py-28 bg-hielo">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-                <div class="max-w-3xl io-reveal">
-                    <p class="eyebrow">Tienda ELAH</p>
-                    <h2 class="display mt-3 text-3xl sm:text-5xl">Prueba. Instala. Reabastece.</h2>
-                    <p class="mt-5 text-lg text-charcoal/70">Comienza con una prueba en tu hotel o instala el sistema completo con multiusos, difusores, spray y aroma.</p>
-                </div>
-                <a class="btn-outline io-reveal" href="<?= e(url('catalogo.php')) ?>">Ver toda la tienda</a>
+    <section class="section-space bg-white home-scroll-step" data-nav-section="sistema-elah">
+        <div class="section-shell">
+            <div class="max-w-3xl">
+                <p class="eyebrow">Sistema ELAH</p>
+                <h2 class="section-title">Unimos dos mundos.</h2>
+                <p class="section-lead">La limpieza y la aromatización suelen resolverse como procesos separados. ELAH los integra dentro de un mismo sistema.</p>
             </div>
-            <div class="mt-12 grid lg:grid-cols-3 gap-6">
-                <article class="elah-offer bg-white p-8 io-reveal">
-                    <p class="eyebrow">Paquete Muestra</p>
-                    <h3 class="font-heading font-extrabold text-2xl text-expert mt-3">Pruébalo en tu hotel</h3>
-                    <p class="price-display mt-5">$1,999 <small>+ IVA</small></p>
-                    <p class="mt-4 text-charcoal/70">1 Dual + 1 Estándar + 1 caja de aromas.</p>
-                    <button class="btn-primary mt-7" type="button" data-cart-add="paquete-muestra">Agregar</button>
-                </article>
-                <article class="elah-offer bg-expert text-white p-8 ring-4 ring-aqua/30 io-reveal">
-                    <span class="inline-flex rounded-full bg-aqua text-expert px-3 py-1 text-xs font-heading font-bold">SISTEMA COMPLETO</span>
-                    <h3 class="font-heading font-extrabold text-2xl mt-4">Paquete de Entrada ELAH</h3>
-                    <p class="price-display text-white mt-5">$8,999 <small>+ IVA</small></p>
-                    <p class="mt-2 text-white/45 line-through">Precio de lista $10,496</p>
-                    <p class="mt-4 text-white/70">2 Dual + 2 Estándar, difusores, spray, aroma y envío.</p>
-                    <button class="btn-primary mt-7" type="button" data-cart-add="paquete-entrada">Agregar</button>
-                </article>
-                <article class="elah-offer bg-white p-8 io-reveal">
-                    <p class="eyebrow">Reabasto</p>
-                    <h3 class="font-heading font-extrabold text-2xl text-expert mt-3">Compra según tu consumo</h3>
-                    <p class="mt-5 text-xl font-heading font-extrabold text-turquesa">A precio de lista</p>
-                    <p class="mt-4 text-charcoal/70">Concentrados, aromas y equipos según el tamaño de tu hotel.</p>
-                    <a class="btn-outline mt-7" href="<?= e(url('catalogo.php#productos')) ?>">Ver productos</a>
-                </article>
+            <div class="equation-grid mt-12">
+                <article><p class="equation-label">Limpieza</p><p>Operación cotidiana del hotel.</p></article>
+                <div class="equation-symbol" aria-hidden="true">+</div>
+                <article><p class="equation-label">Aroma</p><p>Identidad y experiencia sensorial.</p></article>
+                <div class="equation-symbol" aria-hidden="true">=</div>
+                <article class="equation-result"><p class="equation-label">ELAH</p><p>Estandarización de Limpieza y Aroma en Hoteles.</p></article>
             </div>
         </div>
     </section>
 
-    <section id="como-funciona" data-nav-section="como-funciona" class="nav-section py-20 lg:py-28 bg-white">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <div class="max-w-3xl io-reveal">
-                <p class="eyebrow">Cómo funciona</p>
-                <h2 class="display mt-3 text-3xl sm:text-5xl">Tres capas. Un solo aroma.</h2>
-                <p class="mt-5 text-lg text-charcoal/70">ELAH integra limpieza operativa, refuerzo ambiental y presencia continua bajo la misma identidad olfativa.</p>
+    <section class="section-space bg-hielo home-scroll-step" data-nav-section="sistema-elah">
+        <div class="section-shell">
+            <h2 class="section-title max-w-4xl">Una misma identidad, no aromas desconectados.</h2>
+            <div class="identity-compare mt-12">
+                <article class="identity-before">
+                    <p class="eyebrow text-charcoal/50">Antes</p>
+                    <div class="identity-row"><span>Limpieza</span><strong>Aroma A</strong></div>
+                    <div class="identity-row"><span>Spray</span><strong>Aroma B</strong></div>
+                    <div class="identity-row"><span>Difusor</span><strong>Aroma C</strong></div>
+                </article>
+                <article class="identity-after">
+                    <p class="eyebrow text-aqua">Con ELAH</p>
+                    <div class="identity-row"><span>Limpieza</span><strong>Aroma insignia</strong></div>
+                    <div class="identity-row"><span>Spray</span><strong>Aroma insignia</strong></div>
+                    <div class="identity-row"><span>Difusor</span><strong>Aroma insignia</strong></div>
+                </article>
             </div>
-            <div class="mt-12 grid md:grid-cols-3 gap-5">
-                <?php
-                $capas = [
-                    ['01', 'Motor diario', 'Multiusos concentrado', 'Limpia, desinfecta y aromatiza en cada uso.'],
-                    ['02', 'Refuerzo puntual', 'Spray ambiental', 'Refuerza el aroma en zonas específicas.'],
-                    ['03', 'Presencia constante', 'Difusor eléctrico', 'Aromatización pasiva y continua.'],
-                ];
-                foreach ($capas as $c): ?>
-                    <article class="elah-card bg-hielo p-8 io-reveal">
-                        <span class="text-aqua font-heading font-extrabold text-4xl"><?= e($c[0]) ?></span>
-                        <p class="eyebrow mt-6"><?= e($c[1]) ?></p>
-                        <h3 class="mt-2 font-heading font-extrabold text-2xl text-expert"><?= e($c[2]) ?></h3>
-                        <p class="mt-3 text-charcoal/70"><?= e($c[3]) ?></p>
-                    </article>
+            <p class="statement mt-10">Una misma identidad olfativa en diferentes puntos de contacto.</p>
+        </div>
+    </section>
+
+    <section class="section-space bg-expert text-white home-scroll-step" data-nav-section="sistema-elah">
+        <div class="section-shell">
+            <p class="eyebrow text-aqua">Cómo funciona</p>
+            <h2 class="section-title text-white">Un sistema. Tres formas de llevar el aroma insignia.</h2>
+            <div class="process-line mt-12">
+                <article><span>01</span><p class="process-kicker">Limpieza</p><h3>Hotel Expert</h3><p>El multiusos concentrado limpia, desinfecta y deja el aroma insignia durante la operación cotidiana.</p><strong>Limpieza + aroma en cada aplicación.</strong></article>
+                <article><span>02</span><p class="process-kicker">Refuerzo</p><h3>Spray ambiental</h3><p>Permite reforzar el aroma de manera puntual en áreas o momentos específicos.</p><strong>Aroma donde y cuando se necesita.</strong></article>
+                <article><span>03</span><p class="process-kicker">Presencia continua</p><h3>Difusores</h3><p>Complementan el sistema mediante aromatización continua en espacios seleccionados.</p><strong>Presencia aromática continua.</strong></article>
+            </div>
+            <div class="mt-10 flex flex-col gap-5 border-t border-white/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
+                <p class="font-heading text-xl font-bold text-aqua">Limpieza + Refuerzo + Difusión → Aroma insignia</p>
+                <a class="btn-ghost" href="<?= e(url('sistema-elah/')) ?>">Conoce cómo funciona ELAH</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-space bg-white home-scroll-step" data-nav-section="sistema-elah">
+        <div class="section-shell grid gap-10 lg:grid-cols-12 lg:items-center">
+            <div class="lg:col-span-8">
+                <h2 class="section-title">La limpieza deja de ser solo una operación.</h2>
+                <h3 class="mt-5 font-heading text-2xl font-bold text-turquesa sm:text-3xl">También puede reforzar la identidad de tu hotel.</h3>
+                <p class="section-lead">Housekeeping limpia habitaciones, baños y diferentes áreas todos los días. Con Hotel Expert, esa misma aplicación también lleva el aroma insignia.</p>
+                <p class="mt-4 max-w-3xl text-lg text-charcoal/70">Así, una actividad indispensable de la operación se convierte también en un punto de contacto sensorial.</p>
+            </div>
+            <p class="feature-statement lg:col-span-4">Limpieza <span>+</span> identidad olfativa</p>
+        </div>
+    </section>
+
+    <section id="productos" class="section-space bg-arena scroll-mt-28 home-scroll-step" data-nav-section="productos">
+        <div class="section-shell">
+            <p class="eyebrow">Sistema ELAH</p><h2 class="section-title">El motor del sistema</h2>
+            <div class="product-duo mt-12">
+                <article class="product-panel">
+                    <div><p class="eyebrow">Hotel Expert</p><h3>Limpia + Desinfecta + Aroma insignia</h3><p>Multiusos concentrado para la operación cotidiana del hotel.</p><a class="btn-outline mt-7" href="<?= e(url('productos/hotel-expert/')) ?>">Conocer Hotel Expert</a></div>
+                    <img src="<?= e(url('assets/img/bottle-std.svg')) ?>" alt="Presentación de Hotel Expert" loading="lazy" width="260" height="420">
+                </article>
+                <article class="product-panel product-panel-dual">
+                    <div><p class="eyebrow text-aqua">Hotel Expert Dual</p><h3>Limpia + Desinfecta + Aroma insignia + Neutraliza malos olores</h3><p>Añade neutralización de malos olores para áreas donde esta necesidad requiere mayor atención.</p><a class="btn-ghost mt-7" href="<?= e(url('productos/hotel-expert-dual/')) ?>">Conocer Hotel Expert Dual</a></div>
+                    <img src="<?= e(url('assets/img/bottle-dual.svg')) ?>" alt="Presentación de Hotel Expert Dual" loading="lazy" width="260" height="420">
+                </article>
+            </div>
+            <p class="mt-8 text-center font-heading font-semibold text-charcoal/55">Aromas · Spray · Difusores</p>
+        </div>
+    </section>
+
+    <section class="section-space bg-white home-scroll-step" data-nav-section="productos">
+        <div class="section-shell">
+            <h2 class="section-title">Dos versiones. Una misma identidad.</h2>
+            <div class="comparison-cards mt-12">
+                <?php foreach ([
+                    ['Hotel Expert', ['Limpia', 'Desinfecta', 'Aroma insignia', 'Multiuso']],
+                    ['Hotel Expert Dual', ['Limpia', 'Desinfecta', 'Aroma insignia', 'Multiuso', 'Neutraliza malos olores']]
+                ] as [$name, $features]): ?>
+                <article><h3><?= e($name) ?></h3><ul><?php foreach ($features as $feature): ?><li><span aria-hidden="true">✓</span><?= e($feature) ?></li><?php endforeach; ?></ul></article>
                 <?php endforeach; ?>
             </div>
-            <div class="mt-12 rounded-[1.75rem] bg-expert text-white p-8 sm:p-10 grid md:grid-cols-3 gap-8 items-center io-reveal">
-                <div>
-                    <p class="font-heading font-extrabold text-4xl text-aqua">2 L → 20 L</p>
-                    <p class="mt-2 text-white/65">2 L de concentrado + 18 L de agua.</p>
-                </div>
-                <div>
-                    <p class="font-heading font-extrabold text-4xl text-aqua">100%</p>
-                    <p class="mt-2 text-white/65">Biodegradable y eficiente.</p>
-                </div>
-                <a class="btn-primary justify-center" href="<?= e(url('como-funciona.php')) ?>">Ver funcionamiento completo</a>
-            </div>
+            <a class="btn-outline mt-8" href="<?= e(url('productos/#comparacion')) ?>">Comparar productos</a>
         </div>
     </section>
 
-    <section id="nosotros" data-nav-section="nosotros" class="nav-section py-20 lg:py-28 bg-expert text-white relative overflow-hidden">
-        <div class="absolute inset-0 grid-dots opacity-35"></div>
-        <div class="relative mx-auto max-w-7xl px-4 sm:px-6 grid lg:grid-cols-2 gap-12 items-center">
-            <div class="io-reveal">
-                <p class="eyebrow text-aqua">Nosotros</p>
-                <h2 class="display mt-3 text-3xl sm:text-5xl text-white">No son productos separados. Es el Sistema ELAH.</h2>
-                <p class="mt-6 text-lg text-white/70">Resolvemos bajo una sola oferta dos necesidades del hotel: la limpieza de sus instalaciones y la ambientación aromática de su marca.</p>
-                <p class="mt-4 text-lg text-white/70">Funciona para hoteles independientes y cadenas que buscan una experiencia consistente entre habitaciones, áreas y propiedades.</p>
-                <a class="btn-ghost mt-8" href="<?= e(url('nosotros.php')) ?>">Conocer Hotel Expert</a>
-            </div>
-            <div class="grid sm:grid-cols-2 gap-5 io-reveal">
-                <article class="elah-compare bg-white text-charcoal p-7">
-                    <p class="eyebrow">Estándar</p>
-                    <h3 class="font-heading font-extrabold text-xl text-expert mt-2">Áreas abiertas</h3>
-                    <p class="mt-4 text-charcoal/70">Limpia, desinfecta y deja el aroma insignia en zonas de alto tránsito.</p>
-                </article>
-                <article class="elah-compare bg-aqua text-expert p-7">
-                    <p class="eyebrow !text-expert">Dual</p>
-                    <h3 class="font-heading font-extrabold text-xl mt-2">Habitaciones</h3>
-                    <p class="mt-4 text-expert/75">Elimina malos olores en su origen, especialmente en textiles y espacios cerrados.</p>
-                </article>
-            </div>
+    <section class="section-space hotel-map home-scroll-step" data-nav-section="aroma-insignia">
+        <div class="section-shell">
+            <h2 class="section-title max-w-4xl">Una misma experiencia, de la habitación al lobby.</h2>
+            <div class="space-chips mt-10"><?php foreach (['Habitaciones', 'Baños', 'Pasillos', 'Lobby', 'Restaurante', 'Gimnasio', 'Áreas administrativas'] as $space): ?><span><?= e($space) ?></span><?php endforeach; ?></div>
+            <p class="statement mt-12">Un hotel. Diferentes espacios. Una misma identidad olfativa.</p>
         </div>
     </section>
 
-    <section id="blog" data-nav-section="blog" class="nav-section py-20 lg:py-28 bg-arena">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-                <div class="io-reveal">
-                    <p class="eyebrow">Blog y recursos</p>
-                    <h2 class="display mt-3 text-3xl sm:text-5xl">Conoce mejor el Sistema ELAH.</h2>
-                </div>
-                <a class="btn-outline io-reveal" href="<?= e(url('blog.php')) ?>">Ver todos los recursos</a>
+    <section class="section-space aroma-section text-white home-scroll-step" data-nav-section="aroma-insignia">
+        <div class="section-shell grid gap-10 lg:grid-cols-12 lg:items-end">
+            <div class="lg:col-span-8"><p class="eyebrow text-aqua">Aroma insignia</p><h2 class="section-title text-white">Tu hotel se reconoce por cómo se ve. También puede recordarse por cómo huele.</h2></div>
+            <div class="lg:col-span-4"><p class="text-lg leading-relaxed text-white/75">El aroma puede formar parte de la identidad sensorial del establecimiento. ELAH permite incorporarlo desde la limpieza cotidiana y reforzarlo mediante diferentes formas de aromatización.</p><p class="mt-4 font-semibold">No se trata únicamente de que el hotel huela bien. Se trata de mantener una experiencia coherente con su identidad.</p><a class="btn-ghost mt-7" href="<?= e(url('aroma-insignia/')) ?>">Descubre el aroma insignia</a></div>
+        </div>
+    </section>
+
+    <section class="section-space bg-white home-scroll-step" data-nav-section="recursos">
+        <div class="section-shell"><h2 class="section-title max-w-4xl">Diseñado para integrarse a la operación del hotel.</h2>
+            <div class="operations-grid mt-12">
+                <article><p>Concentrado</p><strong>2 L → 20 L</strong><span>Un bidón de 2 litros permite preparar 20 litros de producto listo para usar.</span></article>
+                <article><p>Dilución</p><strong>1:9</strong><span>100 ml de concentrado + 900 ml de agua.</span></article>
+                <article><p>Multiuso</p><strong>Diferentes áreas</strong><span>Para diferentes superficies y áreas del hotel.</span></article>
+                <article><p>Retornable</p><strong>2 litros</strong><span>Presentación concentrada en envase retornable de 2 litros.</span></article>
             </div>
-            <div class="mt-12 grid md:grid-cols-3 gap-6">
-                <?php foreach (array_slice($posts, 0, 3) as $post): ?>
-                    <article class="product-card bg-white overflow-hidden io-reveal">
-                        <img src="<?= e($post['cover']) ?>" alt="" class="h-48 w-full object-cover">
-                        <div class="p-6">
-                            <p class="eyebrow"><?= e($post['categoria']) ?></p>
-                            <h3 class="mt-3 font-heading font-extrabold text-xl text-expert"><?= e($post['titulo']) ?></h3>
-                            <p class="mt-3 text-charcoal/65"><?= e($post['extracto']) ?></p>
-                            <a class="btn-outline mt-6" href="<?= e(url('articulo.php?slug=' . $post['slug'])) ?>">Leer artículo</a>
-                        </div>
-                    </article>
+            <p class="mt-7 text-sm font-semibold text-charcoal/60">No utilizar en vidrio o espejos.</p>
+        </div>
+    </section>
+
+    <section class="section-space bg-hielo home-scroll-step" data-nav-section="recursos">
+        <div class="section-shell">
+            <h2 class="section-title">De la operación a la experiencia del huésped.</h2>
+            <ol class="experience-flow mt-12" aria-label="Secuencia de experiencia"><li>Limpieza</li><li>Frescura</li><li>Aroma insignia</li><li>Consistencia</li><li>Experiencia</li></ol>
+            <p class="section-lead">Cada espacio limpio forma parte de la experiencia del huésped. ELAH busca que limpieza y aroma trabajen bajo una misma lógica para mantener una experiencia consistente en diferentes momentos de la estancia.</p>
+            <p class="statement mt-8"><?= e(SITE_CLAIM) ?></p>
+        </div>
+    </section>
+
+    <section class="sample-section home-scroll-step" id="muestra" data-nav-section="contacto">
+        <div class="section-shell py-20 text-center sm:py-28">
+            <h2 class="section-title text-white">Pruébalo en tu propio hotel.</h2>
+            <p class="mx-auto mt-6 max-w-2xl text-lg text-white/70">Conoce Hotel Expert dentro de tu operación y descubre cómo limpieza y aroma pueden trabajar juntos bajo una misma identidad.</p>
+            <div class="mt-8 flex flex-wrap justify-center gap-3"><a class="btn-primary" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar una muestra</a><a class="btn-ghost" href="<?= e(whatsapp_url()) ?>" target="_blank" rel="noopener noreferrer">Hablar con un asesor</a></div>
+        </div>
+    </section>
+
+    <section class="section-space bg-white home-scroll-step" data-nav-section="recursos">
+        <div class="mx-auto max-w-3xl px-4 sm:px-6">
+            <h2 class="section-title">Preguntas frecuentes</h2>
+            <div class="faq-list mt-10">
+                <?php foreach ($home_faq as $i => [$question, $answer]): ?>
+                <details class="faq-item"><summary><span><?= e($question) ?></span><span class="faq-icon" aria-hidden="true">+</span></summary><div class="faq-answer"><p><?= e($answer) ?></p></div></details>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <section id="contacto" data-nav-section="contacto" class="nav-section relative py-24 overflow-hidden bg-brand">
-        <div class="mx-auto max-w-4xl px-4 text-center text-white">
-            <p class="eyebrow text-aqua io-reveal">Contacto</p>
-            <h2 class="display mt-3 text-3xl sm:text-5xl text-white io-reveal">Instala la identidad olfativa completa.</h2>
-            <p class="mt-5 text-xl text-white/70 io-reveal">Diseñamos el sistema según las áreas, habitaciones y necesidades de tu hotel.</p>
-            <div class="mt-8 flex flex-wrap justify-center gap-3 io-reveal">
-                <a class="btn-light btn-lg" href="<?= e(url('contacto.php')) ?>">Hablar con un asesor</a>
-                <a class="btn-ghost btn-lg" href="https://wa.me/<?= WHATSAPP ?>?text=<?= WHATSAPP_MSG ?>" target="_blank" rel="noopener">WhatsApp <?= WHATSAPP_DISPLAY ?></a>
-            </div>
+    <section class="elah-close home-scroll-step" data-nav-section="contacto">
+        <div class="section-shell py-24 text-center sm:py-32">
+            <p class="eyebrow text-aqua">Sistema</p><p class="elah-close-word">ELAH</p>
+            <p class="mx-auto mt-5 max-w-2xl font-heading text-xl font-bold text-white">Estandarización de Limpieza y Aroma en Hoteles</p>
+            <p class="elah-equation mx-auto mt-8">Limpieza <span>+</span> Aroma <span>=</span> ELAH</p>
+            <p class="mt-8 text-white/65"><?= e(SITE_CLAIM) ?></p>
+            <div class="mt-8 flex flex-wrap justify-center gap-3"><a class="btn-primary" href="<?= e(url('sistema-elah/')) ?>">Conoce el Sistema ELAH</a><a class="btn-ghost" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicita una muestra</a></div>
         </div>
     </section>
 </main>

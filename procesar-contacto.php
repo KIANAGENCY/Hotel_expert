@@ -3,7 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
-    header('Location: ' . url('contacto.php'));
+    header('Location: ' . url('contacto/'));
     exit;
 }
 
@@ -48,6 +48,7 @@ $lead = [
     'email' => trim((string) ($_POST['email'] ?? '')),
     'telefono' => trim((string) ($_POST['telefono'] ?? '')),
     'interes' => trim((string) ($_POST['interes'] ?? '')),
+    'tipo_propiedad' => trim((string) ($_POST['tipo_propiedad'] ?? '')),
     'habitaciones' => trim((string) ($_POST['habitaciones'] ?? '')),
     'rfc' => strtoupper(trim((string) ($_POST['rfc'] ?? ''))),
     'mensaje' => trim((string) ($_POST['mensaje'] ?? '')),
@@ -95,3 +96,7 @@ $hubspot = [
 $_SESSION['last_request_type'] = $lead['origen'];
 header('Location: ' . url('gracias.php'));
 exit;
+
+
+
+

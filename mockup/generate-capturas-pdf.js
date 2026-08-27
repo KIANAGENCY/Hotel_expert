@@ -5,263 +5,100 @@ const path = require('path');
 
 const BASE = 'http://hotel_expert.test';
 const OUT_DIR = path.join(__dirname, 'screenshots');
-const PDF_NAME = 'Hotel_Expert_Sistema_ELAH_Mockup.pdf';
-const PDF_OUT = path.join(__dirname, '..', PDF_NAME);
-const PDF_DOWNLOADS = path.join(process.env.USERPROFILE || '', 'Downloads', PDF_NAME);
-
+const PDF_OUT = path.join(__dirname, '..', 'Hotel_Expert_Sistema_ELAH_Mockup.pdf');
 const VIEWPORT = { width: 1440, height: 900, deviceScaleFactor: 1 };
 
 const PAGES = [
-  { title: 'Inicio — Sistema ELAH', url: '/index.php', slug: 'inicio' },
-  { title: 'Tienda B2B', url: '/catalogo.php', slug: 'tienda' },
-  { title: 'Producto — Hotel Expert Estándar', url: '/producto.php?slug=estandar', slug: 'producto-estandar' },
-  { title: 'Producto — Hotel Expert Dual', url: '/producto.php?slug=dual', slug: 'producto-dual' },
-  { title: 'Producto — Descontaminador de habitaciones', url: '/producto.php?slug=descontaminador', slug: 'producto-descontaminador' },
-  { title: 'Producto — Aroma para difusor', url: '/producto.php?slug=aroma-difusor', slug: 'producto-aroma-difusor' },
-  { title: 'Producto — Caja de aromas', url: '/producto.php?slug=caja-aromas', slug: 'producto-caja-aromas' },
-  { title: 'Producto — Difusor pequeño', url: '/producto.php?slug=difusor-pequeno', slug: 'producto-difusor-pequeno' },
-  { title: 'Producto — Difusor grande', url: '/producto.php?slug=difusor-grande', slug: 'producto-difusor-grande' },
-  { title: 'Paquete Muestra', url: '/producto.php?slug=paquete-muestra', slug: 'paquete-muestra' },
-  { title: 'Paquete de Entrada ELAH', url: '/producto.php?slug=paquete-entrada', slug: 'paquete-entrada' },
-  { title: 'Cotización — Estado vacío', url: '/cotizacion.php', slug: 'cotizacion-vacia', cart: 'empty' },
-  { title: 'Cotización — Con productos', url: '/cotizacion.php', slug: 'cotizacion-productos', cart: 'filled' },
-  { title: 'Cómo funciona el Sistema ELAH', url: '/como-funciona.php', slug: 'como-funciona' },
-  { title: 'Nosotros — Hotel Expert', url: '/nosotros.php', slug: 'nosotros' },
-  { title: 'Blog y recursos', url: '/blog.php', slug: 'blog' },
-  { title: 'Artículo — Qué es el Sistema ELAH', url: '/articulo.php?slug=que-es-sistema-elah', slug: 'articulo-sistema-elah' },
-  { title: 'Artículo — Hotel Expert Dual', url: '/articulo.php?slug=dual-elimina-no-disfraza', slug: 'articulo-dual' },
-  { title: 'Artículo — Eficiencia del concentrado', url: '/articulo.php?slug=eficiencia-concentrado-hoteles', slug: 'articulo-eficiencia' },
-  { title: 'Contacto y asesoría', url: '/contacto.php', slug: 'contacto' },
-  { title: 'Rastreo de pedido', url: '/rastreo.php', slug: 'rastreo' },
-  { title: 'Confirmación de solicitud', url: '/gracias.php', slug: 'gracias' },
+  { title: 'Inicio — Sistema ELAH', url: '/', slug: 'inicio' },
+  { title: 'Sistema ELAH', url: '/sistema-elah/', slug: 'sistema-elah' },
+  { title: 'Productos', url: '/productos/', slug: 'productos' },
+  { title: 'Hotel Expert', url: '/productos/hotel-expert/', slug: 'hotel-expert' },
+  { title: 'Hotel Expert Dual', url: '/productos/hotel-expert-dual/', slug: 'hotel-expert-dual' },
+  { title: 'Aroma insignia', url: '/aroma-insignia/', slug: 'aroma-insignia' },
+  { title: 'Recursos', url: '/recursos/', slug: 'recursos' },
+  { title: 'Manual de uso', url: '/manual-de-uso/', slug: 'manual-de-uso' },
+  { title: 'Nosotros', url: '/nosotros/', slug: 'nosotros' },
+  { title: 'Contacto', url: '/contacto/', slug: 'contacto' },
 ];
 
 async function waitForPageReady(page) {
   await page.waitForNetworkIdle({ idleTime: 500, timeout: 30000 }).catch(() => {});
   await page.evaluate(async () => {
     if (document.fonts?.ready) await document.fonts.ready;
-  });
-  await new Promise((r) => setTimeout(r, 800));
-}
-
-async function capturePageSections(page, slug) {
-  const totalHeight = await page.evaluate(() =>
-    Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)
-  );
-  const shots = [];
-  const step = VIEWPORT.height;
-  let y = 0;
-  let index = 0;
-
-  while (y < totalHeight) {
-    await page.evaluate((scrollY) => window.scrollTo(0, scrollY), y);
-    await new Promise((r) => setTimeout(r, 400));
-
-    const remaining = totalHeight - y;
-    const clipHeight = Math.min(step, remaining);
-
-    const file = path.join(OUT_DIR, `${slug}-${String(index).padStart(2, '0')}.png`);
-    await page.screenshot({
-      path: file,
-      type: 'png',
-      clip: { x: 0, y: 0, width: VIEWPORT.width, height: clipHeight },
+    document.querySelectorAll('.reveal, .io-reveal, .text-reveal').forEach((element) => {
+      element.style.opacity = '1';
+      element.style.transform = 'none';
+      element.style.filter = 'none';
+      element.style.animation = 'none';
+      element.style.transition = 'none';
     });
-    shots.push({ file, height: clipHeight });
-    y += step;
-    index++;
-  }
-  return shots;
+    window.scrollTo(0, 0);
+  });
+  await new Promise((resolve) => setTimeout(resolve, 500));
 }
 
-async function addCoverPage(pdf, fontBold, fontReg) {
+async function addCover(pdf, fontBold, fontRegular) {
   const page = pdf.addPage([842, 595]);
-  const { width, height } = page.getSize();
-
-  page.drawRectangle({
-    x: 0,
-    y: 0,
-    width,
-    height,
-    color: rgb(0.043, 0.137, 0.271),
-  });
-
-  page.drawRectangle({
-    x: width * 0.55,
-    y: 0,
-    width: width * 0.45,
-    height,
-    color: rgb(0, 0.549, 0.584),
-    opacity: 0.35,
-  });
-
-  page.drawText('HOTEL EXPERT', {
-    x: 48,
-    y: height - 72,
-    size: 14,
-    font: fontBold,
-    color: rgb(0.322, 0.784, 0.784),
-  });
-
-  page.drawText('Sistema ELAH', {
-    x: 48,
-    y: height - 130,
-    size: 32,
-    font: fontBold,
-    color: rgb(1, 1, 1),
-    maxWidth: 480,
-    lineHeight: 36,
-  });
-
-  page.drawText('Mockup completo con capturas reales del e-commerce B2B', {
-    x: 48,
-    y: height - 175,
-    size: 13,
-    font: fontReg,
-    color: rgb(0.85, 0.92, 0.92),
-    maxWidth: 420,
-  });
-
-  page.drawText(`Generado: ${new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' })}`, {
-    x: 48,
-    y: 48,
-    size: 10,
-    font: fontReg,
-    color: rgb(0.7, 0.8, 0.8),
-  });
-
-  page.drawText('localhost/hotel_expert · HTML · CSS · JS · PHP · Tailwind', {
-    x: 48,
-    y: 32,
-    size: 9,
-    font: fontReg,
-    color: rgb(0.55, 0.65, 0.65),
-  });
+  page.drawRectangle({ x: 0, y: 0, width: 842, height: 595, color: rgb(0.043, 0.137, 0.271) });
+  page.drawRectangle({ x: 500, y: 0, width: 342, height: 595, color: rgb(0, 0.549, 0.584), opacity: 0.35 });
+  page.drawText('HOTEL EXPERT', { x: 48, y: 520, size: 14, font: fontBold, color: rgb(0.322, 0.784, 0.784) });
+  page.drawText('Sistema ELAH', { x: 48, y: 454, size: 34, font: fontBold, color: rgb(1, 1, 1) });
+  page.drawText('Mock-up integral del sitio web', { x: 48, y: 420, size: 15, font: fontRegular, color: rgb(0.85, 0.92, 0.92) });
+  page.drawText('Una captura completa por página · sin duplicados', { x: 48, y: 392, size: 11, font: fontRegular, color: rgb(0.7, 0.82, 0.82) });
+  page.drawText(`Generado: ${new Date().toLocaleDateString('es-MX')}`, { x: 48, y: 42, size: 10, font: fontRegular, color: rgb(0.7, 0.8, 0.8) });
 }
 
-async function addSectionPage(pdf, title, url, fontBold, fontReg) {
-  const page = pdf.addPage([842, 595]);
-  const { width, height } = page.getSize();
-
-  page.drawRectangle({ x: 0, y: 0, width, height, color: rgb(0.918, 0.961, 0.961) });
-  page.drawRectangle({ x: 0, y: height - 6, width, height: 6, color: rgb(0, 0.549, 0.584) });
-
-  page.drawText(title.toUpperCase(), {
-    x: 48,
-    y: height / 2 + 20,
-    size: 22,
-    font: fontBold,
-    color: rgb(0.043, 0.137, 0.271),
-    maxWidth: width - 96,
-  });
-
-  page.drawText(BASE + url, {
-    x: 48,
-    y: height / 2 - 16,
-    size: 11,
-    font: fontReg,
-    color: rgb(0, 0.549, 0.584),
-  });
-}
-
-async function addScreenshotPage(pdf, pngBytes, clipHeight) {
-  const png = await pdf.embedPng(pngBytes);
-  const page = pdf.addPage([842, 595]);
-  const { width, height } = page.getSize();
+async function addFullPageMockup(pdf, imageBytes, entry, fontBold, fontRegular) {
+  const image = await pdf.embedPng(imageBytes);
+  const pageWidth = 842;
   const margin = 24;
-  const maxW = width - margin * 2;
-  const maxH = height - margin * 2;
+  const imageWidth = pageWidth - margin * 2;
+  const imageHeight = image.height * (imageWidth / image.width);
+  const page = pdf.addPage([pageWidth, imageHeight + 92]);
+  const { height } = page.getSize();
 
-  const scale = Math.min(maxW / png.width, maxH / png.height);
-  const drawW = png.width * scale;
-  const drawH = png.height * scale;
-
-  page.drawImage(png, {
-    x: (width - drawW) / 2,
-    y: (height - drawH) / 2,
-    width: drawW,
-    height: drawH,
-  });
-
-  page.drawRectangle({
-    x: margin - 1,
-    y: margin - 1,
-    width: drawW + 2,
-    height: drawH + 2,
-    borderColor: rgb(0.85, 0.88, 0.88),
-    borderWidth: 1,
-  });
+  page.drawRectangle({ x: 0, y: 0, width: pageWidth, height, color: rgb(0.965, 0.975, 0.975) });
+  page.drawText(entry.title, { x: 24, y: height - 30, size: 14, font: fontBold, color: rgb(0.043, 0.137, 0.271) });
+  page.drawText(BASE + entry.url, { x: 24, y: height - 48, size: 8, font: fontRegular, color: rgb(0, 0.549, 0.584) });
+  page.drawImage(image, { x: margin, y: 24, width: imageWidth, height: imageHeight });
+  page.drawRectangle({ x: 23, y: 23, width: imageWidth + 2, height: imageHeight + 2, borderColor: rgb(0.83, 0.87, 0.87), borderWidth: 1 });
 }
 
 (async () => {
-  if (fs.existsSync(OUT_DIR)) {
-    fs.rmSync(OUT_DIR, { recursive: true });
-  }
   fs.mkdirSync(OUT_DIR, { recursive: true });
+  for (const file of fs.readdirSync(OUT_DIR)) {
+    if (file.endsWith('.png')) fs.unlinkSync(path.join(OUT_DIR, file));
+  }
 
   const browser = await puppeteer.launch({
     headless: 'new',
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
   });
-
   const page = await browser.newPage();
   await page.setViewport(VIEWPORT);
 
   const pdf = await PDFDocument.create();
   const fontBold = await pdf.embedFont(StandardFonts.HelveticaBold);
-  const fontReg = await pdf.embedFont(StandardFonts.Helvetica);
-
-  await addCoverPage(pdf, fontBold, fontReg);
+  const fontRegular = await pdf.embedFont(StandardFonts.Helvetica);
+  await addCover(pdf, fontBold, fontRegular);
 
   for (const entry of PAGES) {
-    const slug = entry.slug || entry.url.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
-    console.log('Capturing:', entry.title);
-
-    await page.goto(BASE + entry.url, { waitUntil: 'networkidle0', timeout: 60000 });
-    if (entry.cart) {
-      await page.evaluate((cartMode) => {
-        if (cartMode === 'filled') {
-          localStorage.setItem('hotelExpertElahCart', JSON.stringify({
-            'paquete-entrada': 1,
-            'paquete-muestra': 1,
-            dual: 2,
-          }));
-        } else {
-          localStorage.removeItem('hotelExpertElahCart');
-        }
-      }, entry.cart);
-      await page.reload({ waitUntil: 'networkidle0', timeout: 60000 });
-    }
+    console.log(`Capturando: ${entry.title}`);
+    const response = await page.goto(BASE + entry.url, { waitUntil: 'networkidle0', timeout: 60000 });
+    if (!response || !response.ok()) throw new Error(`No se pudo abrir ${entry.url}`);
     await waitForPageReady(page);
 
-    await page.evaluate(() => {
-      document.querySelectorAll('.reveal, .io-reveal').forEach((el) => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-        el.style.animation = 'none';
-      });
-      window.scrollTo(0, 0);
-    });
-
-    const shots = await capturePageSections(page, slug);
-    await addSectionPage(pdf, entry.title, entry.url, fontBold, fontReg);
-
-    for (const shot of shots) {
-      const bytes = fs.readFileSync(shot.file);
-      await addScreenshotPage(pdf, bytes, shot.height);
-    }
+    const screenshotPath = path.join(OUT_DIR, `${entry.slug}.png`);
+    await page.screenshot({ path: screenshotPath, type: 'png', fullPage: true });
+    await addFullPageMockup(pdf, fs.readFileSync(screenshotPath), entry, fontBold, fontRegular);
   }
 
   await browser.close();
-
-  const pdfBytes = await pdf.save();
-  fs.writeFileSync(PDF_OUT, pdfBytes);
-
-  try {
-    fs.copyFileSync(PDF_OUT, PDF_DOWNLOADS);
-  } catch (_) {}
-
-  const sizeMb = (pdfBytes.length / 1024 / 1024).toFixed(2);
-  console.log(`PDF listo: ${PDF_OUT} (${sizeMb} MB)`);
-  console.log(`Copia: ${PDF_DOWNLOADS}`);
-  console.log(`Capturas en: ${OUT_DIR}`);
-})();
+  const bytes = await pdf.save();
+  fs.writeFileSync(PDF_OUT, bytes);
+  console.log(`PDF listo: ${PDF_OUT}`);
+  console.log(`Páginas del PDF: ${PAGES.length + 1} (portada + ${PAGES.length} capturas únicas)`);
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

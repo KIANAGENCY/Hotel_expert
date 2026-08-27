@@ -17,12 +17,12 @@ $pref = $pref ?? '';
     </div>
     <div class="grid sm:grid-cols-2 gap-4">
         <label class="block">
-            <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Hotel / Empresa</span>
+            <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Hotel / empresa</span>
             <input class="field" name="hotel" required placeholder="Nombre de la propiedad">
         </label>
         <label class="block">
-            <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Ciudad</span>
-            <input class="field" name="ciudad" placeholder="Monterrey, CDMX…">
+            <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Ciudad / estado</span>
+            <input class="field" name="ciudad" placeholder="Monterrey, N.L. · CDMX…">
         </label>
     </div>
     <div class="grid sm:grid-cols-2 gap-4">
@@ -35,26 +35,23 @@ $pref = $pref ?? '';
             <input class="field" type="tel" name="telefono" autocomplete="tel" placeholder="81 0000 0000">
         </label>
     </div>
-    <div class="grid sm:grid-cols-2 gap-4">
-        <label class="block">
-            <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Interés</span>
-            <select class="field" name="interes">
-                <option value="sistema" <?= $pref === 'sistema' ? 'selected' : '' ?>>Paquete de Entrada ELAH</option>
-                <option value="muestra" <?= $pref === 'muestra' ? 'selected' : '' ?>>Paquete Muestra</option>
-                <option value="reabasto">Reabasto de productos</option>
-                <option value="difusores">Difusores y aroma</option>
-                <option value="asesoria">Asesoría para diseñar el sistema</option>
-            </select>
-        </label>
-        <label class="block">
-            <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Habitaciones (aprox.)</span>
-            <input class="field" name="habitaciones" inputmode="numeric" placeholder="Ej. 42">
-        </label>
-    </div>
     <label class="block">
-        <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Necesidades del hotel</span>
-        <textarea class="field min-h-[120px]" name="mensaje" placeholder="Cuéntanos las áreas que quieres cubrir, problemas de olor y fecha deseada."></textarea>
+        <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Necesidad principal</span>
+        <select class="field" name="interes">
+            <option value="muestra" <?= $pref === 'muestra' ? 'selected' : '' ?>>Solicitar muestra</option>
+            <option value="sistema" <?= $pref === 'sistema' ? 'selected' : '' ?>>Solicitar propuesta / Sistema ELAH</option>
+            <option value="asesoria" <?= $pref === 'asesoria' ? 'selected' : '' ?>>Solicitar información</option>
+            <option value="difusores" <?= $pref === 'difusores' ? 'selected' : '' ?>>Aroma / difusores</option>
+            <option value="reabasto" <?= $pref === 'reabasto' ? 'selected' : '' ?>>Reabasto de productos</option>
+        </select>
+    </label>
+    <label class="block">
+        <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Mensaje</span>
+        <textarea class="field min-h-[120px]" name="mensaje" placeholder="Cuéntanos las áreas a cubrir, necesidades de aroma u olores, y el siguiente paso que buscas."></textarea>
     </label>
     <p class="text-sm text-charcoal/60">Al enviar, un asesor B2B te contacta. También puedes escribir al WhatsApp <?= WHATSAPP_DISPLAY ?>.</p>
-    <button class="btn-primary justify-center py-3.5 text-base" type="submit">Hablar con un asesor ELAH</button>
+    <div class="flex flex-wrap gap-3">
+        <button class="btn-primary justify-center py-3.5 text-base" type="submit">Enviar solicitud</button>
+        <a class="btn-outline justify-center py-3.5 text-base" href="<?= e(whatsapp_url($pref === 'muestra' ? WHATSAPP_MSG_MUESTRA : WHATSAPP_MSG)) ?>" target="_blank" rel="noopener">Hablar por WhatsApp</a>
+    </div>
 </form>

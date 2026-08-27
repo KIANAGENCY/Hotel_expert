@@ -15,11 +15,11 @@ if (!$post) {
     $page_title = 'Artículo no encontrado — Hotel Expert';
     require __DIR__ . '/includes/head.php';
     require __DIR__ . '/includes/header.php';
-    echo '<main id="contenido" class="pt-40 pb-24 px-4 text-center"><h1 class="display text-4xl">Artículo no encontrado</h1><a class="btn-primary mt-6" href="' . e(url('blog.php')) . '">Volver al blog</a></main>';
+    echo '<main id="contenido" class="pt-40 pb-24 px-4 text-center"><h1 class="display text-4xl">Artículo no encontrado</h1><a class="btn-primary mt-6" href="' . e(url('blog/')) . '">Volver al blog</a></main>';
     require __DIR__ . '/includes/footer.php';
     exit;
 }
-$page = 'blog';
+$page = 'recursos';
 $page_title = $post['seo_titulo'] ?? ($post['titulo'] . ' — Hotel Expert');
 $page_description = $post['meta_descripcion'] ?? $post['extracto'];
 $page_og = $post['cover'];
@@ -44,10 +44,14 @@ require __DIR__ . '/includes/header.php';
                 <p><?= e($p) ?></p>
             <?php endforeach; ?>
             <div class="pt-8 flex flex-wrap gap-3">
-                <a class="btn-primary" href="<?= e(url('contacto.php')) ?>">Cotizar el sistema</a>
-                <a class="btn-outline" href="<?= e(url('blog.php')) ?>">Más artículos</a>
+                <a class="btn-primary" href="<?= e(url('contacto/')) ?>">Cotizar el sistema</a>
+                <a class="btn-outline" href="<?= e(url('blog/')) ?>">Más artículos</a>
             </div>
         </div>
     </article>
 </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>
+
+
+
+

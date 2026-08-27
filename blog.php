@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 $posts = require __DIR__ . '/data/blog.php';
+$page = 'recursos';
 $page_title = 'Blog Hotel Expert | Marketing Olfativo y Limpieza para Hoteles';
 $page_description = 'Artículos sobre marketing olfativo, limpieza biodegradable y operación hotelera. Recursos del Sistema ELAH para gerencia, compras y housekeeping.';
 require __DIR__ . '/includes/head.php';
@@ -37,9 +38,14 @@ require __DIR__ . '/includes/header.php';
                     <h2 class="font-heading font-extrabold text-2xl text-expert">Cómo funciona el sistema completo</h2>
                     <p class="mt-2 text-charcoal/70">Conoce las tres capas de ELAH, sus proporciones y la cobertura dentro del hotel.</p>
                 </div>
-                <a class="btn-primary" href="<?= e(url('como-funciona.php')) ?>">Entender ELAH</a>
+                <a class="btn-primary" href="<?= e(url('sistema-elah/')) ?>">Entender ELAH</a>
             </div>
         </div>
     </section>
 </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>
+
+
+
+
+

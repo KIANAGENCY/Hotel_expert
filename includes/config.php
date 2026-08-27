@@ -16,13 +16,15 @@ define('BASE_URL', $base === '' || $base === false ? '' : $base);
 define('ROOT_PATH', $rootFs);
 
 define('SITE_NAME', 'Hotel Expert');
-define('SITE_TAGLINE', 'Estandarización de Limpieza y Aroma de Hoteles.');
-define('SITE_CLAIM', 'Unimos dos mundos: limpieza y aromatización.');
+define('SITE_TAGLINE', 'Estandarización de Limpieza y Aroma en Hoteles');
+define('SITE_CLAIM', 'Frescura que se siente. Marca que se recuerda.');
 define('SITE_DOMAIN', 'www.hotelexpert.mx');
+define('SITE_ORIGIN', 'https://' . SITE_DOMAIN);
 define('WHATSAPP', '528112497481');
 define('WHATSAPP_DISPLAY', '+52 81 1249 7481');
 define('EMAIL_VENTAS', 'ventas@hotelexpert.mx');
-define('WHATSAPP_MSG', rawurlencode('Hola Hotel Expert, quiero una cotización del Sistema ELAH para mi hotel.'));
+define('WHATSAPP_MSG', rawurlencode('Hola Hotel Expert, quiero información del Sistema ELAH para mi hotel.'));
+define('WHATSAPP_MSG_MUESTRA', rawurlencode('Hola Hotel Expert, quiero solicitar una muestra del Sistema ELAH para mi hotel.'));
 
 $page = basename((string) ($_SERVER['PHP_SELF'] ?? 'index.php'), '.php');
 
@@ -35,6 +37,11 @@ function url(string $path = ''): string
 {
     $path = ltrim($path, '/');
     return BASE_URL . '/' . $path;
+}
+
+function whatsapp_url(string $message = WHATSAPP_MSG): string
+{
+    return 'https://wa.me/' . WHATSAPP . '?text=' . $message;
 }
 
 function is_active(string $slug): bool
@@ -56,11 +63,16 @@ function csrf_ok(?string $token): bool
     return is_string($token) && hash_equals(csrf_token(), $token);
 }
 
+$social = [
+    'facebook' => null,
+    'instagram' => null,
+];
+
 $nav = [
-    ['Inicio', 'index.php', 'index'],
-    ['Tienda', 'catalogo.php', 'catalogo'],
-    ['Cómo funciona', 'como-funciona.php', 'como-funciona'],
-    ['Nosotros', 'nosotros.php', 'nosotros'],
-    ['Blog', 'blog.php', 'blog'],
-    ['Contacto', 'contacto.php', 'contacto'],
+    ['Sistema ELAH', 'sistema-elah/', 'sistema-elah'],
+    ['Productos', 'productos/', 'productos'],
+    ['Aroma insignia', 'aroma-insignia/', 'aroma-insignia'],
+    ['Recursos', 'recursos/', 'recursos'],
+    ['Nosotros', 'nosotros/', 'nosotros'],
+    ['Contacto', 'contacto/', 'contacto'],
 ];

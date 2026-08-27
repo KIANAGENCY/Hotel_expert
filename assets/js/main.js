@@ -4,70 +4,41 @@
   const menu = document.getElementById("mobile-menu");
   const iconOpen = document.getElementById("icon-open");
   const iconClose = document.getElementById("icon-close");
-  const mobileNav = document.querySelector(".mobile-nav-strip");
-  const homeScrollNav =
-    window.location.pathname.endsWith("/") ||
-    window.location.pathname.endsWith("/index.php");
-  const desktopNavLinks = Array.from(
-    document.querySelectorAll('nav[aria-label="Principal"] .nav-link')
-  );
-  const mobileNavLinks = Array.from(
-    document.querySelectorAll(".mobile-nav-strip .mobile-nav-link")
-  );
-  const navSections = Array.from(
-    document.querySelectorAll("[data-nav-section]")
-  );
-  let currentNavSection = "";
 
-  const setCurrentNavSection = (sectionId) => {
-    if (!sectionId || sectionId === currentNavSection) return;
-    currentNavSection = sectionId;
-    const target = `#${sectionId}`;
-    [...desktopNavLinks, ...mobileNavLinks].forEach((link) => {
-      link.classList.toggle(
-        "is-scroll-current",
-        link.getAttribute("data-nav-target") === target
-      );
-    });
-
-    const mobileActive = mobileNavLinks.find(
-      (link) => link.getAttribute("data-nav-target") === target
-    );
-    if (mobileNav && mobileActive && window.innerWidth < 1024) {
-      const left =
-        mobileActive.offsetLeft -
-        (mobileNav.clientWidth - mobileActive.offsetWidth) / 2;
-      mobileNav.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
-    }
+  const setMenuOpen = (open) => {
+    if (!menuBtn || !menu) return;
+    menuBtn.setAttribute("aria-expanded", String(open));
+    menuBtn.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+    menu.classList.toggle("hidden", !open);
+    menu.hidden = !open;
+    iconOpen?.classList.toggle("hidden", open);
+    iconClose?.classList.toggle("hidden", !open);
+    document.body.classList.toggle("menu-open", open);
   };
+
+  menuBtn?.addEventListener("click", () => {
+    setMenuOpen(menu?.hidden !== false);
+  });
+
+  menu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setMenuOpen(false));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMenuOpen(false);
+  });
+
+  window.matchMedia("(min-width: 1280px)").addEventListener("change", (event) => {
+    if (event.matches) setMenuOpen(false);
+  });
 
   const onScroll = () => {
     if (header) {
       header.classList.toggle("is-scrolled", window.scrollY > 12);
-      header.classList.toggle("is-home-scrollnav", homeScrollNav);
-    }
-    if (homeScrollNav && navSections.length) {
-      const marker = (header?.offsetHeight || 0) + 40;
-      let visibleSection = navSections[0];
-      navSections.forEach((section) => {
-        if (section.getBoundingClientRect().top <= marker) {
-          visibleSection = section;
-        }
-      });
-      setCurrentNavSection(visibleSection.id);
     }
   };
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
-
-  if (menuBtn && menu) {
-    menuBtn.addEventListener("click", () => {
-      const open = menu.classList.toggle("hidden") === false;
-      menuBtn.setAttribute("aria-expanded", String(open));
-      iconOpen?.classList.toggle("hidden", open);
-      iconClose?.classList.toggle("hidden", !open);
-    });
-  }
 
   const io = new IntersectionObserver(
     (entries) => {
@@ -81,6 +52,59 @@
     { threshold: 0.16 }
   );
   document.querySelectorAll(".io-reveal").forEach((el) => io.observe(el));
+
+  const scrollFlow = document.querySelector("[data-scroll-flow]");
+  if (scrollFlow) {
+    document.documentElement.classList.add("has-scroll-flow");
+
+    const animatedText = scrollFlow.querySelectorAll(
+      ".eyebrow, h1, h2, h3, .elah-equation, .section-lead, .statement, .feature-statement"
+    );
+    const textObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-text-visible");
+          textObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.18, rootMargin: "0px 0px -8%" }
+    );
+
+    animatedText.forEach((element, index) => {
+      element.classList.add("text-reveal");
+      element.style.setProperty("--text-delay", `${Math.min(index % 4, 3) * 70}ms`);
+      textObserver.observe(element);
+    });
+
+    const navLinks = document.querySelectorAll("[data-nav-key]");
+    const setActiveNav = (key) => {
+      navLinks.forEach((link) => {
+        const active = link.dataset.navKey === key;
+        link.classList.toggle("is-context-active", active);
+        if (active) link.setAttribute("aria-current", "location");
+        else if (!link.classList.contains("is-active")) link.removeAttribute("aria-current");
+      });
+    };
+
+    const flowSections = [...scrollFlow.querySelectorAll("[data-nav-section]")];
+    let navTicking = false;
+    const updateContextNav = () => {
+      const readingLine = window.innerHeight * 0.34;
+      const closest = flowSections.reduce((selected, section) => {
+        const distance = Math.abs(section.getBoundingClientRect().top - readingLine);
+        return !selected || distance < selected.distance ? { section, distance } : selected;
+      }, null);
+      if (closest) setActiveNav(closest.section.dataset.navSection);
+      navTicking = false;
+    };
+    window.addEventListener("scroll", () => {
+      if (navTicking) return;
+      navTicking = true;
+      requestAnimationFrame(updateContextNav);
+    }, { passive: true });
+    updateContextNav();
+  }
 
   document.querySelectorAll("[data-count]").forEach((el) => {
     const target = Number(el.getAttribute("data-count"));
@@ -100,33 +124,6 @@
     });
     once.observe(el);
   });
-
-  const water = document.getElementById("dil-water");
-  const conc = document.getElementById("dil-conc");
-  const mode = document.getElementById("dil-mode");
-  const out = document.getElementById("dil-out");
-
-  const renderDilution = () => {
-    if (!out) return;
-    const m = mode?.value || "20l";
-    if (m === "20l") {
-      out.innerHTML =
-        "<strong>Porrón 20 L:</strong> vierte primero <em>18 L de agua</em> y después <em>2 L de concentrado</em> (1 envase completo).";
-      return;
-    }
-    if (m === "1l") {
-      out.innerHTML =
-        "<strong>Atomizador 1 L:</strong> vierte primero <em>900 ml de agua</em> y después <em>100 ml de concentrado</em>.";
-      return;
-    }
-    const liters = Number(water?.value || 18);
-    const c = +(liters * (2 / 18)).toFixed(2);
-    if (conc) conc.value = String(c);
-    out.innerHTML = `<strong>Mezcla libre:</strong> ${liters} L de agua + <em>${c} L de concentrado</em>. Siempre agua primero.`;
-  };
-  mode?.addEventListener("change", renderDilution);
-  water?.addEventListener("input", renderDilution);
-  renderDilution();
 })();
 
 (() => {
@@ -296,7 +293,7 @@
     if (whatsapp) {
       const lines = items.map((item) => `• ${item.qty} × ${item.nombre} (${money(item.precio * item.qty)})`);
       const message = `Hola Hotel Expert, quiero cotizar el Sistema ELAH:\n\n${lines.join("\n")}\n\nSubtotal: ${money(total)} + IVA.`;
-      whatsapp.href = `https://wa.me/528112497481?text=${encodeURIComponent(message)}`;
+      whatsapp.href = `https://wa.me/${window.ELAH_WHATSAPP || ''}?text=${encodeURIComponent(message)}`;
     }
     syncQuoteField(readCart());
   };
