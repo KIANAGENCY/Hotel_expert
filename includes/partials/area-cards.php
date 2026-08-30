@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-$areas = $areas ?? (require ROOT_PATH . '/data/areas.php');
+$areas = $areas ?? areas_all();
 $area_linkable = $area_linkable ?? true;
 ?>
 <div class="grid md:grid-cols-2 gap-6">

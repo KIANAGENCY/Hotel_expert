@@ -22,7 +22,7 @@ require __DIR__ . '/includes/header.php';
                 <div class="cart-surface" data-cart-root></div>
                 <div class="mt-6 flex flex-wrap gap-3" data-cart-dependent hidden>
                     <a class="btn-outline" href="<?= e(url('catalogo.php')) ?>">Seguir comprando</a>
-                    <a class="btn-primary" data-cart-whatsapp href="https://wa.me/<?= WHATSAPP ?>" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+                    <a class="btn-primary" data-cart-whatsapp href="https://wa.me/<?= e(site_whatsapp()) ?>" target="_blank" rel="noopener">Enviar por WhatsApp</a>
                 </div>
             </div>
             <aside class="lg:col-span-4 lg:sticky lg:top-28" data-cart-dependent hidden>

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$productos = require __DIR__ . '/data/productos.php';
+$productos = productos_all();
 $slug = preg_replace('/[^a-z0-9-]/', '', strtolower((string) ($_GET['slug'] ?? '')));
 if (!isset($productos[$slug])) {
     http_response_code(404);

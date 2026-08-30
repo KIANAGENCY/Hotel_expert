@@ -26,10 +26,12 @@ require __DIR__ . '/includes/header.php';
     <section class="home-hero home-scroll-step" data-nav-section="sistema-elah">
         <div class="hero-hotel-image" role="img" aria-label="Interior contemporáneo de un hotel"></div>
         <div class="home-hero-overlay"></div>
-        <div class="relative mx-auto grid min-h-[100svh] max-w-7xl items-center gap-12 px-4 pb-20 pt-36 sm:px-6 lg:grid-cols-12 lg:pt-40">
+        <div class="home-hero-content relative mx-auto grid min-h-[100svh] max-w-7xl items-start gap-12 px-4 pb-20 sm:px-6 lg:grid-cols-12">
             <div class="lg:col-span-7">
-                <p class="eyebrow text-aqua">Sistema</p>
-                <h1 class="elah-wordmark">ELAH</h1>
+                <h1 class="elah-hero-lockup">
+                    <span class="elah-hero-sistema">Sistema</span>
+                    <span class="elah-hero-elah">ELAH</span>
+                </h1>
                 <p class="mt-6 max-w-2xl font-heading text-xl font-bold leading-snug text-white sm:text-3xl">Estandarización de Limpieza y Aroma en Hoteles</p>
                 <p class="elah-equation mt-8">Limpieza <span>+</span> Aroma <span>=</span> ELAH</p>
                 <p class="mt-7 max-w-2xl text-lg leading-relaxed text-white/75 sm:text-xl">Hotel Expert integra la limpieza profesional y el aroma insignia de tu hotel dentro de un mismo sistema.</p>

@@ -14,7 +14,7 @@ if (!csrf_ok($_POST['csrf'] ?? null)) {
     exit;
 }
 
-$productos = require ROOT_PATH . '/data/productos.php';
+$productos = productos_all();
 $carritoRaw = json_decode((string) ($_POST['carrito'] ?? '[]'), true);
 $carrito = [];
 $subtotal = 0;
@@ -70,21 +70,12 @@ if ($lead['origen'] === 'cotizacion' && empty($carrito)) {
     exit;
 }
 
-$file = ROOT_PATH . '/data/leads.json';
-$all = [];
-if (is_file($file)) {
-    $decoded = json_decode((string) file_get_contents($file), true);
-    if (is_array($decoded)) {
-        $all = $decoded;
-    }
-}
-$all[] = $lead;
-file_put_contents($file, json_encode($all, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
+lead_create(array_merge($lead, ['estado' => 'nuevo']));
 
 $subject = 'Solicitud Sistema ELAH — ' . $lead['hotel'];
 $body = "Nuevo lead B2B\n\n" . json_encode($lead, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 $headers = 'From: noreply@' . SITE_DOMAIN . "\r\nReply-To: " . $lead['email'];
-@mail(EMAIL_VENTAS, $subject, $body, $headers);
+@mail(site_email(), $subject, $body, $headers);
 
 /* HubSpot: POST al webhook de forms cuando exista portal
 $hubspot = [

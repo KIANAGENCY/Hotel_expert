@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$posts = require __DIR__ . '/data/blog.php';
+$posts = blog_all();
 $slug = preg_replace('/[^a-z0-9-]/', '', strtolower((string) ($_GET['slug'] ?? '')));
 $post = null;
 foreach ($posts as $row) {

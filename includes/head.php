@@ -45,7 +45,7 @@ $canonical = SITE_ORIGIN . '/' . ltrim((string) $canonical_path, '/');
     <link rel="apple-touch-icon" href="<?= e(url('assets/img/logo-mark-256.png')) ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -82,8 +82,8 @@ $canonical = SITE_ORIGIN . '/' . ltrim((string) $canonical_path, '/');
       "@type": "Organization",
       "name": "Hotel Expert",
       "url": "https://www.hotelexpert.mx",
-      "email": "<?= EMAIL_VENTAS ?>",
-      "telephone": "<?= WHATSAPP_DISPLAY ?>",
+      "email": "<?= e(site_email()) ?>",
+      "telephone": "<?= e(site_whatsapp_display()) ?>",
       "description": "Sistema ELAH: <?= e(SITE_TAGLINE) ?>",
       "areaServed": "MX"
     }

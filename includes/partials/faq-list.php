@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-$faqs = $faqs ?? (require ROOT_PATH . '/data/faq.php');
+$faqs = $faqs ?? faqs_all();
 $faq_heading = $faq_heading ?? 'Preguntas frecuentes sobre Hotel Expert';
 $show_heading = $faq_show_heading ?? true;
 ?>

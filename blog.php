@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$posts = require __DIR__ . '/data/blog.php';
+$posts = blog_all();
 $page = 'recursos';
 $page_title = 'Blog Hotel Expert | Marketing Olfativo y Limpieza para Hoteles';
 $page_description = 'Artículos sobre marketing olfativo, limpieza biodegradable y operación hotelera. Recursos del Sistema ELAH para gerencia, compras y housekeeping.';

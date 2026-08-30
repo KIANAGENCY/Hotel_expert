@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$productos = require __DIR__ . '/data/productos.php';
+$productos = productos_all();
 $page_title = 'Catálogo de Limpieza y Aromatización para Hoteles | Tienda B2B Sistema ELAH';
 $page_description = 'Cotiza paquetes, concentrados, difusores y aromas para la limpieza y aromatización de tu hotel. Sistema ELAH: 100% biodegradable, precios + IVA, envío nacional.';
 $page = 'productos';

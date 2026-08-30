@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
-$pedidos = require __DIR__ . '/data/pedidos.php';
-
 $resultado = null;
 $error = '';
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
@@ -11,14 +9,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     } else {
         $id = strtoupper(trim((string) ($_POST['pedido'] ?? '')));
         $email = strtolower(trim((string) ($_POST['email'] ?? '')));
-        foreach ($pedidos as $row) {
-            if (strcasecmp($row['id'], $id) === 0 && strcasecmp($row['email'], $email) === 0) {
-                $resultado = $row;
-                break;
-            }
-        }
+        $resultado = pedido_get($id, $email);
         if (!$resultado) {
-            $error = 'No encontramos un pedido con esa combinación de ID y correo. Verifica el folio o escribe a ventas@hotelexpert.mx.';
+            $error = 'No encontramos un pedido con esa combinación de ID y correo. Verifica el folio o escribe a ' . site_email() . '.';
         }
     }
 }
@@ -105,7 +98,7 @@ function step_state(array $orden, string $actual, string $slug): string
 
             <aside class="mt-10 rounded-2xl bg-arena p-6 text-sm text-charcoal/70">
                 <p class="font-heading font-bold text-expert mb-2">¿Necesitas ayuda con tu envío?</p>
-                <p>Escríbenos a <a class="font-semibold text-turquesa" href="mailto:<?= EMAIL_VENTAS ?>"><?= EMAIL_VENTAS ?></a> o por WhatsApp al <?= WHATSAPP_DISPLAY ?>.</p>
+                <p>Escríbenos a <a class="font-semibold text-turquesa" href="mailto:<?= e(site_email()) ?>"><?= e(site_email()) ?></a> o por WhatsApp al <?= e(site_whatsapp_display()) ?>.</p>
             </aside>
         </div>
     </section>

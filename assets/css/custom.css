@@ -8,6 +8,7 @@
   --charcoal-texto: #222326;
   --verde-eco: #4D7C4D;
   --gradient-brand: linear-gradient(135deg, #0B2345 0%, #008C95 100%);
+  --site-header-clearance: clamp(9.5rem, 11rem + 4vw, 12.75rem);
 }
 
 html {
@@ -77,6 +78,42 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
   box-shadow: 0 8px 28px rgba(82, 200, 200, 0.28);
 }
 
+/* Logo header — tamaño mediano */
+.brand-lockup {
+  margin-right: 0.35rem;
+}
+
+.brand-lockup-logo,
+.brand-lockup img {
+  display: block;
+  height: 5.5rem;
+  width: auto;
+  max-width: min(100%, 19rem);
+}
+
+@media (min-width: 640px) {
+  .brand-lockup-logo,
+  .brand-lockup img {
+    height: 6.25rem;
+  }
+}
+
+.site-header + main.pt-28,
+.site-header + main.pt-40 {
+  padding-top: calc(var(--site-header-clearance) + 0.5rem);
+}
+
+/* Clearance bajo header fijo (logo mediano + barra) */
+.home-hero-content {
+  padding-top: calc(var(--site-header-clearance) + 2.25rem) !important;
+  align-items: start;
+}
+
+.home-hero .relative.mx-auto {
+  padding-top: calc(var(--site-header-clearance) + 2.25rem) !important;
+  align-items: start;
+}
+
 .brand-kicker {
   font-size: 0.78rem;
 }
@@ -94,12 +131,26 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
   color: var(--aqua-sensorial);
 }
 
+.header-inner {
+  gap: clamp(1rem, 2.4vw, 2.75rem);
+}
+
+.header-nav {
+  gap: 0.35rem;
+  margin-inline: auto;
+  padding-inline: 0.5rem;
+}
+
+.header-actions {
+  margin-left: 0.25rem;
+}
+
 .nav-link {
   color: rgba(255, 255, 255, 0.78);
   font-size: 0.74rem;
   font-weight: 600;
   letter-spacing: 0.01em;
-  padding: 0.5rem 0.55rem;
+  padding: 0.5rem 0.8rem;
   border-radius: 999px;
   white-space: nowrap;
   transition: color 0.2s, background 0.2s;
@@ -765,7 +816,7 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
 @media (max-width: 1023px) {
   .site-header + main.pt-28,
   .site-header + main.pt-40 {
-    padding-top: 6.75rem;
+    padding-top: calc(var(--site-header-clearance) + 0.25rem);
   }
 
   [id].scroll-mt-32 {
@@ -873,6 +924,41 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   letter-spacing: -.075em;
   line-height: .78;
 }
+
+.elah-hero-lockup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55em;
+  margin: 0;
+  line-height: 1;
+}
+
+.home-hero .elah-hero-lockup {
+  margin-top: 0.25rem;
+}
+
+.elah-hero-sistema {
+  font-family: Montserrat, sans-serif;
+  font-size: clamp(1.5rem, 3.4vw, 2.125rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: var(--aqua-sensorial);
+  text-transform: uppercase;
+}
+
+.elah-hero-elah {
+  font-family: Montserrat, sans-serif;
+  font-size: clamp(2.75rem, 7.5vw, 5.25rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  color: #fff;
+  text-transform: uppercase;
+  margin-top: 0;
+  -webkit-font-smoothing: antialiased;
+}
 .elah-equation { width: fit-content; color: #fff; font-family: Montserrat, sans-serif; font-size: clamp(1.25rem, 3vw, 2rem); font-weight: 800; letter-spacing: -.025em; }
 .elah-close-word { font-size: clamp(4.75rem, 13vw, 9.5rem); }
 
@@ -889,6 +975,8 @@ html.has-scroll-flow { scroll-snap-type: y proximity; }
 .text-reveal.is-text-visible { opacity: 1; transform: translateY(0); filter: blur(0); }
 .elah-wordmark.text-reveal { transform: translateY(1rem) scale(.97); letter-spacing: -.11em; }
 .elah-wordmark.text-reveal.is-text-visible { transform: translateY(0) scale(1); letter-spacing: -.075em; }
+.elah-hero-lockup.text-reveal { transform: translateY(1rem); opacity: 0; }
+.elah-hero-lockup.text-reveal.is-text-visible { transform: translateY(0); opacity: 1; }
 .elah-equation span { padding-inline: .22em; color: var(--aqua-sensorial); }
 .scent-orbit { position: relative; aspect-ratio: 1; margin-left: auto; max-width: 26rem; border: 1px solid rgba(82,200,200,.28); border-radius: 50%; }
 .scent-orbit::before, .scent-orbit::after, .scent-orbit span { content: ""; position: absolute; border: 1px solid rgba(82,200,200,.22); border-radius: 50%; }
@@ -986,7 +1074,8 @@ html.has-scroll-flow { scroll-snap-type: y proximity; }
   body { font-size: 1rem; }
   .home-hero-overlay { background: linear-gradient(180deg, rgba(11,35,69,.9), rgba(11,35,69,.99) 72%); }
   .header-sample-cta { padding-inline: .7rem; font-size: .61rem; }
-  .brand-lockup img { width: 8.2rem; height: auto; }
+  .brand-lockup-logo,
+  .brand-lockup img { height: clamp(4.5rem, 17vw, 5.5rem); max-width: min(100%, 16rem); }
   .product-panel { grid-template-columns: 1fr 6rem; min-height: 25rem; }
   .product-panel img { max-height: 16rem; }
 }

@@ -41,7 +41,7 @@ function url(string $path = ''): string
 
 function whatsapp_url(string $message = WHATSAPP_MSG): string
 {
-    return 'https://wa.me/' . WHATSAPP . '?text=' . $message;
+    return 'https://wa.me/' . site_whatsapp() . '?text=' . $message;
 }
 
 function is_active(string $slug): bool
@@ -63,11 +63,6 @@ function csrf_ok(?string $token): bool
     return is_string($token) && hash_equals(csrf_token(), $token);
 }
 
-$social = [
-    'facebook' => null,
-    'instagram' => null,
-];
-
 $nav = [
     ['Sistema ELAH', 'sistema-elah/', 'sistema-elah'],
     ['Productos', 'productos/', 'productos'],
@@ -75,4 +70,36 @@ $nav = [
     ['Recursos', 'recursos/', 'recursos'],
     ['Nosotros', 'nosotros/', 'nosotros'],
     ['Contacto', 'contacto/', 'contacto'],
+];
+
+require_once __DIR__ . '/repository.php';
+
+function site_setting(string $key, string $fallback = ''): string
+{
+    try {
+        $cache = settings_all();
+    } catch (Throwable) {
+        $cache = [];
+    }
+    return $cache[$key] ?? $fallback;
+}
+
+function site_email(): string
+{
+    return site_setting('email_ventas', EMAIL_VENTAS);
+}
+
+function site_whatsapp(): string
+{
+    return site_setting('whatsapp', WHATSAPP);
+}
+
+function site_whatsapp_display(): string
+{
+    return site_setting('whatsapp_display', WHATSAPP_DISPLAY);
+}
+
+$social = [
+    'facebook' => site_setting('social_facebook') ?: null,
+    'instagram' => site_setting('social_instagram') ?: null,
 ];

@@ -33,11 +33,11 @@ require __DIR__ . '/includes/header.php';
                         <ul class="mt-4 space-y-4">
                             <li class="rounded-2xl bg-white p-5">
                                 <p class="text-xs uppercase tracking-wider text-charcoal/40 font-heading font-bold">WhatsApp</p>
-                                <a class="font-heading font-extrabold text-xl text-expert hover:text-turquesa" href="<?= e(whatsapp_url($pref === 'muestra' ? WHATSAPP_MSG_MUESTRA : WHATSAPP_MSG)) ?>"><?= WHATSAPP_DISPLAY ?></a>
+                                <a class="font-heading font-extrabold text-xl text-expert hover:text-turquesa" href="<?= e(whatsapp_url($pref === 'muestra' ? WHATSAPP_MSG_MUESTRA : WHATSAPP_MSG)) ?>"><?= e(site_whatsapp_display()) ?></a>
                             </li>
                             <li class="rounded-2xl bg-white p-5">
                                 <p class="text-xs uppercase tracking-wider text-charcoal/40 font-heading font-bold">Correo</p>
-                                <a class="font-heading font-extrabold text-xl text-expert hover:text-turquesa" href="mailto:<?= EMAIL_VENTAS ?>"><?= EMAIL_VENTAS ?></a>
+                                <a class="font-heading font-extrabold text-xl text-expert hover:text-turquesa" href="mailto:<?= e(site_email()) ?>"><?= e(site_email()) ?></a>
                             </li>
                         </ul>
                         <a class="btn-ghost mt-4 inline-flex !text-expert !border-expert/20" href="<?= e(whatsapp_url($pref === 'muestra' ? WHATSAPP_MSG_MUESTRA : WHATSAPP_MSG)) ?>" target="_blank" rel="noopener">Hablar por WhatsApp</a>

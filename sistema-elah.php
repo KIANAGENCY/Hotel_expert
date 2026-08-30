@@ -24,8 +24,10 @@ require __DIR__ . '/includes/header.php';
                     <li><span class="text-white/80">Sistema ELAH</span></li>
                 </ol>
             </nav>
-            <p class="eyebrow text-aqua">Sistema</p>
-            <h1 class="elah-wordmark text-white">ELAH</h1>
+            <h1 class="elah-hero-lockup">
+                <span class="elah-hero-sistema">Sistema</span>
+                <span class="elah-hero-elah">ELAH</span>
+            </h1>
             <p class="mt-6 max-w-2xl font-heading text-xl font-bold text-white sm:text-3xl">Estandarización de Limpieza y Aroma en Hoteles</p>
             <p class="elah-equation mt-7">Limpieza <span>+</span> Aroma <span>=</span> ELAH</p>
             <p class="mt-4 max-w-2xl text-lg text-white/65">Es el sistema de Hotel Expert para integrar la limpieza cotidiana y la identidad olfativa del establecimiento dentro de una misma experiencia.</p>

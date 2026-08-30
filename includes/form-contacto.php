@@ -49,7 +49,7 @@ $pref = $pref ?? '';
         <span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Mensaje</span>
         <textarea class="field min-h-[120px]" name="mensaje" placeholder="Cuéntanos las áreas a cubrir, necesidades de aroma u olores, y el siguiente paso que buscas."></textarea>
     </label>
-    <p class="text-sm text-charcoal/60">Al enviar, un asesor B2B te contacta. También puedes escribir al WhatsApp <?= WHATSAPP_DISPLAY ?>.</p>
+    <p class="text-sm text-charcoal/60">Al enviar, un asesor B2B te contacta. También puedes escribir al WhatsApp <?= e(site_whatsapp_display()) ?>.</p>
     <div class="flex flex-wrap gap-3">
         <button class="btn-primary justify-center py-3.5 text-base" type="submit">Enviar solicitud</button>
         <a class="btn-outline justify-center py-3.5 text-base" href="<?= e(whatsapp_url($pref === 'muestra' ? WHATSAPP_MSG_MUESTRA : WHATSAPP_MSG)) ?>" target="_blank" rel="noopener">Hablar por WhatsApp</a>
