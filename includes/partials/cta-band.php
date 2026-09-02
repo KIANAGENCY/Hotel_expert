@@ -3,7 +3,7 @@ declare(strict_types=1);
 $title = $cta_title ?? 'Pruébalo en tu propio hotel';
 $text = $cta_text ?? 'Solicita información sobre nuestro paquete muestra y conoce Hotel Expert antes de implementar el sistema completo.';
 $primary_label = $cta_primary_label ?? 'Solicitar muestra';
-$primary_href = $cta_primary_href ?? 'contacto/?tipo=muestra';
+$primary_href = $cta_primary_href ?? 'muestra/';
 $secondary_label = $cta_secondary_label ?? 'Hablar por WhatsApp';
 $secondary_whatsapp = $cta_secondary_whatsapp ?? true;
 $wa_message = str_contains($primary_href ?? '', 'muestra') ? WHATSAPP_MSG_MUESTRA : WHATSAPP_MSG;

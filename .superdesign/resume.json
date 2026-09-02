@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "targets": {
+    "/": {
+      "targetKind": "existing-ui",
+      "projectId": "a8b98a55-34fe-4a5d-88c7-5eef972eb91b",
+      "baselineDraftId": "22e11971-5fcf-4460-8905-5bcf91ee2beb",
+      "activeDraftId": "22e11971-5fcf-4460-8905-5bcf91ee2beb",
+      "designSystemPath": ".superdesign/design-system.md",
+      "referenceIds": [
+        "assets-img-logo.svg"
+      ],
+      "brandAssets": {
+        "logo": {
+          "assetKey": "assets-img-logo.svg",
+          "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/a8b98a55-34fe-4a5d-88c7-5eef972eb91b/brand-assets/assets-img-logo.svg/logo.svg",
+          "sourcePath": "assets/img/logo.svg"
+        }
+      },
+      "contextFiles": [
+        ".superdesign/design-system.md",
+        "index.php",
+        "includes/header.php",
+        "includes/footer.php",
+        "includes/partials/process-steps.php",
+        "includes/partials/product-comparison.php",
+        "includes/partials/area-cards.php",
+        "includes/partials/faq-list.php",
+        "includes/partials/cta-band.php",
+        "assets/css/custom.css"
+      ],
+      "fingerprints": {
+        ".superdesign/design-system.md": "7828c6074404689deee352572dcddbfa6b877549a936b82007e5e79c16d9157b",
+        "index.php": "daa1517c9dddeb84b76f80da0b72981df713e5e8f5fa219981463f26c4661559",
+        "includes/header.php": "8b36c8a62833133bcfa9fbbc40d66dfc7174e1fd0a9204e4174ae5089e6a965a",
+        "includes/footer.php": "9865406f83b7a45d38fd0fc83bfe7acec3cc5bbf1d487056c934f00462bb5719",
+        "includes/partials/process-steps.php": "b6c5d86fedb401b0ce3bc671724f4199c7961f2ff836c1a8a5844a008eb7f424",
+        "includes/partials/product-comparison.php": "00c38866d53a3998e14ff3cbc529bbc17712e438ed6a82c94b215c2712c0a988",
+        "includes/partials/area-cards.php": "8cf422ad207c88465223a761d962279211c69393a36014e73be4ef19d7f5b5b1",
+        "includes/partials/faq-list.php": "0d22864a7372577cde41ad79900e99b0e5192b3778b904ffdf60aad53bbfe67d",
+        "includes/partials/cta-band.php": "dbda8b3ff11aecb6bbdf17b9a492ddc10d53c5b461aea1b6e080acf5f784d1c4",
+        "assets/css/custom.css": "6a023e3ceb612e27bf976e50f6261d8f2b4c8e694fd7a9bdcdb5851643cae1dc"
+      },
+      "components": [
+        {
+          "name": "SiteHeader",
+          "id": "34025f76-f9a4-4cfb-9699-635cebe92bad",
+          "sourcePath": "includes/header.php",
+          "logoAssetKey": "assets-img-logo.svg"
+        },
+        {
+          "name": "SiteFooter",
+          "id": "b5f2da5f-00c2-4dc3-8ba1-c6ef6f88680e",
+          "sourcePath": "includes/footer.php",
+          "logoAssetKey": "assets-img-logo.svg"
+        }
+      ],
+      "drafts": {
+        "22e11971-5fcf-4460-8905-5bcf91ee2beb": {
+          "title": "Sistema ELAH para hoteles | Hotel Expert",
+          "visualDirection": "faithful current-home reference",
+          "currentVersion": 1
+        }
+      },
+      "updatedAt": "2026-08-27T19:30:27.999Z"
+    },
+    "/cuenta/": {
+      "targetKind": "existing-ui",
+      "projectId": "a8b98a55-34fe-4a5d-88c7-5eef972eb91b",
+      "baselineDraftId": "45801671-0c43-4fb9-8c6f-6223eb3487dc",
+      "activeDraftId": "45801671-0c43-4fb9-8c6f-6223eb3487dc",
+      "designSystemPath": ".superdesign/design-system.md",
+      "referenceIds": [
+        "assets-img-logo-light.svg"
+      ],
+      "brandAssets": {
+        "logo": {
+          "assetKey": "assets-img-logo-light.svg",
+          "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/projects/a8b98a55-34fe-4a5d-88c7-5eef972eb91b/brand-assets/assets-img-logo-light.svg/logo-light.svg",
+          "sourcePath": "assets/img/logo-light.svg"
+        }
+      },
+      "contextFiles": [
+        ".superdesign/design-system.md",
+        "cuenta/index.php",
+        "cuenta/pedido.php",
+        "includes/head.php",
+        "includes/header.php",
+        "includes/order-status.php",
+        "includes/partials/account-portal-nav.php",
+        "assets/css/custom.css:1206:1635"
+      ],
+      "fingerprints": {
+        ".superdesign/design-system.md": "7828c6074404689deee352572dcddbfa6b877549a936b82007e5e79c16d9157b",
+        "cuenta/index.php": "c158bd646d45b1214c6dd0680f7ed950721f87fb255b3c7c2df0a76dc0ff2f88",
+        "cuenta/pedido.php": "d1a6a5ec22c6ea28177abc5a230676fda104af8966bec6d8a38462d319f578eb",
+        "includes/head.php": "324fecb79f0e28a518e68d5cbadb34bb36e1434de2bec78d22f9fc4a8161e330",
+        "includes/header.php": "26f5a9aa0067face66a0369b6bf9926947fedb7c4a873d148db5ba01e3ab7719",
+        "includes/order-status.php": "e99ffe9672b1ff7848327cb96a614ea61f27ae71b113e33e5a60a6bbd21304e2",
+        "includes/partials/account-portal-nav.php": "7a6dc686727a1dba4f5265dee34b0fc8293c2602e526a7f6def9abab0295b038",
+        "assets/css/custom.css": "02a898d5969297ea7c63a5da471f50af97784c499bedb3fcff1218d8b3b83446"
+      },
+      "components": [
+        {
+          "name": "AccountPortalHeader",
+          "id": "6c2f53a7-d132-4eb0-963b-9ab003d9979d",
+          "sourcePath": "includes/header.php",
+          "logoAssetKey": "assets-img-logo-light.svg"
+        }
+      ],
+      "drafts": {
+        "45801671-0c43-4fb9-8c6f-6223eb3487dc": {
+          "title": "Mi cuenta — Hotel Expert",
+          "visualDirection": "customer operations dashboard with guided profile validation and an animated accessible logout confirmation",
+          "currentVersion": 4
+        }
+      },
+      "updatedAt": "2026-09-01T13:42:00-07:00"
+    }
+  }
+}

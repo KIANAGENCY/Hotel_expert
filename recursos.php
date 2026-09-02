@@ -60,13 +60,12 @@ require __DIR__ . '/includes/header.php';
             <?php require __DIR__ . '/includes/partials/faq-list.php'; ?>
             <div class="mt-10 flex flex-wrap gap-3">
                 <a class="btn-primary" href="<?= e(url('sistema-elah/')) ?>">Conocer el Sistema ELAH</a>
-                <a class="btn-outline" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar muestra</a>
+                <a class="btn-outline" href="<?= e(url('muestra/')) ?>">Solicitar muestra</a>
             </div>
         </div>
     </section>
 </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>
-
 
 
 

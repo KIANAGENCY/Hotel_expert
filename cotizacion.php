@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
+$customer = !empty($_SESSION['customer_id']) ? customer_get((int) $_SESSION['customer_id']) : null;
+$reorderCart = is_array($_SESSION['reorder_cart'] ?? null) ? $_SESSION['reorder_cart'] : null;
+unset($_SESSION['reorder_cart']);
 $page = 'catalogo';
 $page_title = 'Mi cotización ELAH — Hotel Expert';
 $page_description = 'Revisa productos y cantidades del Sistema ELAH y solicita una cotización para tu hotel.';
@@ -51,20 +54,20 @@ require __DIR__ . '/includes/header.php';
                 <input type="hidden" name="interes" value="Sistema ELAH">
                 <input type="hidden" name="carrito" id="cart-json" value="">
                 <div class="grid sm:grid-cols-2 gap-5">
-                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Nombre</span><input class="field" name="nombre" required autocomplete="name" placeholder="Nombre y apellido"></label>
+                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Nombre</span><input class="field" name="nombre" required autocomplete="name" placeholder="Nombre y apellido" value="<?= e($customer['nombre'] ?? '') ?>"></label>
                     <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Cargo</span><input class="field" name="cargo" placeholder="Gerencia, compras, housekeeping"></label>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-5">
-                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Hotel / empresa</span><input class="field" name="hotel" required placeholder="Nombre de la propiedad"></label>
+                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Hotel / empresa</span><input class="field" name="hotel" required placeholder="Nombre de la propiedad" value="<?= e($customer['hotel'] ?? '') ?>"></label>
                     <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Ciudad y estado</span><input class="field" name="ciudad" required placeholder="Monterrey, Nuevo León"></label>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-5">
-                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Correo</span><input class="field" type="email" name="email" required autocomplete="email" placeholder="compras@hotel.com"></label>
-                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Teléfono</span><input class="field" type="tel" name="telefono" required autocomplete="tel" placeholder="81 0000 0000"></label>
+                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Correo</span><input class="field" type="email" name="email" required autocomplete="email" placeholder="compras@hotel.com" value="<?= e($customer['email'] ?? '') ?>" <?= $customer ? 'readonly' : '' ?>></label>
+                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Teléfono</span><input class="field" type="tel" name="telefono" required autocomplete="tel" placeholder="81 0000 0000" value="<?= e($customer['telefono'] ?? '') ?>"></label>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-5">
                     <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Habitaciones</span><input class="field" name="habitaciones" inputmode="numeric" placeholder="Ej. 42"></label>
-                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">RFC (opcional)</span><input class="field" name="rfc" placeholder="RFC de facturación"></label>
+                    <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">RFC (opcional)</span><input class="field" name="rfc" placeholder="RFC de facturación" value="<?= e($customer['rfc'] ?? '') ?>"></label>
                 </div>
                 <label><span class="mb-1.5 block text-sm font-heading font-semibold text-expert">Comentarios</span><textarea class="field min-h-[110px]" name="mensaje" placeholder="Cuéntanos las áreas, necesidades de aroma o fecha deseada."></textarea></label>
                 <label class="flex gap-3 items-start text-sm text-charcoal/60">
@@ -76,4 +79,5 @@ require __DIR__ . '/includes/header.php';
         </div>
     </section>
 </main>
+<?php if ($reorderCart): ?><script>window.ELAH_REORDER_CART = <?= json_encode($reorderCart, JSON_UNESCAPED_SLASHES) ?>;</script><?php endif; ?>
 <?php require __DIR__ . '/includes/footer.php'; ?>

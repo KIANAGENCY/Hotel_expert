@@ -3,20 +3,24 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/admin-auth.php';
 require_once __DIR__ . '/includes/layout.php';
 
-if (admin_user() !== '') {
+if (admin_session_is_valid()) {
     header('Location: ' . admin_url('index.php'));
     exit;
 }
 
 $error = '';
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
-    $user = trim((string) ($_POST['username'] ?? ''));
-    $pass = (string) ($_POST['password'] ?? '');
-    if (admin_login($user, $pass)) {
-        header('Location: ' . admin_url('index.php'));
-        exit;
+    if (!admin_csrf_ok($_POST['csrf'] ?? null)) {
+        $error = 'La sesión expiró. Recarga la página.';
+    } else {
+        $user = trim((string) ($_POST['username'] ?? ''));
+        $pass = (string) ($_POST['password'] ?? '');
+        if (admin_login($user, $pass)) {
+            header('Location: ' . admin_url('index.php'));
+            exit;
+        }
+        $error = 'Usuario o contraseña incorrectos, o acceso temporalmente limitado.';
     }
-    $error = 'Usuario o contraseña incorrectos.';
 }
 ?>
 <!DOCTYPE html>
@@ -54,6 +58,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     <main class="admin-login-main">
         <div class="admin-login-form-card">
         <form method="post" class="admin-login-form">
+            <input type="hidden" name="csrf" value="<?= e(admin_csrf()) ?>">
             <div>
                 <p class="admin-login-form-tag">Bienvenido de vuelta</p>
                 <h2 class="admin-login-form-title">Inicia sesión</h2>
@@ -76,7 +81,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 Entrar al panel <i class="fa-solid fa-arrow-right"></i>
             </button>
 
-            <p class="admin-login-note">Primera instalación: usuario <strong>admin</strong> / contraseña <strong>admin123</strong></p>
+            <p class="admin-login-note">Acceso exclusivo para personal autorizado de Hotel Expert.</p>
         </form>
         </div>
     </main>

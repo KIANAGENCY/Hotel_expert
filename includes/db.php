@@ -8,15 +8,18 @@ function db(): PDO
         return $pdo;
     }
 
-    $dir = ROOT_PATH . '/data';
-    if (!is_dir($dir)) {
-        mkdir($dir, 0755, true);
-    }
+    $host = env('DB_HOST', '127.0.0.1');
+    $port = env('DB_PORT', '3306');
+    $name = env('DB_DATABASE', 'hotel_expert');
+    $user = env('DB_USERNAME', 'root');
+    $password = env('DB_PASSWORD');
+    $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $host, $port, $name);
 
-    $pdo = new PDO('sqlite:' . $dir . '/hotel_expert.sqlite');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    $pdo->exec('PRAGMA foreign_keys = ON');
+    $pdo = new PDO($dsn, $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]);
 
     require_once __DIR__ . '/install.php';
     db_install_if_needed($pdo);

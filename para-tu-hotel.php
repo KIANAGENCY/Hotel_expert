@@ -53,7 +53,7 @@ $areas_detalle = [
                     <p class="mt-4 text-lg text-charcoal/70 max-w-3xl"><?= e($area['texto']) ?></p>
                     <div class="mt-6 flex flex-wrap gap-3">
                         <a class="btn-outline" href="<?= e(url('sistema-elah/')) ?>">Conocer el Sistema ELAH</a>
-                        <a class="btn-outline" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar muestra</a>
+                        <a class="btn-outline" href="<?= e(url('muestra/')) ?>">Solicitar muestra</a>
                     </div>
                 </article>
             <?php endforeach; ?>
@@ -61,7 +61,6 @@ $areas_detalle = [
     </section>
 </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>
-
 
 
 

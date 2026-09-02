@@ -72,14 +72,13 @@ require __DIR__ . '/includes/header.php';
                 <p class="mt-5 rounded-2xl border border-aqua/30 bg-hielo p-6 text-lg text-charcoal/80">No debe utilizarse en vidrio o espejos.</p>
                 <div class="mt-8 flex flex-wrap gap-3">
                     <a class="btn-primary" href="<?= e(url('productos/hotel-expert/')) ?>">Ver Hotel Expert</a>
-                    <a class="btn-outline" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar muestra</a>
+                    <a class="btn-outline" href="<?= e(url('muestra/')) ?>">Solicitar muestra</a>
                 </div>
             </article>
         </div>
     </section>
 </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>
-
 
 
 

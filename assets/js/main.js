@@ -40,6 +40,17 @@
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
+  document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+    const input = document.getElementById(button.getAttribute("aria-controls"));
+    if (!input) return;
+    button.addEventListener("click", () => {
+      const showPassword = input.type === "password";
+      input.type = showPassword ? "text" : "password";
+      button.setAttribute("aria-pressed", String(showPassword));
+      button.setAttribute("aria-label", showPassword ? "Ocultar contraseña" : "Mostrar contraseña");
+    });
+  });
+
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -52,6 +63,96 @@
     { threshold: 0.16 }
   );
   document.querySelectorAll(".io-reveal").forEach((el) => io.observe(el));
+
+  const portalRoot = document.querySelector(
+    ".account-dashboard, .account-auth-page, .account-order-page, .account-single-page"
+  );
+  if (portalRoot) {
+    const portalTextSelector = [
+      ".eyebrow",
+      "h1",
+      "h2",
+      "h3",
+      ".account-lead",
+      ".account-order-date",
+      ".account-muted",
+      ".account-field-help",
+      ".account-profile-intro > p",
+      ".account-auth-story > p",
+      ".account-auth-story li",
+      ".account-quick-label",
+      ".account-detail-link",
+      ".account-auth-switch",
+      ".account-back-link",
+      ".account-shipping-grid > div > span",
+      ".account-shipping-grid > div > strong",
+      ".account-dashboard-summary span",
+      ".account-dashboard-summary small",
+      ".account-dashboard-hero > div > p:last-of-type",
+      ".account-order-header > div > p:last-of-type",
+      ".account-quick-links a",
+      ".account-portal-cta h2",
+      ".account-empty > h2",
+      ".account-empty > p:not(.account-alert)",
+      ".account-order-id",
+    ].join(", ");
+
+    const markPortalText = (container) => {
+      container.querySelectorAll(portalTextSelector).forEach((element, index) => {
+        if (element.closest(".account-form")) return;
+        element.classList.add("portal-text");
+        element.style.setProperty("--portal-delay", `${(index % 6) * 70}ms`);
+      });
+    };
+
+    const revealPortalText = (container) => {
+      container.querySelectorAll(".portal-text:not(.is-visible)").forEach((element) => {
+        element.classList.add("is-visible");
+      });
+    };
+
+    const portalObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const target = entry.target;
+          target.classList.add("is-visible");
+          revealPortalText(target);
+          portalObserver.unobserve(target);
+        });
+      },
+      { threshold: 0.14, rootMargin: "0px 0px -6%" }
+    );
+
+    portalRoot.querySelectorAll(".account-dashboard-hero, .account-order-header, .account-auth-story").forEach((hero) => {
+      hero.classList.add("portal-hero");
+      markPortalText(hero);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => revealPortalText(hero));
+      });
+    });
+
+    portalRoot.querySelectorAll(
+      ".account-panel, .account-empty, .account-current-order, .account-portal-cta, .account-operations-grid > *, .account-dashboard-shell > .account-alert, .account-auth-card, .account-single-card, .account-order-row, .order-timeline-step"
+    ).forEach((panel, index) => {
+      panel.classList.add("portal-panel");
+      panel.style.setProperty("--portal-panel-delay", `${Math.min(index % 4, 3) * 90}ms`);
+      markPortalText(panel);
+      portalObserver.observe(panel);
+    });
+
+    const summary = portalRoot.querySelector(".account-dashboard-summary");
+    if (summary) {
+      summary.classList.add("portal-panel", "portal-panel-summary");
+      markPortalText(summary);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          summary.classList.add("is-visible");
+          revealPortalText(summary);
+        });
+      });
+    }
+  }
 
   const scrollFlow = document.querySelector("[data-scroll-flow]");
   if (scrollFlow) {
@@ -139,6 +240,11 @@
       return {};
     }
   };
+
+  if (window.ELAH_REORDER_CART && typeof window.ELAH_REORDER_CART === "object") {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(window.ELAH_REORDER_CART));
+    delete window.ELAH_REORDER_CART;
+  }
 
   const writeCart = (cart) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
@@ -307,4 +413,30 @@
 
   updateCounts();
   renderCart();
+
+  const logoutDialog = document.getElementById("account-logout-dialog");
+  const logoutForm = document.getElementById("account-logout-form");
+  const logoutTrigger = document.querySelector("[data-logout-trigger]");
+
+  const closeLogoutDialog = () => {
+    if (!logoutDialog?.open) return;
+    logoutDialog.close();
+    logoutTrigger?.focus();
+  };
+
+  logoutTrigger?.addEventListener("click", () => {
+    if (!logoutDialog) return;
+    logoutDialog.showModal();
+    logoutDialog.querySelector("[data-logout-cancel]")?.focus();
+  });
+
+  logoutDialog?.querySelector("[data-logout-cancel]")?.addEventListener("click", closeLogoutDialog);
+  logoutDialog?.querySelector("[data-logout-confirm]")?.addEventListener("click", () => logoutForm?.requestSubmit());
+  logoutDialog?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeLogoutDialog();
+  });
+  logoutDialog?.addEventListener("click", (event) => {
+    if (event.target === logoutDialog) closeLogoutDialog();
+  });
 })();

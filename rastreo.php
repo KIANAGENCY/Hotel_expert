@@ -9,8 +9,15 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     } else {
         $id = strtoupper(trim((string) ($_POST['pedido'] ?? '')));
         $email = strtolower(trim((string) ($_POST['email'] ?? '')));
-        $resultado = pedido_get($id, $email);
-        if (!$resultado) {
+        if (strlen($id) > 80 || strlen($email) > 254 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Revisa el folio y el correo electrónico.';
+        } elseif (rate_limit_exceeded('order-tracking', $email, (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), 10, 15)) {
+            http_response_code(429);
+            $error = 'Alcanzaste el límite temporal de consultas. Intenta nuevamente más tarde.';
+        } else {
+            $resultado = pedido_get($id, $email);
+        }
+        if ($error === '' && !$resultado) {
             $error = 'No encontramos un pedido con esa combinación de ID y correo. Verifica el folio o escribe a ' . site_email() . '.';
         }
     }

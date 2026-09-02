@@ -1,5 +1,7 @@
 node_modules/
+vendor/
 .env
 data/hotel_expert.sqlite
 data/hotel_expert.sqlite-journal
 data/backups/
+.superdesign/tmp/

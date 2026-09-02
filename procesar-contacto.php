@@ -1,6 +1,15 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/mailer.php';
+
+$returnPath = static function (string $origin): string {
+    return match ($origin) {
+        'cotizacion' => 'cotizacion/',
+        'muestra' => 'muestra/',
+        default => 'contacto/',
+    };
+};
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Location: ' . url('contacto/'));
@@ -9,8 +18,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
 
 if (!csrf_ok($_POST['csrf'] ?? null)) {
     $_SESSION['form_error'] = 'Sesión expirada. Vuelve a enviar el formulario.';
-    $returnPage = ($_POST['origen'] ?? '') === 'cotizacion' ? 'cotizacion.php' : 'contacto.php';
-    header('Location: ' . url($returnPage));
+    header('Location: ' . url($returnPath((string) ($_POST['origen'] ?? 'contacto'))));
     exit;
 }
 
@@ -39,6 +47,7 @@ if (is_array($carritoRaw)) {
 }
 
 $lead = [
+    'customer_id' => !empty($_SESSION['customer_id']) ? (int) $_SESSION['customer_id'] : null,
     'fecha' => date('c'),
     'origen' => substr(preg_replace('/[^a-z0-9-]/', '', (string) ($_POST['origen'] ?? 'contacto')), 0, 40),
     'nombre' => trim((string) ($_POST['nombre'] ?? '')),
@@ -57,10 +66,37 @@ $lead = [
     'ip' => $_SERVER['REMOTE_ADDR'] ?? '',
 ];
 
+$authenticatedCustomer = $lead['customer_id'] ? customer_get((int) $lead['customer_id']) : null;
+if ($authenticatedCustomer) {
+    $lead['email'] = (string) $authenticatedCustomer['email'];
+}
+
 if ($lead['nombre'] === '' || $lead['hotel'] === '' || !filter_var($lead['email'], FILTER_VALIDATE_EMAIL)) {
     $_SESSION['form_error'] = 'Revisa nombre, hotel y un correo válido.';
-    $returnPage = $lead['origen'] === 'cotizacion' ? 'cotizacion.php' : 'contacto.php';
-    header('Location: ' . url($returnPage));
+    header('Location: ' . url($returnPath((string) $lead['origen'])));
+    exit;
+}
+
+$tooLong = mb_strlen($lead['nombre']) > 190
+    || mb_strlen($lead['cargo']) > 190
+    || mb_strlen($lead['hotel']) > 190
+    || mb_strlen($lead['ciudad']) > 190
+    || mb_strlen($lead['email']) > 254
+    || mb_strlen($lead['telefono']) > 60
+    || mb_strlen($lead['interes']) > 255
+    || mb_strlen($lead['tipo_propiedad']) > 100
+    || mb_strlen($lead['habitaciones']) > 30
+    || mb_strlen($lead['rfc']) > 20
+    || mb_strlen($lead['mensaje']) > 5000;
+if ($tooLong) {
+    $_SESSION['form_error'] = 'Uno de los datos excede la longitud permitida.';
+    header('Location: ' . url($returnPath((string) $lead['origen'])));
+    exit;
+}
+
+if (rate_limit_exceeded('public-form', $lead['email'], (string) $lead['ip'], 8, 60)) {
+    $_SESSION['form_error'] = 'Alcanzaste el límite temporal de solicitudes. Intenta nuevamente más tarde.';
+    header('Location: ' . url($returnPath((string) $lead['origen'])));
     exit;
 }
 
@@ -70,12 +106,8 @@ if ($lead['origen'] === 'cotizacion' && empty($carrito)) {
     exit;
 }
 
-lead_create(array_merge($lead, ['estado' => 'nuevo']));
-
-$subject = 'Solicitud Sistema ELAH — ' . $lead['hotel'];
-$body = "Nuevo lead B2B\n\n" . json_encode($lead, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-$headers = 'From: noreply@' . SITE_DOMAIN . "\r\nReply-To: " . $lead['email'];
-@mail(site_email(), $subject, $body, $headers);
+$leadId = lead_create(array_merge($lead, ['estado' => 'nuevo']));
+send_lead_notification($leadId, (string) $lead['origen']);
 
 /* HubSpot: POST al webhook de forms cuando exista portal
 $hubspot = [
@@ -87,7 +119,4 @@ $hubspot = [
 $_SESSION['last_request_type'] = $lead['origen'];
 header('Location: ' . url('gracias.php'));
 exit;
-
-
-
 

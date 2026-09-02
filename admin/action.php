@@ -94,6 +94,24 @@ switch ($action) {
 
     case 'order_save':
         $id = strtoupper(trim((string) ($_POST['id'] ?? '')));
+        $products = productos_all();
+        $orderItems = [];
+        $itemNames = [];
+        foreach ((array) ($_POST['product_slug'] ?? []) as $index => $slug) {
+            $slug = preg_replace('/[^a-z0-9-]/', '', (string) $slug);
+            $quantity = min(99, max(1, (int) (($_POST['product_qty'] ?? [])[$index] ?? 1)));
+            if ($slug === '' || !isset($products[$slug])) {
+                continue;
+            }
+            $product = $products[$slug];
+            $orderItems[] = [
+                'slug' => $slug,
+                'name' => $product['nombre'],
+                'quantity' => $quantity,
+                'unit_price' => (int) $product['precio'],
+            ];
+            $itemNames[] = $quantity . '× ' . $product['nombre'];
+        }
         pedido_save([
             'id' => $id,
             'email' => trim((string) ($_POST['email'] ?? '')),
@@ -101,8 +119,9 @@ switch ($action) {
             'estado' => (string) ($_POST['estado'] ?? 'procesando'),
             'fecha' => trim((string) ($_POST['fecha'] ?? '')),
             'eta' => trim((string) ($_POST['eta'] ?? '')),
-            'items' => trim((string) ($_POST['items'] ?? '')),
+            'items' => $itemNames ? implode(', ', $itemNames) : trim((string) ($_POST['items'] ?? '')),
             'guia' => trim((string) ($_POST['guia'] ?? '')),
+            'order_items' => $orderItems,
         ]);
         admin_flash('Pedido guardado.');
         header('Location: ' . admin_url('pedido.php?id=' . rawurlencode($id)));
@@ -150,6 +169,20 @@ switch ($action) {
         break;
 
     case 'settings_save':
+        $newPass = (string) ($_POST['new_password'] ?? '');
+        if ($newPass !== '') {
+            $currentPass = (string) ($_POST['current_password'] ?? '');
+            $confirmation = (string) ($_POST['new_password_confirmation'] ?? '');
+            $strongPassword = strlen($newPass) >= 10
+                && preg_match('/[A-Z]/', $newPass) === 1
+                && preg_match('/[a-z]/', $newPass) === 1
+                && preg_match('/\d/', $newPass) === 1;
+            if (!admin_verify(admin_user(), $currentPass) || !$strongPassword || !hash_equals($newPass, $confirmation)) {
+                admin_flash('No se cambió la contraseña. Verifica la contraseña actual, la confirmación y los requisitos de seguridad.', 'error');
+                header('Location: ' . admin_url('config.php'));
+                exit;
+            }
+        }
         settings_save([
             'site_name' => trim((string) ($_POST['site_name'] ?? '')),
             'site_tagline' => trim((string) ($_POST['site_tagline'] ?? '')),
@@ -161,13 +194,12 @@ switch ($action) {
             'social_facebook' => trim((string) ($_POST['social_facebook'] ?? '')),
             'social_instagram' => trim((string) ($_POST['social_instagram'] ?? '')),
         ]);
-        if ($newPass = (string) ($_POST['new_password'] ?? '')) {
-            if (strlen($newPass) >= 8) {
-                admin_change_password(admin_user(), $newPass);
-                admin_flash('Configuración y contraseña actualizadas.');
-            } else {
-                admin_flash('Configuración guardada. La contraseña debe tener al menos 8 caracteres.', 'error');
-            }
+        if ($newPass !== '') {
+            admin_change_password(admin_user(), $newPass);
+            admin_logout();
+            admin_flash('Configuración y contraseña actualizadas. Inicia sesión nuevamente.', 'success');
+            header('Location: ' . admin_url('login.php'));
+            exit;
         } else {
             admin_flash('Configuración guardada.');
         }

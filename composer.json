@@ -1,0 +1,8 @@
+{
+    "name": "kianagency/hotel-expert",
+    "description": "Sitio y portal de clientes del Sistema ELAH.",
+    "license": "proprietary",
+    "require": {
+        "phpmailer/phpmailer": "^7.0"
+    }
+}

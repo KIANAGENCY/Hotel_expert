@@ -91,7 +91,7 @@ require __DIR__ . '/includes/header.php';
                 <p class="eyebrow text-aqua">Siguiente paso</p>
                 <h2 class="font-heading font-extrabold text-3xl mt-3">Conoce ELAH dentro de tu propia operación</h2>
                 <p class="mt-4 text-white/70">Solicita información sobre el paquete muestra y evalúa el sistema en tu hotel.</p>
-                <a class="btn-primary mt-7" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar muestra</a>
+                <a class="btn-primary mt-7" href="<?= e(url('muestra/')) ?>">Solicitar muestra</a>
             </div>
         </div>
     </section>

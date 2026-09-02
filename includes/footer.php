@@ -18,10 +18,12 @@ declare(strict_types=1);
                     <?php endforeach; ?>
                     <li><a class="footer-link" href="<?= e(url('blog/')) ?>">Blog</a></li>
                     <li><a class="footer-link" href="<?= e(url('manual-de-uso/')) ?>">Manual de uso</a></li>
+                    <li><a class="footer-link" href="<?= e(url('cuenta/')) ?>">Mi cuenta</a></li>
+                    <li><a class="footer-link" href="<?= e(url('rastreo/')) ?>">Rastrear pedido</a></li>
                 </ul>
             </nav>
             <div class="lg:col-span-3">
-                <a href="<?= e(url('contacto/?tipo=muestra')) ?>" class="btn-primary w-full justify-center sm:w-auto">Solicitar muestra</a>
+                <a href="<?= e(url('muestra/')) ?>" class="btn-primary w-full justify-center sm:w-auto">Solicitar muestra</a>
                 <div class="mt-7 space-y-3">
                     <a class="footer-contact" href="<?= e(whatsapp_url()) ?>" target="_blank" rel="noopener noreferrer" aria-label="Contactar a Hotel Expert por WhatsApp">WhatsApp</a>
                     <a class="footer-contact" href="mailto:<?= e(site_email()) ?>">Correo</a>

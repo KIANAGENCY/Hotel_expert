@@ -1358,3 +1358,14 @@ details p {
     display: none;
   }
 }
+
+.admin-order-items {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-order-item-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 90px;
+  gap: 10px;
+}

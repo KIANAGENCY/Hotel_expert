@@ -11,10 +11,29 @@ function admin_url(string $path = ''): string
 
 function admin_require_login(): void
 {
-    if (empty($_SESSION['admin_user'])) {
+    if (!admin_session_is_valid()) {
+        admin_logout();
         header('Location: ' . admin_url('login.php'));
         exit;
     }
+}
+
+function admin_session_is_valid(): bool
+{
+    $username = (string) ($_SESSION['admin_user'] ?? '');
+    if ($username === '') {
+        return false;
+    }
+    $now = time();
+    $idleTimeout = max(300, (int) env('ADMIN_SESSION_IDLE_SECONDS', '1800'));
+    $absoluteTimeout = max($idleTimeout, (int) env('ADMIN_SESSION_ABSOLUTE_SECONDS', '43200'));
+    if ($now - (int) ($_SESSION['admin_last_activity'] ?? 0) > $idleTimeout
+        || $now - (int) ($_SESSION['admin_authenticated_at'] ?? 0) > $absoluteTimeout
+        || (int) ($_SESSION['admin_session_version'] ?? 0) !== admin_session_version($username)) {
+        return false;
+    }
+    $_SESSION['admin_last_activity'] = $now;
+    return true;
 }
 
 function admin_user(): string
@@ -24,15 +43,32 @@ function admin_user(): string
 
 function admin_logout(): void
 {
-    unset($_SESSION['admin_user']);
+    unset(
+        $_SESSION['admin_user'],
+        $_SESSION['admin_session_version'],
+        $_SESSION['admin_authenticated_at'],
+        $_SESSION['admin_last_activity'],
+        $_SESSION['admin_csrf']
+    );
+    session_regenerate_id(true);
 }
 
 function admin_login(string $username, string $password): bool
 {
-    if (!admin_verify($username, $password)) {
+    $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+    if (login_is_limited('admin', $username, $ip)) {
         return false;
     }
+    $valid = admin_verify($username, $password);
+    login_record_attempt('admin', $username, $ip, $valid);
+    if (!$valid) {
+        return false;
+    }
+    session_regenerate_id(true);
     $_SESSION['admin_user'] = $username;
+    $_SESSION['admin_session_version'] = admin_session_version($username);
+    $_SESSION['admin_authenticated_at'] = time();
+    $_SESSION['admin_last_activity'] = time();
     return true;
 }
 

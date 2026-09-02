@@ -2,8 +2,8 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 $page_title = 'Hablemos de tu hotel | Contacto Hotel Expert';
-$page_description = 'Solicita información, muestra o propuesta del Sistema ELAH. WhatsApp y correo para hoteles en México.';
-$pref = preg_replace('/[^a-z]/', '', strtolower((string) ($_GET['tipo'] ?? '')));
+$page_description = 'Contacta al equipo comercial de Hotel Expert por formulario, WhatsApp o correo para resolver dudas sobre el Sistema ELAH.';
+$pref = 'asesoria';
 require __DIR__ . '/includes/head.php';
 require __DIR__ . '/includes/header.php';
 ?>
@@ -23,11 +23,6 @@ require __DIR__ . '/includes/header.php';
                 <p class="mt-4 text-lg text-charcoal/70">Cuéntanos sobre tu propiedad, operación y objetivos de aroma para ayudarte a identificar la solución adecuada.</p>
 
                 <div class="mt-8 space-y-6">
-                    <div>
-                        <h2 class="font-heading font-extrabold text-xl text-expert">¿Prefieres probar primero?</h2>
-                        <p class="mt-2 text-charcoal/70">Solicita información sobre el paquete muestra y evalúa Hotel Expert dentro de tu propia operación.</p>
-                        <a class="btn-outline mt-4" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar muestra</a>
-                    </div>
                     <div>
                         <h2 class="font-heading font-extrabold text-xl text-expert">Habla con Hotel Expert</h2>
                         <ul class="mt-4 space-y-4">
@@ -58,7 +53,5 @@ require __DIR__ . '/includes/header.php';
     </section>
 </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>
-
-
 
 

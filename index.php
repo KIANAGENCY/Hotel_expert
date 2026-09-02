@@ -37,7 +37,7 @@ require __DIR__ . '/includes/header.php';
                 <p class="mt-7 max-w-2xl text-lg leading-relaxed text-white/75 sm:text-xl">Hotel Expert integra la limpieza profesional y el aroma insignia de tu hotel dentro de un mismo sistema.</p>
                 <div class="mt-8 flex flex-wrap gap-3">
                     <a class="btn-primary" href="<?= e(url('sistema-elah/')) ?>">Conoce el Sistema ELAH</a>
-                    <a class="btn-ghost" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicita una muestra</a>
+                    <a class="btn-ghost" href="<?= e(url('muestra/')) ?>">Solicita una muestra</a>
                 </div>
                 <p class="mt-7 text-sm font-semibold tracking-wide text-white/55">Limpieza · Aroma insignia · Estandarización</p>
             </div>
@@ -185,7 +185,7 @@ require __DIR__ . '/includes/header.php';
         <div class="section-shell py-20 text-center sm:py-28">
             <h2 class="section-title text-white">Pruébalo en tu propio hotel.</h2>
             <p class="mx-auto mt-6 max-w-2xl text-lg text-white/70">Conoce Hotel Expert dentro de tu operación y descubre cómo limpieza y aroma pueden trabajar juntos bajo una misma identidad.</p>
-            <div class="mt-8 flex flex-wrap justify-center gap-3"><a class="btn-primary" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar una muestra</a><a class="btn-ghost" href="<?= e(whatsapp_url()) ?>" target="_blank" rel="noopener noreferrer">Hablar con un asesor</a></div>
+            <div class="mt-8 flex flex-wrap justify-center gap-3"><a class="btn-primary" href="<?= e(url('muestra/')) ?>">Solicitar una muestra</a><a class="btn-ghost" href="<?= e(whatsapp_url()) ?>" target="_blank" rel="noopener noreferrer">Hablar con un asesor</a></div>
         </div>
     </section>
 
@@ -206,7 +206,7 @@ require __DIR__ . '/includes/header.php';
             <p class="mx-auto mt-5 max-w-2xl font-heading text-xl font-bold text-white">Estandarización de Limpieza y Aroma en Hoteles</p>
             <p class="elah-equation mx-auto mt-8">Limpieza <span>+</span> Aroma <span>=</span> ELAH</p>
             <p class="mt-8 text-white/65"><?= e(SITE_CLAIM) ?></p>
-            <div class="mt-8 flex flex-wrap justify-center gap-3"><a class="btn-primary" href="<?= e(url('sistema-elah/')) ?>">Conoce el Sistema ELAH</a><a class="btn-ghost" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicita una muestra</a></div>
+            <div class="mt-8 flex flex-wrap justify-center gap-3"><a class="btn-primary" href="<?= e(url('sistema-elah/')) ?>">Conoce el Sistema ELAH</a><a class="btn-ghost" href="<?= e(url('muestra/')) ?>">Solicita una muestra</a></div>
         </div>
     </section>
 </main>

@@ -1,5 +1,30 @@
 RewriteEngine On
 DirectoryIndex index.php
+Options -Indexes
+
+# Never expose development artifacts, application internals or dependencies.
+RewriteRule ^(?:\.git|\.superdesign|\.cursor|tests|tools|includes|data|vendor)(?:/|$) - [R=404,L,NC]
+RewriteRule ^(?:MYSQL_SETUP\.md|Hotel_Expert_(?:Capturas|Mockup|Sistema_ELAH_Mockup)_2026\.pdf)$ - [R=404,L,NC]
+
+<FilesMatch "^(\.env(?:\..*)?|composer\.(json|lock))$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header unset X-Powered-By
+  Header always unset X-Powered-By
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://js.hs-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://images.unsplash.com; connect-src 'self' https://*.hubspot.com; frame-src 'none'"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" "expr=%{HTTPS} == 'on'"
+</IfModule>
+
+php_flag expose_php Off
+php_flag display_errors Off
+php_flag log_errors On
 
 # Canonical legacy redirects
 RewriteCond %{THE_REQUEST} \s/+como-funciona(?:\.php)?[\s?] [NC]
@@ -8,6 +33,8 @@ RewriteCond %{THE_REQUEST} \s/+producto\.php\?slug=estandar [NC]
 RewriteRule ^producto\.php$ /productos/hotel-expert/ [R=301,L,NE,QSD]
 RewriteCond %{THE_REQUEST} \s/+producto\.php\?slug=dual [NC]
 RewriteRule ^producto\.php$ /productos/hotel-expert-dual/ [R=301,L,NE,QSD]
+RewriteCond %{QUERY_STRING} (^|&)tipo=muestra(&|$) [NC]
+RewriteRule ^contacto(?:\.php)?/?$ /muestra/ [R=301,L,NE,QSD]
 
 # Clean public routes
 RewriteRule ^sistema-elah/?$ sistema-elah.php [L,NC]
@@ -20,6 +47,17 @@ RewriteRule ^blog/?$ blog.php [L,NC]
 RewriteRule ^manual-de-uso/?$ manual-de-uso.php [L,NC]
 RewriteRule ^nosotros/?$ nosotros.php [L,NC]
 RewriteRule ^contacto/?$ contacto.php [L,NC]
+RewriteRule ^muestra/?$ muestra.php [L,NC]
+RewriteRule ^cuenta/?$ cuenta/index.php [L,NC]
+RewriteRule ^cuenta/login/?$ cuenta/login.php [L,NC]
+RewriteRule ^cuenta/registro/?$ cuenta/registro.php [L,NC]
+RewriteRule ^cuenta/logout/?$ cuenta/logout.php [L,NC]
+RewriteRule ^cuenta/verificar/?$ cuenta/verificar.php [L,NC,QSA]
+RewriteRule ^cuenta/reenviar/?$ cuenta/reenviar.php [L,NC]
+RewriteRule ^cuenta/recuperar/?$ cuenta/recuperar.php [L,NC]
+RewriteRule ^cuenta/restablecer/?$ cuenta/restablecer.php [L,NC,QSA]
+RewriteRule ^cuenta/pedido/?$ cuenta/pedido.php [L,NC,QSA]
+RewriteRule ^cuenta/action/?$ cuenta/action.php [L,NC]
 
 # Preserve useful extensionless legacy URLs
 RewriteCond %{REQUEST_FILENAME} !-d

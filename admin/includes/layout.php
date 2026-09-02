@@ -156,7 +156,10 @@ function admin_layout_start(string $title, string $active = ''): void
                     <div class="admin-menu" id="menu-profile" data-admin-menu style="width:170px">
                         <a class="admin-menu-item" href="<?= e(admin_url('config.php')) ?>"><i class="fa-regular fa-user"></i> Perfil</a>
                         <div class="admin-menu-divider"></div>
-                        <a class="admin-menu-item is-danger" href="<?= e(admin_url('logout.php')) ?>"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                        <form method="post" action="<?= e(admin_url('logout.php')) ?>">
+                            <input type="hidden" name="csrf" value="<?= e(admin_csrf()) ?>">
+                            <button class="admin-menu-item is-danger" type="submit" style="width:100%;border:0;background:transparent;text-align:left;cursor:pointer"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</button>
+                        </form>
                     </div>
                 </div>
             </div>

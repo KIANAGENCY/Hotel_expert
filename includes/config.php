@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
-
 $rootFs = dirname(__DIR__);
 $docRoot = rtrim(str_replace('\\', '/', (string) ($_SERVER['DOCUMENT_ROOT'] ?? '')), '/');
 $rootNorm = rtrim(str_replace('\\', '/', $rootFs), '/');
@@ -14,6 +10,52 @@ if ($docRoot !== '' && str_starts_with($rootNorm, $docRoot)) {
 }
 define('BASE_URL', $base === '' || $base === false ? '' : $base);
 define('ROOT_PATH', $rootFs);
+
+function load_env_file(string $path): void
+{
+    if (!is_file($path)) {
+        return;
+    }
+    foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+            continue;
+        }
+        [$key, $value] = array_map('trim', explode('=', $line, 2));
+        $value = trim($value, "\"'");
+        if ($key !== '' && getenv($key) === false) {
+            putenv($key . '=' . $value);
+            $_ENV[$key] = $value;
+        }
+    }
+}
+
+function env(string $key, string $default = ''): string
+{
+    $value = getenv($key);
+    return $value === false ? $default : (string) $value;
+}
+
+load_env_file(ROOT_PATH . '/.env');
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.use_only_cookies', '1');
+    if (PHP_SAPI === 'cli') {
+        ini_set('session.save_path', sys_get_temp_dir());
+    }
+    $trustProxyHeaders = filter_var(env('TRUST_PROXY_HEADERS', 'false'), FILTER_VALIDATE_BOOLEAN);
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || ($trustProxyHeaders && strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => BASE_URL !== '' ? BASE_URL . '/' : '/',
+        'secure' => $https,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+    session_start();
+}
 
 define('SITE_NAME', 'Hotel Expert');
 define('SITE_TAGLINE', 'Estandarización de Limpieza y Aroma en Hoteles');
@@ -70,6 +112,7 @@ $nav = [
     ['Recursos', 'recursos/', 'recursos'],
     ['Nosotros', 'nosotros/', 'nosotros'],
     ['Contacto', 'contacto/', 'contacto'],
+    ['Solicitar muestra', 'muestra/', 'muestra'],
 ];
 
 require_once __DIR__ . '/repository.php';

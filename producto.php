@@ -70,7 +70,7 @@ require __DIR__ . '/includes/header.php';
                         <p class="mt-2 text-charcoal/65"><?= e($p['rendimiento']) ?></p>
                     </div>
                     <div class="mt-7 flex flex-wrap gap-3">
-                        <a class="btn-primary btn-lg" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar muestra</a>
+                        <a class="btn-primary btn-lg" href="<?= e(url('muestra/')) ?>">Solicitar muestra</a>
                         <a class="btn-outline btn-lg" href="<?= e(whatsapp_url()) ?>" target="_blank" rel="noopener noreferrer">Hablar con un asesor</a>
                     </div>
                 </div>
@@ -132,7 +132,7 @@ require __DIR__ . '/includes/header.php';
             <article>
                 <h2 class="display text-3xl">¿Dónde recomendamos Hotel Expert?</h2>
                 <p class="mt-4 text-lg text-charcoal/70">Especialmente en áreas abiertas y de alto tránsito dentro de la lógica actual del sistema.</p>
-                <a class="btn-primary mt-6" href="<?= e(url('contacto/?tipo=muestra')) ?>">Solicitar muestra</a>
+                <a class="btn-primary mt-6" href="<?= e(url('muestra/')) ?>">Solicitar muestra</a>
             </article>
         </div>
     </section>
@@ -158,13 +158,12 @@ require __DIR__ . '/includes/header.php';
             <article>
                 <h2 class="display text-3xl">También lleva el aroma insignia de tu hotel</h2>
                 <p class="mt-4 text-lg text-charcoal/70">Además de neutralizar, Dual incorpora el aroma insignia del establecimiento.</p>
-                <a class="btn-primary mt-6" href="<?= e(url('contacto/?tipo=muestra')) ?>">Probar Hotel Expert Dual</a>
+                <a class="btn-primary mt-6" href="<?= e(url('muestra/')) ?>">Probar Hotel Expert Dual</a>
             </article>
         </div>
     </section>
     <?php endif; ?>
 </main>
 <?php require __DIR__ . '/includes/footer.php'; ?>
-
 
 

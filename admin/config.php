@@ -25,7 +25,10 @@ admin_page_header('Ajustes', 'Configuración', 'Datos del sitio, contacto y segu
     <?php admin_field('Instagram URL', 'social_instagram', $s['social_instagram'] ?? ''); ?>
 
     <h2 class="admin-section-title">Seguridad</h2>
-    <?php admin_field('Nueva contraseña admin (opcional, min. 8)', 'new_password', '', 'password', ['autocomplete' => 'new-password']); ?>
+    <?php admin_field('Contraseña actual', 'current_password', '', 'password', ['autocomplete' => 'current-password']); ?>
+    <?php admin_field('Nueva contraseña admin (opcional)', 'new_password', '', 'password', ['autocomplete' => 'new-password']); ?>
+    <?php admin_field('Confirmar nueva contraseña', 'new_password_confirmation', '', 'password', ['autocomplete' => 'new-password']); ?>
+    <p style="font-size:13px;color:var(--admin-text-muted);margin:0 0 16px">Para cambiarla, usa al menos 10 caracteres, mayúscula, minúscula y número. Se cerrarán todas las sesiones administrativas.</p>
     <p style="font-size:13px;color:var(--admin-text-muted);margin:0 0 16px">Los cambios de contacto se guardan en la base de datos y se reflejan en el sitio público.</p>
 
     <button class="admin-btn admin-btn-primary" type="submit">Guardar configuración</button>
