@@ -32,10 +32,10 @@ admin_page_header('Contenido', 'Áreas del hotel', 'Tarjetas de áreas operativa
                                 <input type="hidden" name="csrf" value="<?= e(admin_csrf()) ?>">
                                 <input type="hidden" name="action" value="area_save">
                                 <input type="hidden" name="id" value="<?= (int) $area['id'] ?>">
-                                <input class="admin-input" name="titulo" value="<?= e($area['titulo']) ?>">
-                                <textarea class="admin-input" name="texto" rows="2" style="margin-top:8px"><?= e($area['texto']) ?></textarea>
-                                <input class="admin-input" name="href" value="<?= e($area['href']) ?>" style="margin-top:8px">
-                                <input class="admin-input" type="number" name="sort_order" value="<?= (int) $area['sort_order'] ?>" style="margin-top:8px">
+                                <input class="admin-input" name="titulo" value="<?= e($area['titulo']) ?>"<?= admin_field_attrs([], 'titulo') ?>>
+                                <textarea class="admin-input" name="texto" rows="2" style="margin-top:8px"<?= admin_field_attrs([], 'texto') ?>><?= e($area['texto']) ?></textarea>
+                                <input class="admin-input" name="href" value="<?= e($area['href']) ?>" style="margin-top:8px"<?= admin_field_attrs([], 'href') ?>>
+                                <input class="admin-input" type="number" name="sort_order" value="<?= (int) $area['sort_order'] ?>" style="margin-top:8px"<?= admin_field_attrs([], 'sort_order') ?>>
                                 <button class="admin-btn admin-btn-primary admin-btn-sm" type="submit" style="margin-top:8px">Actualizar</button>
                             </form>
                         </td>

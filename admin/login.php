@@ -9,17 +9,19 @@ if (admin_session_is_valid()) {
 }
 
 $error = '';
+$usernameValue = '';
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+    $usernameValue = trim((string) ($_POST['username'] ?? ''));
+    $pass = (string) ($_POST['password'] ?? '');
     if (!admin_csrf_ok($_POST['csrf'] ?? null)) {
-        $error = 'La sesión expiró. Recarga la página.';
+        $error = 'La sesión expiró. Recarga la página e inténtalo de nuevo.';
+    } elseif (admin_login_is_blocked($usernameValue, (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown'))) {
+        $error = 'Demasiados intentos fallidos. Espera 15 minutos o pide que restablezcan tu acceso.';
+    } elseif (admin_login($usernameValue, $pass)) {
+        header('Location: ' . admin_url('index.php'));
+        exit;
     } else {
-        $user = trim((string) ($_POST['username'] ?? ''));
-        $pass = (string) ($_POST['password'] ?? '');
-        if (admin_login($user, $pass)) {
-            header('Location: ' . admin_url('index.php'));
-            exit;
-        }
-        $error = 'Usuario o contraseña incorrectos, o acceso temporalmente limitado.';
+        $error = 'Usuario o contraseña incorrectos.';
     }
 }
 ?>
@@ -33,7 +35,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="<?= e(url('admin/assets/admin.css')) ?>">
+    <link rel="stylesheet" href="<?= e(url('admin/assets/admin.css?v=2')) ?>">
 </head>
 <body class="admin-login">
 <div class="admin-login-mobile-brand">
@@ -70,12 +72,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
             <label class="admin-label">
                 <span>Usuario</span>
-                <input class="admin-input" name="username" required autocomplete="username">
+                <input class="admin-input" name="username" required autocomplete="username" placeholder="Ej. operaciones.hotel" value="<?= e($usernameValue) ?>">
             </label>
-            <label class="admin-label">
-                <span>Contraseña</span>
-                <input class="admin-input" type="password" name="password" required autocomplete="current-password">
-            </label>
+            <label class="admin-label-caption" for="admin-login-password">Contraseña</label>
+            <div class="admin-password-field admin-password-field--standalone">
+                <input class="admin-input" id="admin-login-password" type="password" name="password" required minlength="8" autocomplete="current-password" placeholder="Tu clave de acceso al panel">
+                <?php admin_password_toggle_markup('admin-login-password'); ?>
+            </div>
 
             <button class="admin-btn admin-btn-primary admin-btn-block-lg" type="submit">
                 Entrar al panel <i class="fa-solid fa-arrow-right"></i>
@@ -86,5 +89,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         </div>
     </main>
 </div>
+<script src="<?= e(url('admin/assets/admin.js?v=2')) ?>"></script>
 </body>
 </html>

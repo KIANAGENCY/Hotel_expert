@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/admin-auth.php';
+require_once __DIR__ . '/includes/validation.php';
 admin_require_login();
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST' || !admin_csrf_ok($_POST['csrf'] ?? null)) {
@@ -13,9 +14,13 @@ $action = (string) ($_POST['action'] ?? '');
 
 switch ($action) {
     case 'lead_update':
-        lead_update((int) ($_POST['id'] ?? 0), (string) ($_POST['estado'] ?? 'nuevo'), trim((string) ($_POST['notas'] ?? '')));
+        $validated = admin_validate_lead_payload($_POST);
+        if (!$validated['ok']) {
+            admin_redirect_error($validated['message'], admin_url('lead.php?id=' . (int) ($_POST['id'] ?? 0)));
+        }
+        lead_update($validated['data']['id'], $validated['data']['estado'], $validated['data']['notas']);
         admin_flash('Lead actualizado.');
-        header('Location: ' . admin_url('lead.php?id=' . (int) $_POST['id']));
+        header('Location: ' . admin_url('lead.php?id=' . $validated['data']['id']));
         break;
 
     case 'lead_delete':
@@ -25,39 +30,17 @@ switch ($action) {
         break;
 
     case 'product_save':
-        $slug = preg_replace('/[^a-z0-9-]/', '', strtolower((string) ($_POST['slug'] ?? '')));
-        if ($slug === '') {
-            admin_flash('Slug inválido.', 'error');
-            header('Location: ' . admin_url('productos.php'));
-            exit;
+        $validated = admin_validate_product_payload($_POST);
+        if (!$validated['ok']) {
+            $slug = preg_replace('/[^a-z0-9-]/', '', strtolower((string) ($_POST['slug'] ?? '')));
+            admin_redirect_error($validated['message'], admin_url($slug !== '' ? 'producto.php?slug=' . rawurlencode($slug) : 'producto.php'));
         }
-        $claims = array_values(array_filter(array_map('trim', explode("\n", (string) ($_POST['claims'] ?? '')))));
-        $superficies = array_values(array_filter(array_map('trim', explode("\n", (string) ($_POST['superficies'] ?? '')))));
-        $noUsar = array_values(array_filter(array_map('trim', explode("\n", (string) ($_POST['no_usar'] ?? '')))));
-        producto_save($slug, [
-            'slug' => $slug,
-            'sku' => trim((string) ($_POST['sku'] ?? '')),
-            'nombre' => trim((string) ($_POST['nombre'] ?? '')),
-            'categoria' => trim((string) ($_POST['categoria'] ?? '')),
-            'subtitulo' => trim((string) ($_POST['subtitulo'] ?? '')),
-            'resumen' => trim((string) ($_POST['resumen'] ?? '')),
-            'presentacion' => trim((string) ($_POST['presentacion'] ?? '')),
-            'rendimiento' => trim((string) ($_POST['rendimiento'] ?? '')),
-            'precio' => max(0, (int) ($_POST['precio'] ?? 0)),
-            'precio_texto' => trim((string) ($_POST['precio_texto'] ?? '')),
-            'precio_lista' => trim((string) ($_POST['precio_lista'] ?? '')) ?: null,
-            'iva' => !empty($_POST['iva']),
-            'imagen' => trim((string) ($_POST['imagen'] ?? '')) ?: null,
-            'alt' => trim((string) ($_POST['alt'] ?? '')),
-            'icono' => trim((string) ($_POST['icono'] ?? '')),
-            'funcion' => trim((string) ($_POST['funcion'] ?? '')),
-            'especialidad' => trim((string) ($_POST['especialidad'] ?? '')),
-            'claims' => $claims,
-            'superficies' => $superficies,
-            'no_usar' => $noUsar,
-        ], (int) ($_POST['sort_order'] ?? 0));
+        $data = $validated['data'];
+        $sortOrder = $data['sort_order'];
+        unset($data['sort_order']);
+        producto_save($data['slug'], $data, $sortOrder);
         admin_flash('Producto guardado.');
-        header('Location: ' . admin_url('producto.php?slug=' . rawurlencode($slug)));
+        header('Location: ' . admin_url('producto.php?slug=' . rawurlencode($data['slug'])));
         break;
 
     case 'product_delete':
@@ -67,23 +50,17 @@ switch ($action) {
         break;
 
     case 'post_save':
-        $slug = preg_replace('/[^a-z0-9-]/', '', strtolower((string) ($_POST['slug'] ?? '')));
-        $cuerpo = array_values(array_filter(array_map('trim', explode("\n\n", (string) ($_POST['cuerpo'] ?? '')))));
-        blog_save($slug, [
-            'slug' => $slug,
-            'titulo' => trim((string) ($_POST['titulo'] ?? '')),
-            'seo_titulo' => trim((string) ($_POST['seo_titulo'] ?? '')),
-            'meta_descripcion' => trim((string) ($_POST['meta_descripcion'] ?? '')),
-            'bajada' => trim((string) ($_POST['bajada'] ?? '')),
-            'extracto' => trim((string) ($_POST['extracto'] ?? '')),
-            'categoria' => trim((string) ($_POST['categoria'] ?? '')),
-            'fecha' => trim((string) ($_POST['fecha'] ?? date('Y-m-d'))),
-            'lectura' => trim((string) ($_POST['lectura'] ?? '4 min')),
-            'cover' => trim((string) ($_POST['cover'] ?? '')),
-            'cuerpo' => $cuerpo,
-        ], (int) ($_POST['sort_order'] ?? 0));
+        $validated = admin_validate_post_payload($_POST);
+        if (!$validated['ok']) {
+            $slug = preg_replace('/[^a-z0-9-]/', '', strtolower((string) ($_POST['slug'] ?? '')));
+            admin_redirect_error($validated['message'], admin_url($slug !== '' ? 'post.php?slug=' . rawurlencode($slug) : 'post.php'));
+        }
+        $data = $validated['data'];
+        $sortOrder = $data['sort_order'];
+        unset($data['sort_order']);
+        blog_save($data['slug'], $data, $sortOrder);
         admin_flash('Artículo guardado.');
-        header('Location: ' . admin_url('post.php?slug=' . rawurlencode($slug)));
+        header('Location: ' . admin_url('post.php?slug=' . rawurlencode($data['slug'])));
         break;
 
     case 'post_delete':
@@ -93,7 +70,12 @@ switch ($action) {
         break;
 
     case 'order_save':
-        $id = strtoupper(trim((string) ($_POST['id'] ?? '')));
+        $validated = admin_validate_order_payload($_POST);
+        if (!$validated['ok']) {
+            $id = strtoupper(trim((string) ($_POST['id'] ?? '')));
+            admin_redirect_error($validated['message'], admin_url($id !== '' ? 'pedido.php?id=' . rawurlencode($id) : 'pedido.php'));
+        }
+        $data = $validated['data'];
         $products = productos_all();
         $orderItems = [];
         $itemNames = [];
@@ -113,18 +95,18 @@ switch ($action) {
             $itemNames[] = $quantity . '× ' . $product['nombre'];
         }
         pedido_save([
-            'id' => $id,
-            'email' => trim((string) ($_POST['email'] ?? '')),
-            'hotel' => trim((string) ($_POST['hotel'] ?? '')),
-            'estado' => (string) ($_POST['estado'] ?? 'procesando'),
-            'fecha' => trim((string) ($_POST['fecha'] ?? '')),
-            'eta' => trim((string) ($_POST['eta'] ?? '')),
-            'items' => $itemNames ? implode(', ', $itemNames) : trim((string) ($_POST['items'] ?? '')),
-            'guia' => trim((string) ($_POST['guia'] ?? '')),
+            'id' => $data['id'],
+            'email' => $data['email'],
+            'hotel' => $data['hotel'],
+            'estado' => $data['estado'],
+            'fecha' => $data['fecha'],
+            'eta' => $data['eta'],
+            'items' => $itemNames ? implode(', ', $itemNames) : $data['items'],
+            'guia' => $data['guia'],
             'order_items' => $orderItems,
         ]);
         admin_flash('Pedido guardado.');
-        header('Location: ' . admin_url('pedido.php?id=' . rawurlencode($id)));
+        header('Location: ' . admin_url('pedido.php?id=' . rawurlencode($data['id'])));
         break;
 
     case 'order_delete':
@@ -134,12 +116,12 @@ switch ($action) {
         break;
 
     case 'faq_save':
-        faq_save(
-            ((int) ($_POST['id'] ?? 0)) ?: null,
-            trim((string) ($_POST['pregunta'] ?? '')),
-            trim((string) ($_POST['respuesta'] ?? '')),
-            (int) ($_POST['sort_order'] ?? 0)
-        );
+        $validated = admin_validate_faq_payload($_POST);
+        if (!$validated['ok']) {
+            admin_redirect_error($validated['message'], admin_url('faq.php'));
+        }
+        $data = $validated['data'];
+        faq_save($data['id'], $data['pregunta'], $data['respuesta'], $data['sort_order']);
         admin_flash('FAQ guardada.');
         header('Location: ' . admin_url('faq.php'));
         break;
@@ -151,13 +133,12 @@ switch ($action) {
         break;
 
     case 'area_save':
-        area_save(
-            ((int) ($_POST['id'] ?? 0)) ?: null,
-            trim((string) ($_POST['titulo'] ?? '')),
-            trim((string) ($_POST['texto'] ?? '')),
-            trim((string) ($_POST['href'] ?? '')),
-            (int) ($_POST['sort_order'] ?? 0)
-        );
+        $validated = admin_validate_area_payload($_POST);
+        if (!$validated['ok']) {
+            admin_redirect_error($validated['message'], admin_url('areas.php'));
+        }
+        $data = $validated['data'];
+        area_save($data['id'], $data['titulo'], $data['texto'], $data['href'], $data['sort_order']);
         admin_flash('Área guardada.');
         header('Location: ' . admin_url('areas.php'));
         break;
@@ -169,41 +150,105 @@ switch ($action) {
         break;
 
     case 'settings_save':
-        $newPass = (string) ($_POST['new_password'] ?? '');
-        if ($newPass !== '') {
-            $currentPass = (string) ($_POST['current_password'] ?? '');
-            $confirmation = (string) ($_POST['new_password_confirmation'] ?? '');
-            $strongPassword = strlen($newPass) >= 10
-                && preg_match('/[A-Z]/', $newPass) === 1
-                && preg_match('/[a-z]/', $newPass) === 1
-                && preg_match('/\d/', $newPass) === 1;
-            if (!admin_verify(admin_user(), $currentPass) || !$strongPassword || !hash_equals($newPass, $confirmation)) {
-                admin_flash('No se cambió la contraseña. Verifica la contraseña actual, la confirmación y los requisitos de seguridad.', 'error');
-                header('Location: ' . admin_url('config.php'));
-                exit;
-            }
+        $validated = admin_validate_settings_payload($_POST);
+        if (!$validated['ok']) {
+            admin_redirect_error($validated['message'], admin_url('config.php'));
         }
-        settings_save([
-            'site_name' => trim((string) ($_POST['site_name'] ?? '')),
-            'site_tagline' => trim((string) ($_POST['site_tagline'] ?? '')),
-            'site_claim' => trim((string) ($_POST['site_claim'] ?? '')),
-            'site_domain' => trim((string) ($_POST['site_domain'] ?? '')),
-            'whatsapp' => preg_replace('/\D/', '', (string) ($_POST['whatsapp'] ?? '')),
-            'whatsapp_display' => trim((string) ($_POST['whatsapp_display'] ?? '')),
-            'email_ventas' => trim((string) ($_POST['email_ventas'] ?? '')),
-            'social_facebook' => trim((string) ($_POST['social_facebook'] ?? '')),
-            'social_instagram' => trim((string) ($_POST['social_instagram'] ?? '')),
-        ]);
+        settings_save($validated['data']['settings']);
+        $newPass = $validated['data']['new_password'];
         if ($newPass !== '') {
             admin_change_password(admin_user(), $newPass);
             admin_logout();
             admin_flash('Configuración y contraseña actualizadas. Inicia sesión nuevamente.', 'success');
             header('Location: ' . admin_url('login.php'));
             exit;
-        } else {
-            admin_flash('Configuración guardada.');
         }
+        admin_flash('Configuración guardada.');
         header('Location: ' . admin_url('config.php'));
+        break;
+
+    case 'deployment_test_db':
+        require_once __DIR__ . '/../includes/env-file.php';
+        $validated = admin_validate_deploy_db_payload($_POST);
+        if (!$validated['ok']) {
+            admin_redirect_error($validated['message'], admin_url('deploy.php'));
+        }
+        if (!env_file_test_database($validated['data'])) {
+            admin_redirect_error('No se pudo conectar a la base de datos con esas credenciales.', admin_url('deploy.php'));
+        }
+        admin_flash('Conexión a la base de datos correcta.');
+        header('Location: ' . admin_url('deploy.php'));
+        break;
+
+    case 'deployment_save':
+        require_once __DIR__ . '/../includes/env-file.php';
+        require_once __DIR__ . '/../includes/htaccess-deploy.php';
+        $validated = admin_validate_deploy_payload($_POST, true);
+        if (!$validated['ok']) {
+            admin_redirect_error($validated['message'], admin_url('deploy.php'));
+        }
+        $data = $validated['data'];
+        if (!env_file_test_database($data)) {
+            admin_redirect_error('No se pudo conectar a la base de datos. Corrige las credenciales antes de guardar.', admin_url('deploy.php'));
+        }
+        try {
+            $envBackup = env_file_update($data);
+            $htBackup = htaccess_deploy_apply($data);
+            $domain = (string) ($data['site_domain'] ?? '');
+            if ($domain !== '') {
+                settings_save(['site_domain' => $domain]);
+            }
+        } catch (Throwable $e) {
+            admin_redirect_error('No se pudo guardar el despliegue: ' . $e->getMessage(), admin_url('deploy.php'));
+        }
+        $message = 'Despliegue guardado.';
+        if ($envBackup !== '' || $htBackup !== '') {
+            $parts = array_filter([$envBackup !== '' ? basename($envBackup) : '', $htBackup !== '' ? basename($htBackup) : '']);
+            if ($parts !== []) {
+                $message .= ' Respaldo: ' . implode(', ', $parts) . '.';
+            }
+        }
+        admin_flash($message);
+        header('Location: ' . admin_url('deploy.php'));
+        break;
+
+    case 'stripe_test':
+        require_once __DIR__ . '/../includes/stripe-config.php';
+        $validated = admin_validate_stripe_payload($_POST, false);
+        if (!$validated['ok']) {
+            admin_redirect_error($validated['message'], admin_url('stripe.php'));
+        }
+        if (!stripe_test_connection($validated['data'])) {
+            admin_redirect_error('No se pudo conectar con Stripe. Verifica el modo y la clave secreta.', admin_url('stripe.php'));
+        }
+        admin_flash('Conexión con Stripe correcta.');
+        header('Location: ' . admin_url('stripe.php'));
+        break;
+
+    case 'stripe_save':
+        require_once __DIR__ . '/../includes/stripe-config.php';
+        $validated = admin_validate_stripe_payload($_POST, true);
+        if (!$validated['ok']) {
+            admin_redirect_error($validated['message'], admin_url('stripe.php'));
+        }
+        if (filter_var($validated['data']['STRIPE_ENABLED'], FILTER_VALIDATE_BOOLEAN) && !stripe_test_connection($validated['data'])) {
+            admin_redirect_error('Stripe está activo pero la clave secreta no responde. Corrige las credenciales antes de guardar.', admin_url('stripe.php'));
+        }
+        try {
+            $envData = $validated['data'];
+            $ivaRate = (string) $envData['checkout_iva_rate'];
+            unset($envData['checkout_iva_rate']);
+            $backup = env_file_update($envData, ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET']);
+            settings_save(['checkout_iva_rate' => $ivaRate]);
+        } catch (Throwable $e) {
+            admin_redirect_error('No se pudo guardar Stripe: ' . $e->getMessage(), admin_url('stripe.php'));
+        }
+        $message = 'Configuración de Stripe guardada.';
+        if ($backup !== '') {
+            $message .= ' Respaldo: ' . basename($backup) . '.';
+        }
+        admin_flash($message);
+        header('Location: ' . admin_url('stripe.php'));
         break;
 
     default:

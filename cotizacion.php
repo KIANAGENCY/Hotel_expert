@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/stripe-config.php';
+require_once __DIR__ . '/includes/cart-pricing.php';
 $customer = !empty($_SESSION['customer_id']) ? customer_get((int) $_SESSION['customer_id']) : null;
 $reorderCart = is_array($_SESSION['reorder_cart'] ?? null) ? $_SESSION['reorder_cart'] : null;
 unset($_SESSION['reorder_cart']);
@@ -15,7 +17,7 @@ require __DIR__ . '/includes/header.php';
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <p class="eyebrow">Solicitud B2B</p>
             <h1 class="display mt-3 text-4xl sm:text-6xl">Mi cotización ELAH</h1>
-            <p class="mt-4 max-w-2xl text-lg text-charcoal/65">Revisa cantidades y comparte los datos de tu hotel. Esta solicitud no genera un cobro.</p>
+            <p class="mt-4 max-w-2xl text-lg text-charcoal/65">Revisa cantidades, IVA y total. Puedes pagar en línea o solicitar cotización sin cobro.</p>
         </div>
     </section>
 
@@ -25,13 +27,28 @@ require __DIR__ . '/includes/header.php';
                 <div class="cart-surface" data-cart-root></div>
                 <div class="mt-6 flex flex-wrap gap-3" data-cart-dependent hidden>
                     <a class="btn-outline" href="<?= e(url('catalogo.php')) ?>">Seguir comprando</a>
-                    <a class="btn-primary" data-cart-whatsapp href="https://wa.me/<?= e(site_whatsapp()) ?>" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+                    <?php if (stripe_is_enabled() && stripe_status_summary()['ready']): ?>
+                        <button class="btn-primary" type="button" data-cart-pay-trigger>Pagar ahora</button>
+                    <?php endif; ?>
+                    <a class="btn-outline" data-cart-whatsapp href="https://wa.me/<?= e(site_whatsapp()) ?>" target="_blank" rel="noopener">Enviar por WhatsApp</a>
                 </div>
             </div>
             <aside class="lg:col-span-4 lg:sticky lg:top-28" data-cart-dependent hidden>
                 <div class="cart-summary-card rounded-[1.75rem] p-7">
                     <h2 class="font-heading font-extrabold text-2xl text-expert">Resumen</h2>
                     <div class="mt-6" data-cart-summary></div>
+                    <?php if (stripe_is_enabled() && stripe_status_summary()['ready']): ?>
+                        <form method="post" action="<?= e(url('stripe-iniciar.php')) ?>" class="mt-6 grid gap-3" data-cart-pay-form>
+                            <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+                            <input type="hidden" name="carrito" value="" data-cart-pay-json>
+                            <input type="hidden" name="nombre" value="" data-cart-pay-nombre>
+                            <input type="hidden" name="hotel" value="" data-cart-pay-hotel>
+                            <input type="hidden" name="email" value="" data-cart-pay-email>
+                            <input type="hidden" name="telefono" value="" data-cart-pay-telefono>
+                            <button class="btn-primary justify-center w-full" type="submit">Pagar con tarjeta</button>
+                            <p class="text-xs text-charcoal/45 text-center">Pago seguro con Stripe · IVA incluido en el total</p>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </aside>
         </div>

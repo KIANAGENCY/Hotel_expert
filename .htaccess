@@ -1,4 +1,10 @@
 RewriteEngine On
+
+# BEGIN HOTEL_EXPERT_DEPLOY
+# Generado por el panel — no editar a mano
+# Sin reglas adicionales de despliegue
+# END HOTEL_EXPERT_DEPLOY
+
 DirectoryIndex index.php
 Options -Indexes
 
@@ -57,6 +63,7 @@ RewriteRule ^cuenta/reenviar/?$ cuenta/reenviar.php [L,NC]
 RewriteRule ^cuenta/recuperar/?$ cuenta/recuperar.php [L,NC]
 RewriteRule ^cuenta/restablecer/?$ cuenta/restablecer.php [L,NC,QSA]
 RewriteRule ^cuenta/pedido/?$ cuenta/pedido.php [L,NC,QSA]
+RewriteRule ^cuenta/stripe-webhook/?$ cuenta/stripe-webhook.php [L,NC]
 RewriteRule ^cuenta/action/?$ cuenta/action.php [L,NC]
 
 # Preserve useful extensionless legacy URLs

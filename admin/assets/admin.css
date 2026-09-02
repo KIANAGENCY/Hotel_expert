@@ -929,6 +929,14 @@ body.admin-login {
   color: var(--admin-text-secondary);
 }
 
+.admin-label-caption {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12.5px;
+  color: var(--admin-text-secondary);
+  cursor: pointer;
+}
+
 .admin-input,
 .admin-label select,
 .admin-label textarea {
@@ -962,6 +970,47 @@ body.admin-login {
   margin-top: 8px;
   padding-top: 16px;
   border-top: 1px solid var(--admin-border);
+}
+
+.admin-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.admin-checkbox-row input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--admin-primary);
+}
+
+.admin-checkbox-row > span {
+  margin: 0;
+  font-size: 14px;
+  color: var(--admin-text);
+}
+
+.admin-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.admin-badge-success {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--admin-success);
+}
+
+.admin-badge-warning {
+  background: rgba(245, 165, 36, 0.15);
+  color: var(--admin-warning);
+}
+
+.admin-deploy-status p {
+  margin: 0 0 8px;
 }
 
 .admin-two-col {
@@ -1261,6 +1310,66 @@ details p {
   color: var(--admin-text-muted);
   text-align: center;
   margin: 0;
+}
+
+.admin-password-field {
+  position: relative;
+  display: block;
+}
+
+.admin-password-field--standalone {
+  margin-bottom: 16px;
+}
+
+.admin-password-field .admin-input {
+  display: block;
+  width: 100%;
+  padding-right: 2.85rem;
+}
+
+.admin-password-field .admin-input::-ms-reveal {
+  display: none;
+}
+
+.admin-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: .45rem;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: inline-flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: .65rem;
+  background: transparent;
+  color: rgba(234, 245, 245, .72);
+  cursor: pointer;
+}
+
+.admin-password-toggle svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+}
+
+.admin-password-toggle:hover {
+  color: #fff;
+  background: rgba(82, 200, 200, .12);
+}
+
+.admin-password-toggle .password-eye-closed {
+  display: none;
+}
+
+.admin-password-toggle[aria-pressed="true"] .password-eye-open {
+  display: none;
+}
+
+.admin-password-toggle[aria-pressed="true"] .password-eye-closed {
+  display: block;
 }
 
 .admin-mobile-toggle {

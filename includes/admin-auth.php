@@ -56,7 +56,7 @@ function admin_logout(): void
 function admin_login(string $username, string $password): bool
 {
     $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
-    if (login_is_limited('admin', $username, $ip)) {
+    if (admin_login_is_blocked($username, $ip)) {
         return false;
     }
     $valid = admin_verify($username, $password);
@@ -70,6 +70,11 @@ function admin_login(string $username, string $password): bool
     $_SESSION['admin_authenticated_at'] = time();
     $_SESSION['admin_last_activity'] = time();
     return true;
+}
+
+function admin_login_is_blocked(string $username, string $ip): bool
+{
+    return login_is_limited('admin', $username, $ip);
 }
 
 function admin_csrf(): string

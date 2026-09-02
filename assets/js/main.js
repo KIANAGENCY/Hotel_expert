@@ -231,6 +231,8 @@
   const STORAGE_KEY = "hotelExpertElahCart";
   const products = window.ELAH_PRODUCTS || {};
   const base = window.ELAH_BASE || "";
+  const cartConfig = window.ELAH_CART || {};
+  const ivaRate = Number(cartConfig.ivaRate ?? 16);
 
   const readCart = () => {
     try {
@@ -329,7 +331,49 @@
   const cartItems = (cart = readCart()) =>
     Object.entries(cart)
       .filter(([slug, qty]) => products[slug] && Number(qty) > 0)
-      .map(([slug, qty]) => ({ ...products[slug], qty: Number(qty) }));
+      .map(([slug, qty]) => {
+        const product = products[slug];
+        const lineSubtotal = Number(product.precio) * Number(qty);
+        const appliesIva = Boolean(product.iva);
+        const lineIva = appliesIva ? Math.round(lineSubtotal * ivaRate / 100) : 0;
+        return {
+          ...product,
+          qty: Number(qty),
+          line_subtotal: lineSubtotal,
+          line_iva: lineIva,
+          line_total: lineSubtotal + lineIva,
+        };
+      });
+
+  const cartTotals = (items = cartItems()) => {
+    const subtotal = items.reduce((sum, item) => sum + item.line_subtotal, 0);
+    const iva = items.reduce((sum, item) => sum + item.line_iva, 0);
+    return {
+      items,
+      subtotal,
+      iva,
+      total: subtotal + iva,
+      count: items.reduce((sum, item) => sum + item.qty, 0),
+    };
+  };
+
+  const syncPayForm = (items = cartItems()) => {
+    const payJson = document.querySelector("[data-cart-pay-json]");
+    if (payJson) {
+      payJson.value = JSON.stringify(items.map(({ slug, qty }) => ({ slug, qty })));
+    }
+    const quoteForm = document.querySelector("[data-quote-form]");
+    if (!quoteForm) return;
+    const setField = (selector, name) => {
+      const source = quoteForm.querySelector(`[name="${name}"]`);
+      const target = document.querySelector(selector);
+      if (source && target) target.value = source.value.trim();
+    };
+    setField("[data-cart-pay-nombre]", "nombre");
+    setField("[data-cart-pay-hotel]", "hotel");
+    setField("[data-cart-pay-email]", "email");
+    setField("[data-cart-pay-telefono]", "telefono");
+  };
 
   const syncQuoteField = (cart = readCart()) => {
     const field = document.getElementById("cart-json");
@@ -339,8 +383,8 @@
   const renderCart = () => {
     const root = document.querySelector("[data-cart-root]");
     if (!root) return;
-    const items = cartItems();
-    const total = items.reduce((sum, item) => sum + item.precio * item.qty, 0);
+    const totals = cartTotals();
+    const items = totals.items;
     const summary = document.querySelector("[data-cart-summary]");
     const whatsapp = document.querySelector("[data-cart-whatsapp]");
     const layout = document.querySelector("[data-cart-layout]");
@@ -360,6 +404,7 @@
           <a class="btn-primary mt-6" href="${base}/catalogo.php">Explorar la tienda</a>
         </div>`;
       syncQuoteField({});
+      syncPayForm([]);
       return;
     }
 
@@ -380,7 +425,7 @@
               <input type="text" readonly value="${item.qty}" aria-label="Cantidad">
               <button type="button" data-cart-action="plus" data-cart-slug="${item.slug}" aria-label="Aumentar">+</button>
             </div>
-            <p class="min-w-[6rem] text-right font-heading font-extrabold text-expert">${money(item.precio * item.qty)}</p>
+            <p class="min-w-[6rem] text-right font-heading font-extrabold text-expert">${money(item.line_subtotal)}</p>
             <button type="button" class="text-sm text-charcoal/45 hover:text-red-700" data-cart-action="remove" data-cart-slug="${item.slug}">Eliminar</button>
           </div>
         </article>`;
@@ -388,21 +433,52 @@
 
     if (summary) {
       summary.innerHTML = `
-        <div class="flex justify-between text-charcoal/60"><span>Productos (${items.reduce((s, i) => s + i.qty, 0)})</span><span>${money(total)}</span></div>
+        <div class="flex justify-between text-charcoal/60"><span>Productos (${totals.count})</span><span>${money(totals.subtotal)}</span></div>
+        <div class="flex justify-between text-charcoal/60 mt-2"><span>IVA (${ivaRate}%)</span><span>${money(totals.iva)}</span></div>
         <div class="mt-4 pt-4 border-t border-expert/10 flex justify-between items-end">
-          <span class="font-heading font-bold text-expert">Subtotal</span>
-          <strong class="price-display !text-3xl">${money(total)}</strong>
+          <span class="font-heading font-bold text-expert">Total</span>
+          <strong class="price-display !text-3xl">${money(totals.total)}</strong>
         </div>
-        <p class="mt-2 text-xs text-charcoal/45 text-right">Más IVA. Entrega por confirmar.</p>`;
+        <p class="mt-2 text-xs text-charcoal/45 text-right">Subtotal sin IVA: ${money(totals.subtotal)} · Entrega por confirmar.</p>`;
     }
 
     if (whatsapp) {
-      const lines = items.map((item) => `• ${item.qty} × ${item.nombre} (${money(item.precio * item.qty)})`);
-      const message = `Hola Hotel Expert, quiero cotizar el Sistema ELAH:\n\n${lines.join("\n")}\n\nSubtotal: ${money(total)} + IVA.`;
+      const lines = items.map((item) => `• ${item.qty} × ${item.nombre} (${money(item.line_subtotal)} + IVA ${money(item.line_iva)})`);
+      const message = `Hola Hotel Expert, quiero cotizar el Sistema ELAH:\n\n${lines.join("\n")}\n\nSubtotal: ${money(totals.subtotal)}\nIVA (${ivaRate}%): ${money(totals.iva)}\nTotal: ${money(totals.total)}`;
       whatsapp.href = `https://wa.me/${window.ELAH_WHATSAPP || ''}?text=${encodeURIComponent(message)}`;
     }
     syncQuoteField(readCart());
+    syncPayForm(items);
   };
+
+  document.querySelector("[data-cart-pay-form]")?.addEventListener("submit", (event) => {
+    const totals = cartTotals();
+    if (!totals.items.length) {
+      event.preventDefault();
+      showToast("Agrega al menos un producto antes de pagar");
+      return;
+    }
+    syncPayForm(totals.items);
+    const quoteForm = document.querySelector("[data-quote-form]");
+    const nombre = quoteForm?.querySelector('[name="nombre"]')?.value.trim() || "";
+    const hotel = quoteForm?.querySelector('[name="hotel"]')?.value.trim() || "";
+    const email = quoteForm?.querySelector('[name="email"]')?.value.trim() || "";
+    if (!nombre || !hotel || !email) {
+      event.preventDefault();
+      showToast("Completa nombre, hotel y correo en el formulario antes de pagar");
+      quoteForm?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+
+  document.querySelector("[data-cart-pay-trigger]")?.addEventListener("click", () => {
+    const payForm = document.querySelector("[data-cart-pay-form]");
+    if (payForm) {
+      syncPayForm(cartItems());
+      payForm.requestSubmit();
+      return;
+    }
+    document.querySelector("[data-quote-form]")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 
   document.querySelector("[data-quote-form]")?.addEventListener("submit", (event) => {
     if (!cartItems().length) {

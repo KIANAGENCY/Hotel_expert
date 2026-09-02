@@ -123,4 +123,25 @@
       el.textContent = String(visible);
     });
   }
+
+  function bindPasswordToggles(root) {
+    (root || document).querySelectorAll('.admin-password-toggle').forEach(function (button) {
+      if (button.dataset.bound === '1') return;
+      button.dataset.bound = '1';
+      button.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var field = button.closest('.admin-password-field');
+        if (!field) return;
+        var input = field.querySelector('input');
+        if (!input) return;
+        var reveal = input.getAttribute('type') === 'password';
+        input.setAttribute('type', reveal ? 'text' : 'password');
+        button.setAttribute('aria-pressed', reveal ? 'true' : 'false');
+        button.setAttribute('aria-label', reveal ? 'Ocultar contraseña' : 'Mostrar contraseña');
+      });
+    });
+  }
+
+  bindPasswordToggles(document);
 })();

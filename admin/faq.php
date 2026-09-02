@@ -34,9 +34,9 @@ admin_page_header('Contenido', 'FAQ', 'Preguntas frecuentes del sitio público.'
                                     <input type="hidden" name="csrf" value="<?= e(admin_csrf()) ?>">
                                     <input type="hidden" name="action" value="faq_save">
                                     <input type="hidden" name="id" value="<?= (int) $faq['id'] ?>">
-                                    <textarea class="admin-input" name="pregunta" rows="2"><?= e($faq['pregunta']) ?></textarea>
-                                    <textarea class="admin-input" name="respuesta" rows="3" style="margin-top:8px"><?= e($faq['respuesta']) ?></textarea>
-                                    <input class="admin-input" type="number" name="sort_order" value="<?= (int) $faq['sort_order'] ?>" style="margin-top:8px">
+                                    <textarea class="admin-input" name="pregunta" rows="2"<?= admin_field_attrs([], 'pregunta') ?>><?= e($faq['pregunta']) ?></textarea>
+                                    <textarea class="admin-input" name="respuesta" rows="3" style="margin-top:8px"<?= admin_field_attrs([], 'respuesta') ?>><?= e($faq['respuesta']) ?></textarea>
+                                    <input class="admin-input" type="number" name="sort_order" value="<?= (int) $faq['sort_order'] ?>" style="margin-top:8px"<?= admin_field_attrs([], 'sort_order') ?>>
                                     <button class="admin-btn admin-btn-primary admin-btn-sm" type="submit" style="margin-top:8px">Actualizar</button>
                                 </form>
                             </details>

@@ -46,7 +46,7 @@ admin_page_header('Logística B2B', $isNew ? 'Nuevo pedido' : 'Editar pedido', '
                             <option value="<?= e($slug) ?>" <?= ($item['slug'] ?? '') === $slug ? 'selected' : '' ?>><?= e($product['nombre']) ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <input class="admin-input" type="number" min="1" max="99" name="product_qty[]" value="<?= e($item['cantidad'] ?? 1) ?>" aria-label="Cantidad">
+                    <input class="admin-input" type="number" min="1" max="99" name="product_qty[]" value="<?= e($item['cantidad'] ?? 1) ?>" aria-label="Cantidad"<?= admin_field_attrs([], 'product_qty') ?>>
                 </div>
             <?php endfor; ?>
         </div>

@@ -181,6 +181,31 @@ SQL);
         $pdo->exec('ALTER TABLE admin_users ADD session_version INT UNSIGNED NOT NULL DEFAULT 1 AFTER password_hash');
     }
     $pdo->exec("INSERT IGNORE INTO schema_migrations (version, applied_at) VALUES (5, NOW())");
+    $stripeCheckoutMigration = (bool) $pdo->query('SELECT 1 FROM schema_migrations WHERE version = 6')->fetchColumn();
+    if (!$stripeCheckoutMigration) {
+        $pdo->exec(<<<'SQL'
+CREATE TABLE IF NOT EXISTS stripe_checkouts (
+    session_id VARCHAR(255) PRIMARY KEY,
+    order_id VARCHAR(80) NOT NULL,
+    customer_id BIGINT UNSIGNED NULL,
+    email_blind_index CHAR(64) NOT NULL,
+    hotel VARCHAR(190) NOT NULL,
+    nombre VARCHAR(190) NOT NULL DEFAULT '',
+    cart_json JSON NOT NULL,
+    subtotal_sin_iva INT UNSIGNED NOT NULL DEFAULT 0,
+    iva_amount INT UNSIGNED NOT NULL DEFAULT 0,
+    total_amount INT UNSIGNED NOT NULL DEFAULT 0,
+    currency CHAR(3) NOT NULL DEFAULT 'mxn',
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_stripe_checkouts_order (order_id),
+    INDEX idx_stripe_checkouts_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL);
+        $pdo->prepare('INSERT INTO settings (setting_key, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_key = setting_key')
+            ->execute(['checkout_iva_rate', '16']);
+        $pdo->exec("INSERT INTO schema_migrations (version, applied_at) VALUES (6, NOW())");
+    }
     db_seed_mysql($pdo);
 }
 
@@ -348,6 +373,7 @@ function db_seed_mysql(PDO $pdo): void
             'email_ventas' => EMAIL_VENTAS,
             'social_facebook' => '',
             'social_instagram' => '',
+            'checkout_iva_rate' => '16',
         ] as $key => $value) {
             $stmt->execute([$key, $value]);
         }
@@ -356,8 +382,8 @@ function db_seed_mysql(PDO $pdo): void
     if ((int) $pdo->query('SELECT COUNT(*) FROM admin_users')->fetchColumn() === 0) {
         $username = env('ADMIN_USERNAME', 'admin');
         $password = env('ADMIN_INITIAL_PASSWORD');
-        if ($password === '') {
-            throw new RuntimeException('Define ADMIN_INITIAL_PASSWORD antes de crear el primer administrador.');
+        if ($password === '' || mb_strlen($password) < 12) {
+            throw new RuntimeException('Define ADMIN_INITIAL_PASSWORD con al menos 12 caracteres antes de crear el primer administrador.');
         }
         $stmt = $pdo->prepare('INSERT INTO admin_users (username, password_hash, created_at) VALUES (?, ?, ?)');
         $stmt->execute([$username, password_hash($password, PASSWORD_DEFAULT), date('Y-m-d H:i:s')]);
