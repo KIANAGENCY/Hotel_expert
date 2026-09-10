@@ -10,6 +10,7 @@ $canonical_routes = [
     'index' => '/', 'sistema-elah' => '/sistema-elah/', 'productos' => '/productos/',
     'aroma-insignia' => '/aroma-insignia/', 'recursos' => '/recursos/', 'blog' => '/blog/',
     'manual-de-uso' => '/manual-de-uso/', 'nosotros' => '/nosotros/', 'contacto' => '/contacto/',
+    'aviso-de-privacidad' => '/aviso-de-privacidad/', 'terminos-y-condiciones' => '/terminos-y-condiciones/',
 ];
 $route_page = basename((string) ($_SERVER['PHP_SELF'] ?? 'index.php'), '.php');
 $canonical_path = $canonical_path ?? ($canonical_routes[$route_page] ?? parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH));
@@ -46,6 +47,13 @@ $canonical = SITE_ORIGIN . '/' . ltrim((string) $canonical_path, '/');
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        html, body { background: #fff; }
+        .site-header { position: fixed; inset: 0 0 auto 0; z-index: 50; }
+        .site-header .header-shell { background: rgba(11, 35, 69, 0.94); }
+        body > main:not([data-scroll-flow]) { padding-top: 7.15rem; }
+    </style>
+    <link rel="stylesheet" href="<?= e(url('assets/css/custom.css')) ?>?v=<?= (int) filemtime(ROOT_PATH . '/assets/css/custom.css') ?>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -75,7 +83,6 @@ $canonical = SITE_ORIGIN . '/' . ltrim((string) $canonical_path, '/');
             }
         }
     </script>
-    <link rel="stylesheet" href="<?= e(url('assets/css/custom.css')) ?>?v=<?= (int) filemtime(ROOT_PATH . '/assets/css/custom.css') ?>">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",

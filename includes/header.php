@@ -54,7 +54,7 @@ $isAccountPortal = should_use_customer_portal_header($portalCustomer);
             </div>
         <?php else: ?>
             <div class="header-shell mt-3 rounded-2xl px-4 py-3 sm:px-6 sm:py-3.5">
-                <div class="header-inner flex min-h-16 items-center justify-between sm:min-h-[7.25rem]">
+                <div class="header-inner flex items-center justify-between">
                     <a href="<?= e(url('')) ?>" class="brand-lockup shrink-0" aria-label="Hotel Expert — inicio">
                         <img src="<?= e(url('assets/img/logo-light.svg?v=spaced-lockup-1')) ?>" alt="Hotel Expert" class="brand-lockup-logo" width="320" height="100">
                     </a>

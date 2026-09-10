@@ -8,7 +8,7 @@
   --charcoal-texto: #222326;
   --verde-eco: #4D7C4D;
   --gradient-brand: linear-gradient(135deg, #0B2345 0%, #008C95 100%);
-  --site-header-clearance: clamp(9.5rem, 11rem + 4vw, 12.75rem);
+  --site-header-clearance: clamp(6.35rem, 5.6rem + 1.8vw, 7.35rem);
   --site-header-clearance-portal: clamp(5.25rem, 6rem + 2vw, 7rem);
 }
 
@@ -43,6 +43,12 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
 
 .skip-link:focus {
   top: 1rem;
+}
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
 }
 
 .site-header .header-shell {
@@ -87,22 +93,23 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
 .brand-lockup-logo,
 .brand-lockup img {
   display: block;
-  height: 5.5rem;
+  height: 3.35rem;
   width: auto;
-  max-width: min(100%, 19rem);
+  max-width: min(100%, 12.5rem);
 }
 
 @media (min-width: 640px) {
   .brand-lockup-logo,
   .brand-lockup img {
-    height: 5rem;
-    max-width: 16rem;
+    height: 3.5rem;
+    max-width: 13rem;
   }
 }
 
+body > main:not([data-scroll-flow]),
 .site-header + main.pt-28,
 .site-header + main.pt-40 {
-  padding-top: calc(var(--site-header-clearance) + 0.5rem);
+  padding-top: calc(var(--site-header-clearance) + 0.35rem);
 }
 
 .site-header.has-customer-context + main.pt-28,
@@ -230,12 +237,12 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
 
 /* Clearance bajo header fijo (logo mediano + barra) */
 .home-hero-content {
-  padding-top: calc(var(--site-header-clearance) + 2.25rem) !important;
+  padding-top: calc(var(--site-header-clearance) + 1.35rem) !important;
   align-items: start;
 }
 
 .home-hero .relative.mx-auto {
-  padding-top: calc(var(--site-header-clearance) + 2.25rem) !important;
+  padding-top: calc(var(--site-header-clearance) + 1.35rem) !important;
   align-items: start;
 }
 
@@ -266,6 +273,7 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: clamp(0.7rem, 1.25vw, 1.35rem);
   min-width: 0;
+  min-height: 4.35rem;
 }
 
 .header-nav {
@@ -508,6 +516,40 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
   letter-spacing: -0.035em;
   color: var(--bg-azul-expert);
   line-height: 0.98;
+}
+
+.legal-doc h2 {
+  margin-top: 2.35rem;
+  color: var(--bg-azul-expert);
+  font-family: Montserrat, sans-serif;
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.legal-doc p,
+.legal-doc li {
+  color: rgba(34, 35, 38, 0.72);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.legal-doc p + p,
+.legal-doc ul {
+  margin-top: 0.9rem;
+}
+
+.legal-doc ul {
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+
+.legal-doc a {
+  color: var(--turquesa-sensorial);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
 }
 
 .hero-ken {
@@ -987,6 +1029,7 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
 }
 
 @media (max-width: 1023px) {
+  body > main:not([data-scroll-flow]),
   .site-header + main.pt-28,
   .site-header + main.pt-40 {
     padding-top: calc(var(--site-header-clearance) + 0.25rem);
@@ -1005,7 +1048,7 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
   }
   html { scroll-behavior: auto; }
 }
-+
+
 /* 2026 ELAH editorial system */
 body {
   color: var(--charcoal-texto);
@@ -1254,7 +1297,7 @@ html.has-scroll-flow { scroll-snap-type: y proximity; }
   .home-hero-overlay { background: linear-gradient(180deg, rgba(11,35,69,.9), rgba(11,35,69,.99) 72%); }
   .header-sample-cta { padding-inline: .7rem; font-size: .61rem; }
   .brand-lockup-logo,
-  .brand-lockup img { height: clamp(4.5rem, 17vw, 5.5rem); max-width: min(100%, 16rem); }
+  .brand-lockup img { height: clamp(2.85rem, 12vw, 3.35rem); max-width: min(100%, 12rem); }
   .product-panel { grid-template-columns: 1fr 6rem; min-height: 25rem; }
   .product-panel img { max-height: 16rem; }
 }

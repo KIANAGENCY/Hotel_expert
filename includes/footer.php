@@ -38,7 +38,10 @@ declare(strict_types=1);
         </div>
         <div class="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-white/50 sm:flex-row sm:items-center sm:justify-between">
             <p>© <?= date('Y') ?> Hotel Expert</p>
-            <p><?= e(SITE_CLAIM) ?></p>
+            <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Información legal">
+                <a class="footer-link" href="<?= e(url('aviso-de-privacidad/')) ?>">Aviso de privacidad</a>
+                <a class="footer-link" href="<?= e(url('terminos-y-condiciones/')) ?>">Términos y condiciones</a>
+            </nav>
         </div>
     </div>
 </footer>

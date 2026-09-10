@@ -2,7 +2,19 @@ RewriteEngine On
 
 # BEGIN HOTEL_EXPERT_DEPLOY
 # Generado por el panel — no editar a mano
-# Sin reglas adicionales de despliegue
+RewriteCond %{HTTP_HOST} !^localhost(:[0-9]+)?$ [NC]
+RewriteCond %{HTTP_HOST} !^127\.0\.0\.1(:[0-9]+)?$ [NC]
+RewriteCond %{HTTP_HOST} !\.test$ [NC]
+RewriteCond %{HTTP_HOST} !\.local$ [NC]
+RewriteCond %{HTTP_HOST} !^www\.hotelexpert\.mx$ [NC]
+RewriteRule ^ https://www.hotelexpert.mx%{REQUEST_URI} [R=301,L,NE]
+RewriteCond %{HTTP_HOST} !^localhost(:[0-9]+)?$ [NC]
+RewriteCond %{HTTP_HOST} !^127\.0\.0\.1(:[0-9]+)?$ [NC]
+RewriteCond %{HTTP_HOST} !\.test$ [NC]
+RewriteCond %{HTTP_HOST} !\.local$ [NC]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]
 # END HOTEL_EXPERT_DEPLOY
 
 DirectoryIndex index.php
@@ -54,6 +66,8 @@ RewriteRule ^manual-de-uso/?$ manual-de-uso.php [L,NC]
 RewriteRule ^nosotros/?$ nosotros.php [L,NC]
 RewriteRule ^contacto/?$ contacto.php [L,NC]
 RewriteRule ^muestra/?$ muestra.php [L,NC]
+RewriteRule ^aviso-de-privacidad/?$ aviso-de-privacidad.php [L,NC]
+RewriteRule ^terminos-y-condiciones/?$ terminos-y-condiciones.php [L,NC]
 RewriteRule ^cuenta/?$ cuenta/index.php [L,NC]
 RewriteRule ^cuenta/login/?$ cuenta/login.php [L,NC]
 RewriteRule ^cuenta/registro/?$ cuenta/registro.php [L,NC]

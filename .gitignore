@@ -1,6 +1,8 @@
 node_modules/
 vendor/
 .env
+.env.bak.*
+.htaccess.bak.*
 data/hotel_expert.sqlite
 data/hotel_expert.sqlite-journal
 data/backups/

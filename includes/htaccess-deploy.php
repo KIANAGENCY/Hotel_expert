@@ -21,6 +21,16 @@ function htaccess_deploy_marker_end(): string
     return '# END HOTEL_EXPERT_DEPLOY';
 }
 
+function htaccess_deploy_local_skip_conditions(): array
+{
+    return [
+        'RewriteCond %{HTTP_HOST} !^localhost(:[0-9]+)?$ [NC]',
+        'RewriteCond %{HTTP_HOST} !^127\\.0\\.0\\.1(:[0-9]+)?$ [NC]',
+        'RewriteCond %{HTTP_HOST} !\\.test$ [NC]',
+        'RewriteCond %{HTTP_HOST} !\\.local$ [NC]',
+    ];
+}
+
 function htaccess_deploy_rules(array $config): string
 {
     $forceHttps = filter_var((string) ($config['DEPLOY_FORCE_HTTPS'] ?? 'false'), FILTER_VALIDATE_BOOLEAN);
@@ -39,12 +49,15 @@ function htaccess_deploy_rules(array $config): string
     if ($canonicalHost !== '') {
         $host = preg_replace('/[^a-zA-Z0-9.\-]/', '', $canonicalHost);
         if ($host !== '') {
-            $lines[] = 'RewriteCond %{HTTP_HOST} !^' . $host . '$ [NC]';
+            $hostPattern = str_replace('.', '\\.', $host);
+            $lines = array_merge($lines, htaccess_deploy_local_skip_conditions());
+            $lines[] = 'RewriteCond %{HTTP_HOST} !^' . $hostPattern . '$ [NC]';
             $lines[] = 'RewriteRule ^ https://' . $host . '%{REQUEST_URI} [R=301,L,NE]';
         }
     }
 
     if ($forceHttps) {
+        $lines = array_merge($lines, htaccess_deploy_local_skip_conditions());
         $lines[] = 'RewriteCond %{HTTPS} !=on';
         $lines[] = 'RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]';
         $lines[] = 'RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]';
