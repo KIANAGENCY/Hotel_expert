@@ -382,10 +382,9 @@ function db_seed_mysql(PDO $pdo): void
     if ((int) $pdo->query('SELECT COUNT(*) FROM admin_users')->fetchColumn() === 0) {
         $username = env('ADMIN_USERNAME', 'admin');
         $password = env('ADMIN_INITIAL_PASSWORD');
-        if ($password === '' || mb_strlen($password) < 12) {
-            throw new RuntimeException('Define ADMIN_INITIAL_PASSWORD con al menos 12 caracteres antes de crear el primer administrador.');
+        if ($password !== '' && mb_strlen($password) >= 12) {
+            $stmt = $pdo->prepare('INSERT INTO admin_users (username, password_hash, created_at) VALUES (?, ?, ?)');
+            $stmt->execute([$username, password_hash($password, PASSWORD_DEFAULT), date('Y-m-d H:i:s')]);
         }
-        $stmt = $pdo->prepare('INSERT INTO admin_users (username, password_hash, created_at) VALUES (?, ?, ?)');
-        $stmt->execute([$username, password_hash($password, PASSWORD_DEFAULT), date('Y-m-d H:i:s')]);
     }
 }

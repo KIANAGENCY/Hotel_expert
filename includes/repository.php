@@ -6,18 +6,23 @@ require_once __DIR__ . '/pii-crypto.php';
 
 function productos_all(): array
 {
-    $rows = db()->query('SELECT slug, data FROM products ORDER BY sort_order, slug')->fetchAll();
-    $out = [];
-    foreach ($rows as $row) {
-        $data = json_decode($row['data'], true);
-        if (is_array($data)) {
-            $out[$row['slug']] = $data;
+    try {
+        $rows = db()->query('SELECT slug, data FROM products ORDER BY sort_order, slug')->fetchAll();
+        $out = [];
+        foreach ($rows as $row) {
+            $data = json_decode($row['data'], true);
+            if (is_array($data)) {
+                $out[$row['slug']] = $data;
+            }
         }
+        if ($out !== []) {
+            return $out;
+        }
+    } catch (Throwable) {
+        // Si MySQL no está listo, el catálogo estático mantiene el sitio público.
     }
-    if ($out === []) {
-        return require ROOT_PATH . '/data/productos.php';
-    }
-    return $out;
+
+    return require ROOT_PATH . '/data/productos.php';
 }
 
 function producto_get(string $slug): ?array

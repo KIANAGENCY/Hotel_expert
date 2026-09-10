@@ -50,33 +50,47 @@ declare(strict_types=1);
     <svg class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 2.1 17.4L1 23l5.8-1.1A11 11 0 0 0 12 23a11 11 0 0 0 8.5-19.5zM12 21a9 9 0 0 1-4.6-1.3l-.3-.2-3.4.6.7-3.3-.2-.3A9 9 0 1 1 12 21zm5-6.7c-.3-.1-1.6-.8-1.9-.9s-.4-.1-.6.1-.7.9-.8 1-.3.2-.6.1a7.4 7.4 0 0 1-2.2-1.4 8.2 8.2 0 0 1-1.5-1.9c-.2-.3 0-.4.1-.6l.4-.5.1-.3a.5.5 0 0 0 0-.5c0-.1-.6-1.4-.8-1.9s-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.9 11.9 0 0 0 4.6 4.1 15 15 0 0 0 1.5.6 3.6 3.6 0 0 0 1.6.1 2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c-.1-.1-.3-.2-.6-.3z"/></svg>
 </a>
 <?php
-require_once __DIR__ . '/stripe-config.php';
-require_once __DIR__ . '/cart-pricing.php';
-$cartProducts = productos_all();
 $cartData = [];
-foreach ($cartProducts as $slug => $product) {
-    $cartData[$slug] = [
-        'slug' => $slug,
-        'nombre' => $product['nombre'],
-        'precio' => $product['precio'],
-        'precio_texto' => $product['precio_texto'],
-        'presentacion' => $product['presentacion'],
-        'imagen' => $product['imagen'],
-        'icono' => $product['icono'],
-        'iva' => !empty($product['iva']),
-    ];
+$stripeReady = false;
+$ivaRate = 16.0;
+try {
+    require_once __DIR__ . '/stripe-config.php';
+    require_once __DIR__ . '/cart-pricing.php';
+    $cartProducts = productos_all();
+    foreach ($cartProducts as $slug => $product) {
+        if (!is_array($product)) {
+            continue;
+        }
+        $cartData[$slug] = [
+            'slug' => $slug,
+            'nombre' => $product['nombre'] ?? $slug,
+            'precio' => $product['precio'] ?? 0,
+            'precio_texto' => $product['precio_texto'] ?? '',
+            'presentacion' => $product['presentacion'] ?? '',
+            'imagen' => $product['imagen'] ?? '',
+            'icono' => $product['icono'] ?? '',
+            'iva' => !empty($product['iva']),
+        ];
+    }
+    $stripeReady = stripe_is_enabled() && stripe_status_summary()['ready'];
+    $ivaRate = checkout_iva_rate();
+} catch (Throwable) {
+    $cartData = [];
+    $stripeReady = false;
+    $ivaRate = 16.0;
 }
-$stripeReady = stripe_is_enabled() && stripe_status_summary()['ready'];
+$mainJs = ROOT_PATH . '/assets/js/main.js';
+$mainJsVersion = is_file($mainJs) ? (int) filemtime($mainJs) : time();
 ?>
 <script>
 window.ELAH_BASE = <?= json_encode(BASE_URL, JSON_UNESCAPED_SLASHES) ?>;
 window.ELAH_WHATSAPP = <?= json_encode(site_whatsapp()) ?>;
 window.ELAH_PRODUCTS = <?= json_encode($cartData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
 window.ELAH_CART = {
-  ivaRate: <?= json_encode(checkout_iva_rate()) ?>,
+  ivaRate: <?= json_encode($ivaRate) ?>,
   stripeEnabled: <?= $stripeReady ? 'true' : 'false' ?>
 };
 </script>
-<script src="<?= e(url('assets/js/main.js')) ?>?v=<?= (int) filemtime(ROOT_PATH . '/assets/js/main.js') ?>" defer></script>
+<script src="<?= e(url('assets/js/main.js')) ?>?v=<?= $mainJsVersion ?>" defer></script>
 </body>
 </html>

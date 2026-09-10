@@ -161,15 +161,18 @@
     const animatedText = scrollFlow.querySelectorAll(
       ".eyebrow, h1, h2, h3, .elah-equation, .section-lead, .statement, .feature-statement"
     );
+    const revealText = (element) => {
+      element.classList.add("is-text-visible");
+    };
     const textObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-text-visible");
+          revealText(entry.target);
           textObserver.unobserve(entry.target);
         });
       },
-      { threshold: 0.18, rootMargin: "0px 0px -8%" }
+      { threshold: 0.05, rootMargin: "0px 0px -4%" }
     );
 
     animatedText.forEach((element, index) => {
@@ -177,6 +180,20 @@
       element.style.setProperty("--text-delay", `${Math.min(index % 4, 3) * 70}ms`);
       textObserver.observe(element);
     });
+
+    const revealVisibleText = () => {
+      animatedText.forEach((element) => {
+        if (element.classList.contains("is-text-visible")) return;
+        const rect = element.getBoundingClientRect();
+        const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+        if (rect.top < viewHeight * 0.92 && rect.bottom > 0) {
+          revealText(element);
+          textObserver.unobserve(element);
+        }
+      });
+    };
+    requestAnimationFrame(revealVisibleText);
+    window.setTimeout(revealVisibleText, 120);
 
     const navLinks = document.querySelectorAll("[data-nav-key]");
     const setActiveNav = (key) => {
