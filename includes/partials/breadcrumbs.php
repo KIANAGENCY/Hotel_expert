@@ -12,7 +12,7 @@ if ($breadcrumbs === []) {
             <?php if ($i > 0): ?><li aria-hidden="true" class="text-charcoal/30">/</li><?php endif; ?>
             <li>
                 <?php if (!empty($crumb['href'])): ?>
-                    <a class="hover:text-turquesa" href="<?= e(url($crumb['href'])) ?>"><?= e($crumb['label']) ?></a>
+                    <a class="breadcrumb-link hover:text-turquesa" href="<?= e(url($crumb['href'])) ?>"><?= e($crumb['label']) ?></a>
                 <?php else: ?>
                     <span class="text-charcoal/70"><?= e($crumb['label']) ?></span>
                 <?php endif; ?>
