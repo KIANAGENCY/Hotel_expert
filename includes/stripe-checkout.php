@@ -59,11 +59,11 @@ function stripe_api_request(string $method, string $endpoint, array $params = []
     return $json;
 }
 
-function stripe_checkout_create(array $totals, string $orderId, array $buyer): string
+function stripe_checkout_create(array $totals, string $orderId, array $buyer): array
 {
     $currency = stripe_currency();
     $params = [
-        'mode' => 'payment',
+        'mode' => 'payment', 'customer_creation' => 'always', 'billing_address_collection' => 'required', 'invoice_creation[enabled]' => 'true', 'invoice_creation[invoice_data][metadata][order_id]' => $orderId,
         'client_reference_id' => $orderId,
         'success_url' => rtrim(env('APP_URL', SITE_ORIGIN), '/') . url('pago-exitoso.php') . '?session_id={CHECKOUT_SESSION_ID}',
         'cancel_url' => rtrim(env('APP_URL', SITE_ORIGIN), '/') . url('pago-cancelado.php'),
