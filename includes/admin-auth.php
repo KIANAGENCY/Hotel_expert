@@ -77,6 +77,11 @@ function admin_login_is_blocked(string $username, string $ip): bool
     return login_is_limited('admin', $username, $ip);
 }
 
+function admin_password_reset_url(string $token): string
+{
+    return rtrim(env('APP_URL', SITE_ORIGIN), '/') . admin_url('restablecer.php?token=' . rawurlencode($token));
+}
+
 function admin_csrf(): string
 {
     if (empty($_SESSION['admin_csrf'])) {

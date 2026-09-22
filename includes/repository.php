@@ -565,6 +565,50 @@ function admin_change_password(string $username, string $newPassword): void
         ->execute([$hash, $username]);
 }
 
+function admin_password_reset_create(string $username): ?string
+{
+    $username = trim($username);
+    $stmt = db()->prepare('SELECT username FROM admin_users WHERE username = ? LIMIT 1');
+    $stmt->execute([$username]);
+    if ($stmt->fetchColumn() === false) {
+        return null;
+    }
+    $token = bin2hex(random_bytes(32));
+    $pdo = db();
+    $pdo->prepare('DELETE FROM admin_password_reset_tokens WHERE username = ? AND used_at IS NULL')->execute([$username]);
+    $pdo->prepare('INSERT INTO admin_password_reset_tokens (username, token_hash, expires_at, created_at) VALUES (?, ?, ?, ?)')
+        ->execute([$username, hash('sha256', $token), date('Y-m-d H:i:s', time() + 3600), date('Y-m-d H:i:s')]);
+    return $token;
+}
+
+function admin_password_reset_consume(string $token, string $newPassword): bool
+{
+    if (!preg_match('/\\A[a-f0-9]{64}\\z/', $token) || mb_strlen($newPassword) < 12) {
+        return false;
+    }
+    $pdo = db();
+    $pdo->beginTransaction();
+    try {
+        $stmt = $pdo->prepare('SELECT id, username FROM admin_password_reset_tokens WHERE token_hash = ? AND used_at IS NULL AND expires_at >= NOW() FOR UPDATE');
+        $stmt->execute([hash('sha256', $token)]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            $pdo->rollBack();
+            return false;
+        }
+        $pdo->prepare('UPDATE admin_password_reset_tokens SET used_at = ? WHERE id = ?')->execute([date('Y-m-d H:i:s'), $row['id']]);
+        $pdo->prepare('UPDATE admin_users SET password_hash = ?, session_version = session_version + 1 WHERE username = ?')
+            ->execute([password_hash($newPassword, PASSWORD_DEFAULT), $row['username']]);
+        $pdo->commit();
+        return true;
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        throw $e;
+    }
+}
+
 function admin_slugify(string $text): string
 {
     $text = strtolower(trim($text));

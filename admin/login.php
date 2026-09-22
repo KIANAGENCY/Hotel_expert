@@ -10,6 +10,7 @@ if (admin_session_is_valid()) {
 
 $error = '';
 $usernameValue = '';
+$flash = admin_flash_consume();
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $usernameValue = trim((string) ($_POST['username'] ?? ''));
     $pass = (string) ($_POST['password'] ?? '');
@@ -69,6 +70,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             <?php if ($error): ?>
                 <div class="admin-alert admin-alert-error"><?= e($error) ?></div>
             <?php endif; ?>
+            <?php if ($flash): ?>
+                <div class="admin-alert admin-alert-<?= e($flash['type'] ?? 'success') ?>"><?= e($flash['message'] ?? '') ?></div>
+            <?php endif; ?>
 
             <label class="admin-label">
                 <span>Usuario</span>
@@ -83,6 +87,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             <button class="admin-btn admin-btn-primary admin-btn-block-lg" type="submit">
                 Entrar al panel <i class="fa-solid fa-arrow-right"></i>
             </button>
+
+            <p class="admin-login-note"><a href="<?= e(admin_url('recuperar.php')) ?>">¿Olvidaste tu contraseña?</a></p>
 
             <p class="admin-login-note">Acceso exclusivo para personal autorizado de Hotel Expert.</p>
         </form>
