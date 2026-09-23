@@ -18,7 +18,7 @@ $isAccountPortal = should_use_customer_portal_header($portalCustomer);
         <?php if ($isAccountPortal): ?>
             <div class="header-shell account-portal-shell mt-3 rounded-2xl px-4 py-3 sm:px-6">
                 <a href="<?= e($portalCustomer ? account_url() : url('')) ?>" class="brand-lockup shrink-0" aria-label="<?= $portalCustomer ? 'Portal de clientes' : 'Hotel Expert — inicio' ?>">
-                    <img src="<?= e(url('assets/img/logo-light.svg?v=spaced-lockup-1')) ?>" alt="Hotel Expert" class="brand-lockup-logo" width="320" height="100">
+                    <img src="<?= e(url('assets/img/logo-light.svg?v=ios-white-1')) ?>" alt="Hotel Expert" class="brand-lockup-logo" width="320" height="100">
                 </a>
                 <?php if ($portalCustomer): ?>
                     <div class="account-portal-header-nav">
@@ -56,7 +56,7 @@ $isAccountPortal = should_use_customer_portal_header($portalCustomer);
             <div class="header-shell mt-3 rounded-2xl px-4 py-3 sm:px-6 sm:py-3.5">
                 <div class="header-inner flex items-center justify-between">
                     <a href="<?= e(url('')) ?>" class="brand-lockup shrink-0" aria-label="Hotel Expert — inicio">
-                        <img src="<?= e(url('assets/img/logo-light.svg?v=spaced-lockup-1')) ?>" alt="Hotel Expert" class="brand-lockup-logo" width="320" height="100">
+                        <img src="<?= e(url('assets/img/logo-light.svg?v=ios-white-1')) ?>" alt="Hotel Expert" class="brand-lockup-logo" width="320" height="100">
                     </a>
                     <nav class="header-nav hidden xl:flex items-center" aria-label="Principal">
                         <?php foreach ($nav as [$label, $href, $slug]): ?>

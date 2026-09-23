@@ -3,6 +3,7 @@ declare(strict_types=1);
 ?>
 <div class="grid lg:grid-cols-2 gap-6">
     <article class="elah-compare bg-white p-8 sm:p-10 io-reveal">
+        <img class="product-line-photo" src="<?= e(url('assets/img/hotel-expert-2l.jpg')) ?>" alt="Bidón de 2 L de concentrado limpiador multiusos Hotel Expert" width="819" height="1024" loading="lazy">
         <p class="eyebrow">Hotel Expert</p>
         <h3 class="font-heading font-extrabold text-3xl text-expert mt-3">Hotel Expert</h3>
         <p class="mt-4 text-charcoal/70">Para limpieza, desinfección y aroma insignia.</p>
@@ -14,6 +15,7 @@ declare(strict_types=1);
         <a class="btn-outline mt-7" href="<?= e(url('productos/hotel-expert/')) ?>">Ver Hotel Expert</a>
     </article>
     <article class="elah-compare bg-expert text-white p-8 sm:p-10 io-reveal">
+        <img class="product-line-photo" src="<?= e(url('assets/img/hotel-expert-2l.jpg')) ?>" alt="Bidón de 2 L de concentrado limpiador multiusos Hotel Expert Dual" width="819" height="1024" loading="lazy">
         <p class="eyebrow text-aqua">Hotel Expert Dual</p>
         <h3 class="font-heading font-extrabold text-3xl mt-3">Hotel Expert Dual</h3>
         <p class="mt-4 text-white/70">Para limpieza, desinfección y aroma insignia cuando además existe una necesidad relevante de neutralización de malos olores.</p>

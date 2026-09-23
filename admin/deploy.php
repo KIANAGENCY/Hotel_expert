@@ -42,6 +42,7 @@ admin_page_header('Sistema', 'Despliegue y servidor', 'Configura dominio, base d
     <?php admin_field('Contraseña' . (env_file_secret_is_set('DB_PASSWORD') ? ' (configurada — vacío = mantener)' : ''), 'DB_PASSWORD', '', 'password'); ?>
 
     <h2 class="admin-section-title">Correo SMTP</h2>
+    <p style="font-size:13px;color:var(--admin-text-muted);margin:0 0 16px">Servidor: <code>mail.hotelexpert.mx</code> o <code>localhost</code>. El usuario es el correo completo, no el servidor. Si SMTP falla, el sitio usa el correo de cPanel para no bloquear altas ni notificaciones.</p>
     <?php admin_field('Servidor SMTP', 'SMTP_HOST', $d['SMTP_HOST']); ?>
     <?php admin_field('Puerto SMTP', 'SMTP_PORT', $d['SMTP_PORT'], 'number'); ?>
     <?php admin_field('Usuario SMTP', 'SMTP_USERNAME', $d['SMTP_USERNAME']); ?>
@@ -86,6 +87,7 @@ admin_page_header('Sistema', 'Despliegue y servidor', 'Configura dominio, base d
 
     <div class="admin-form-actions" style="display:flex;gap:12px;flex-wrap:wrap">
         <button class="admin-btn admin-btn-secondary" type="submit" name="action" value="deployment_test_db">Probar conexión DB</button>
+        <button class="admin-btn admin-btn-secondary" type="submit" name="action" value="deployment_test_mail">Probar correo</button>
         <button class="admin-btn admin-btn-primary" type="submit" name="action" value="deployment_save">Guardar despliegue</button>
     </div>
 </form>

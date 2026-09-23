@@ -7,6 +7,10 @@ if (admin_session_is_valid()) {
     header('Location: ' . admin_url('index.php'));
     exit;
 }
+if (admin_2fa_pending_user() !== '') {
+    header('Location: ' . admin_url('2fa.php'));
+    exit;
+}
 
 $error = '';
 $usernameValue = '';
@@ -19,6 +23,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     } elseif (admin_login_is_blocked($usernameValue, (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown'))) {
         $error = 'Demasiados intentos fallidos. Espera 15 minutos o pide que restablezcan tu acceso.';
     } elseif (admin_login($usernameValue, $pass)) {
+        if (admin_2fa_pending_user() !== '') {
+            header('Location: ' . admin_url('2fa.php'));
+            exit;
+        }
         header('Location: ' . admin_url('index.php'));
         exit;
     } else {
@@ -36,7 +44,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="<?= e(url('admin/assets/admin.css?v=2')) ?>">
+    <link rel="stylesheet" href="<?= e(url('admin/assets/admin.css?v=3')) ?>">
 </head>
 <body class="admin-login">
 <div class="admin-login-mobile-brand">
@@ -95,6 +103,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         </div>
     </main>
 </div>
-<script src="<?= e(url('admin/assets/admin.js?v=2')) ?>"></script>
+<script src="<?= e(url('admin/assets/admin.js?v=3')) ?>"></script>
 </body>
 </html>

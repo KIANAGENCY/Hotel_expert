@@ -9,6 +9,7 @@ function admin_nav_groups(): array
         'Operación' => [
             'index' => ['Dashboard', 'index.php', 'fa-gauge-high'],
             'leads' => ['Leads', 'leads.php', 'fa-inbox'],
+            'clientes' => ['Clientes', 'clientes.php', 'fa-users'],
             'pedidos' => ['Pedidos', 'pedidos.php', 'fa-truck-fast'],
         ],
         'Catálogo' => [
@@ -73,7 +74,7 @@ function admin_layout_start(string $title, string $active = ''): void
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="<?= e(url('admin/assets/admin.css?v=2')) ?>">
+    <link rel="stylesheet" href="<?= e(url('admin/assets/admin.css?v=3')) ?>">
 </head>
 <body class="admin-app">
 <div class="admin-sidebar-backdrop" data-admin-sidebar-backdrop hidden></div>
@@ -182,7 +183,7 @@ function admin_layout_end(): void
         </main>
     </div>
 </div>
-<script src="<?= e(url('admin/assets/admin.js?v=2')) ?>"></script>
+<script src="<?= e(url('admin/assets/admin.js?v=3')) ?>"></script>
 </body>
 </html>
     <?php
@@ -281,6 +282,11 @@ function admin_placeholder(string $name): string
         'social_facebook' => 'https://facebook.com/hotelexpert',
         'social_instagram' => 'https://instagram.com/hotelexpert',
         'current_password' => 'Tu contraseña actual del panel',
+        'confirm_password' => 'Tu contraseña actual del panel',
+        'recovery_password' => 'Tu contraseña actual del panel',
+        'disable_password' => 'Tu contraseña actual del panel',
+        'disable_code' => '000000 o ABCD-EFGH',
+        'totp_code' => '000000 o ABCD-EFGH',
         'new_password' => 'Nueva clave de al menos 12 caracteres',
         'new_password_confirmation' => 'Repite la nueva contraseña',
         'id' => 'HE-2026-0001',

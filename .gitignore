@@ -7,3 +7,5 @@ data/hotel_expert.sqlite
 data/hotel_expert.sqlite-journal
 data/backups/
 .superdesign/tmp/
+_cpanel_subir/
+subir-cpanel.zip

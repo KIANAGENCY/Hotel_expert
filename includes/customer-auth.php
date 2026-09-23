@@ -172,11 +172,19 @@ function customer_register_account(array $input): array
         return [false, 'Ingresa un correo electrónico válido.'];
     }
     $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
-    if (rate_limit_exceeded('registration', $email, $ip, 5, 60)) {
-        return [false, 'Se alcanzó el límite temporal de registros. Intenta nuevamente más tarde.'];
+    $existing = customer_by_email($email);
+    if ($existing) {
+        if (empty($existing['email_verified_at'])) {
+            $_SESSION['unverified_customer_id'] = (int) $existing['id'];
+            $sent = customer_send_verification((int) $existing['id']);
+            return [true, $sent
+                ? 'Esta cuenta ya existía y faltaba verificar el correo. Te enviamos un enlace nuevo.'
+                : 'Esta cuenta ya existe y falta verificar el correo. En Iniciar sesión pulsa “Reenviar correo de verificación”.'];
+        }
+        return [false, 'Ya existe una cuenta con este correo. Inicia sesión o recupera tu contraseña.'];
     }
-    if (customer_by_email($email)) {
-        return [false, 'No fue posible crear la cuenta con esos datos. Puedes iniciar sesión o recuperar tu contraseña.'];
+    if (login_is_limited('registration', $email, $ip, 5, 60)) {
+        return [false, 'Se alcanzó el límite temporal de registros. Intenta nuevamente más tarde.'];
     }
     if (!customer_identity_valid((string) ($input['nombre'] ?? ''), (string) ($input['hotel'] ?? ''))) {
         return [false, 'Ingresa al menos un nombre y un apellido válidos, además del hotel o empresa.'];
@@ -202,37 +210,56 @@ function customer_register_account(array $input): array
         }
         throw $e;
     }
+    login_record_attempt('registration', $email, $ip, false);
+    $_SESSION['unverified_customer_id'] = $id;
     $sent = customer_send_verification($id);
     return [true, $sent
-        ? 'Cuenta creada. Revisa tu correo para verificarla.'
-        : 'Cuenta creada, pero no pudimos enviar el correo. Revisa la configuración SMTP o solicita otro enlace.'];
+        ? 'Cuenta creada. Revisa tu correo para verificarla (también la carpeta de spam).'
+        : 'Cuenta creada. Si no llega el correo, un administrador puede verificarla desde el panel.'];
 }
 
-function customer_send_verification(int $customerId): bool
+function customer_verification_url(int $customerId): ?string
 {
     $customer = customer_get($customerId);
     if (!$customer || !empty($customer['email_verified_at'])) {
-        return false;
-    }
-    if (rate_limit_exceeded(
-        'email-verification',
-        (string) $customerId,
-        (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown'),
-        3,
-        60
-    )) {
-        return false;
+        return null;
     }
     $token = bin2hex(random_bytes(32));
     customer_store_token('email_verification_tokens', $customerId, $token, date('Y-m-d H:i:s', time() + 86400));
-    return send_customer_email(
-        (string) $customer['email'],
-        'Verifica tu cuenta — Hotel Expert',
-        'Verifica tu correo',
-        'Confirma tu correo para acceder a tus pedidos, rastreo y recompra.',
-        'Verificar mi cuenta',
-        account_absolute_url('verificar/?token=' . rawurlencode($token))
-    );
+    return account_absolute_url('verificar/?token=' . rawurlencode($token));
+}
+
+function customer_send_verification(int $customerId, bool $ignoreLimit = false): bool
+{
+    try {
+        $customer = customer_get($customerId);
+        if (!$customer || !empty($customer['email_verified_at'])) {
+            return false;
+        }
+        $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+        if (!$ignoreLimit && login_is_limited('email-verification', (string) $customerId, $ip, 3, 60)) {
+            return false;
+        }
+        $url = customer_verification_url($customerId);
+        if ($url === null) {
+            return false;
+        }
+        $sent = send_customer_email(
+            (string) $customer['email'],
+            'Verifica tu cuenta — Hotel Expert',
+            'Verifica tu correo',
+            'Confirma tu correo para acceder a tus pedidos, rastreo y recompra.',
+            'Verificar mi cuenta',
+            $url
+        );
+        if (!$ignoreLimit) {
+            login_record_attempt('email-verification', (string) $customerId, $ip, $sent);
+        }
+        return $sent;
+    } catch (Throwable $e) {
+        error_log('SMTP Hotel Expert [verification]: ' . $e->getMessage());
+        return false;
+    }
 }
 
 function customer_verify_email_token(string $token): bool

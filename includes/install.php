@@ -21,6 +21,11 @@ CREATE TABLE IF NOT EXISTS admin_users (
     username VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     session_version INT UNSIGNED NOT NULL DEFAULT 1,
+    totp_secret TEXT NULL,
+    totp_enabled TINYINT(1) NOT NULL DEFAULT 0,
+    totp_confirmed_at DATETIME NULL,
+    totp_last_counter BIGINT NULL,
+    totp_recovery_hashes TEXT NULL,
     created_at DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -216,6 +221,15 @@ SQL);
             ->execute(['checkout_iva_rate', '16']);
         $pdo->exec("INSERT INTO schema_migrations (version, applied_at) VALUES (6, NOW())");
     }
+    if (!db_column_exists($pdo, 'admin_users', 'totp_secret')) {
+        $pdo->exec('ALTER TABLE admin_users
+            ADD totp_secret TEXT NULL AFTER session_version,
+            ADD totp_enabled TINYINT(1) NOT NULL DEFAULT 0 AFTER totp_secret,
+            ADD totp_confirmed_at DATETIME NULL AFTER totp_enabled,
+            ADD totp_last_counter BIGINT NULL AFTER totp_confirmed_at,
+            ADD totp_recovery_hashes TEXT NULL AFTER totp_last_counter');
+    }
+    $pdo->exec("INSERT IGNORE INTO schema_migrations (version, applied_at) VALUES (7, NOW())");
     db_seed_mysql($pdo);
 }
 
@@ -396,5 +410,27 @@ function db_seed_mysql(PDO $pdo): void
             $stmt = $pdo->prepare('INSERT INTO admin_users (username, password_hash, created_at) VALUES (?, ?, ?)');
             $stmt->execute([$username, password_hash($password, PASSWORD_DEFAULT), date('Y-m-d H:i:s')]);
         }
+    }
+
+    db_upgrade_default_product_images($pdo);
+}
+
+function db_upgrade_default_product_images(PDO $pdo): void
+{
+    $placeholders = ['', 'bottle-std.svg', 'bottle-dual.svg', 'atomizador.svg'];
+    $packshot = 'hotel-expert-2l.jpg';
+    $rows = $pdo->query('SELECT slug, data FROM products')->fetchAll();
+    $update = $pdo->prepare('UPDATE products SET data = ? WHERE slug = ?');
+    foreach ($rows as $row) {
+        $data = json_decode((string) $row['data'], true);
+        if (!is_array($data)) {
+            continue;
+        }
+        $current = (string) ($data['imagen'] ?? '');
+        if ($current === $packshot || !in_array($current, $placeholders, true)) {
+            continue;
+        }
+        $data['imagen'] = $packshot;
+        $update->execute([json_encode($data, JSON_UNESCAPED_UNICODE), $row['slug']]);
     }
 }

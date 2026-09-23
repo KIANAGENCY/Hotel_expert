@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/pii-crypto.php';
+require_once __DIR__ . '/totp.php';
 
 function productos_all(): array
 {
@@ -356,6 +357,19 @@ function customer_get(int $id): ?array
     return $row ? pii_decrypt_row($row, 'customers') : null;
 }
 
+function customers_all(): array
+{
+    $ids = db()->query('SELECT id FROM customers ORDER BY created_at DESC, id DESC')->fetchAll(PDO::FETCH_COLUMN);
+    $out = [];
+    foreach ($ids as $id) {
+        $customer = customer_get((int) $id);
+        if ($customer) {
+            $out[] = $customer;
+        }
+    }
+    return $out;
+}
+
 function customer_id_by_email(string $email): ?int
 {
     $customer = customer_by_email($email);
@@ -607,6 +621,103 @@ function admin_password_reset_consume(string $token, string $newPassword): bool
         }
         throw $e;
     }
+}
+
+function admin_totp_row(string $username): ?array
+{
+    $stmt = db()->prepare('SELECT totp_secret, totp_enabled, totp_confirmed_at, totp_last_counter, totp_recovery_hashes FROM admin_users WHERE username = ?');
+    $stmt->execute([$username]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return is_array($row) ? $row : null;
+}
+
+function admin_totp_is_enabled(string $username): bool
+{
+    $row = admin_totp_row($username);
+    return $row !== null && (int) ($row['totp_enabled'] ?? 0) === 1 && trim((string) ($row['totp_secret'] ?? '')) !== '';
+}
+
+function admin_totp_encrypt_secret(string $secret): string
+{
+    $key = env('PII_ENCRYPTION_KEY');
+    if (preg_match('/^[a-f0-9]{64}$/i', $key)) {
+        return pii_encrypt($secret, 'admin_users.totp_secret');
+    }
+    return $secret;
+}
+
+function admin_totp_decrypt_secret(string $stored): string
+{
+    $stored = trim($stored);
+    if ($stored === '') {
+        return '';
+    }
+    if (pii_is_encrypted($stored)) {
+        return pii_decrypt($stored, 'admin_users.totp_secret');
+    }
+    return $stored;
+}
+
+function admin_totp_consume(string $username, string $code): bool
+{
+    $row = admin_totp_row($username);
+    if ($row === null || (int) ($row['totp_enabled'] ?? 0) !== 1) {
+        return false;
+    }
+    $secret = admin_totp_decrypt_secret((string) ($row['totp_secret'] ?? ''));
+    if ($secret === '') {
+        return false;
+    }
+    $lastCounter = $row['totp_last_counter'] !== null && $row['totp_last_counter'] !== ''
+        ? (int) $row['totp_last_counter']
+        : null;
+    $counter = totp_verify($secret, $code, TOTP_WINDOW, null, TOTP_PERIOD, $lastCounter);
+    if ($counter !== null) {
+        db()->prepare('UPDATE admin_users SET totp_last_counter = ? WHERE username = ?')
+            ->execute([$counter, $username]);
+        return true;
+    }
+    $remaining = totp_consume_recovery_code((string) ($row['totp_recovery_hashes'] ?? ''), $code);
+    if ($remaining === null) {
+        return false;
+    }
+    db()->prepare('UPDATE admin_users SET totp_recovery_hashes = ? WHERE username = ?')
+        ->execute([$remaining, $username]);
+    return true;
+}
+
+function admin_totp_enable(string $username, string $secret, array $recoveryCodes): void
+{
+    db()->prepare('UPDATE admin_users
+        SET totp_secret = ?, totp_enabled = 1, totp_confirmed_at = ?, totp_last_counter = NULL, totp_recovery_hashes = ?
+        WHERE username = ?')
+        ->execute([
+            admin_totp_encrypt_secret($secret),
+            date('Y-m-d H:i:s'),
+            totp_hash_recovery_codes($recoveryCodes),
+            $username,
+        ]);
+}
+
+function admin_totp_disable(string $username): void
+{
+    db()->prepare('UPDATE admin_users
+        SET totp_secret = NULL, totp_enabled = 0, totp_confirmed_at = NULL, totp_last_counter = NULL, totp_recovery_hashes = NULL
+        WHERE username = ?')
+        ->execute([$username]);
+}
+
+function admin_totp_replace_recovery(string $username, array $recoveryCodes): void
+{
+    db()->prepare('UPDATE admin_users SET totp_recovery_hashes = ? WHERE username = ?')
+        ->execute([totp_hash_recovery_codes($recoveryCodes), $username]);
+}
+
+function admin_totp_remaining_recovery(string $username): int
+{
+    $row = admin_totp_row($username);
+    $hashes = json_decode((string) ($row['totp_recovery_hashes'] ?? '[]'), true);
+    return is_array($hashes) ? count($hashes) : 0;
 }
 
 function admin_slugify(string $text): string

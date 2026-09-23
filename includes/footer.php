@@ -5,7 +5,7 @@ declare(strict_types=1);
     <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:py-20">
         <div class="grid gap-12 lg:grid-cols-12">
             <div class="lg:col-span-5">
-                <img src="<?= e(url('assets/img/logo-light.svg?v=white-blue-large-3')) ?>" alt="Hotel Expert" class="h-16 w-auto" width="193" height="64">
+                <img src="<?= e(url('assets/img/logo-light.svg?v=ios-white-1')) ?>" alt="Hotel Expert" class="h-16 w-auto" width="193" height="64">
                 <p class="mt-7 eyebrow text-aqua">Sistema ELAH</p>
                 <p class="mt-3 max-w-md font-heading text-xl font-bold leading-snug"><?= e(SITE_TAGLINE) ?>.</p>
                 <p class="mt-5 text-white/65"><?= e(SITE_CLAIM) ?></p>

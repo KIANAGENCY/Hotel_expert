@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/totp.php';
 require_once __DIR__ . '/repository.php';
 
 function admin_url(string $path = ''): string
@@ -48,9 +49,43 @@ function admin_logout(): void
         $_SESSION['admin_session_version'],
         $_SESSION['admin_authenticated_at'],
         $_SESSION['admin_last_activity'],
-        $_SESSION['admin_csrf']
+        $_SESSION['admin_csrf'],
+        $_SESSION['admin_2fa_pending'],
+        $_SESSION['admin_2fa_pending_until']
     );
     session_regenerate_id(true);
+}
+
+function admin_establish_session(string $username): void
+{
+    unset($_SESSION['admin_2fa_pending'], $_SESSION['admin_2fa_pending_until']);
+    $_SESSION['admin_user'] = $username;
+    $_SESSION['admin_session_version'] = admin_session_version($username);
+    $_SESSION['admin_authenticated_at'] = time();
+    $_SESSION['admin_last_activity'] = time();
+}
+
+function admin_start_2fa_challenge(string $username): void
+{
+    unset(
+        $_SESSION['admin_user'],
+        $_SESSION['admin_session_version'],
+        $_SESSION['admin_authenticated_at'],
+        $_SESSION['admin_last_activity']
+    );
+    $_SESSION['admin_2fa_pending'] = $username;
+    $_SESSION['admin_2fa_pending_until'] = time() + 300;
+}
+
+function admin_2fa_pending_user(): string
+{
+    $username = trim((string) ($_SESSION['admin_2fa_pending'] ?? ''));
+    $until = (int) ($_SESSION['admin_2fa_pending_until'] ?? 0);
+    if ($username === '' || $until < time()) {
+        unset($_SESSION['admin_2fa_pending'], $_SESSION['admin_2fa_pending_until']);
+        return '';
+    }
+    return $username;
 }
 
 function admin_login(string $username, string $password): bool
@@ -65,11 +100,56 @@ function admin_login(string $username, string $password): bool
         return false;
     }
     session_regenerate_id(true);
-    $_SESSION['admin_user'] = $username;
-    $_SESSION['admin_session_version'] = admin_session_version($username);
-    $_SESSION['admin_authenticated_at'] = time();
-    $_SESSION['admin_last_activity'] = time();
+    if (admin_totp_is_enabled($username)) {
+        admin_start_2fa_challenge($username);
+        return true;
+    }
+    admin_establish_session($username);
     return true;
+}
+
+function admin_complete_2fa(string $code): bool
+{
+    $username = admin_2fa_pending_user();
+    if ($username === '') {
+        return false;
+    }
+    $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+    if (login_is_limited('admin-2fa', $username, $ip)) {
+        return false;
+    }
+    if (!admin_totp_consume($username, $code)) {
+        login_record_attempt('admin-2fa', $username, $ip, false);
+        return false;
+    }
+    login_record_attempt('admin-2fa', $username, $ip, true);
+    session_regenerate_id(true);
+    admin_establish_session($username);
+    return true;
+}
+
+function admin_totp_begin_setup(): string
+{
+    $secret = totp_secret_generate();
+    $_SESSION['admin_totp_setup_secret'] = $secret;
+    $_SESSION['admin_totp_setup_until'] = time() + 900;
+    return $secret;
+}
+
+function admin_totp_setup_secret(): string
+{
+    $secret = trim((string) ($_SESSION['admin_totp_setup_secret'] ?? ''));
+    $until = (int) ($_SESSION['admin_totp_setup_until'] ?? 0);
+    if ($secret === '' || $until < time()) {
+        unset($_SESSION['admin_totp_setup_secret'], $_SESSION['admin_totp_setup_until']);
+        return '';
+    }
+    return $secret;
+}
+
+function admin_totp_clear_setup(): void
+{
+    unset($_SESSION['admin_totp_setup_secret'], $_SESSION['admin_totp_setup_until']);
 }
 
 function admin_login_is_blocked(string $username, string $ip): bool

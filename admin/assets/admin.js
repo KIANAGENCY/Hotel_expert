@@ -144,4 +144,22 @@
   }
 
   bindPasswordToggles(document);
+
+  var qrEl = document.getElementById('admin-totp-qr');
+  if (qrEl && qrEl.getAttribute('data-otpauth')) {
+    var script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    script.onload = function () {
+      qrEl.innerHTML = '';
+      new QRCode(qrEl, {
+        text: qrEl.getAttribute('data-otpauth'),
+        width: 176,
+        height: 176,
+        colorDark: '#0B2345',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    };
+    document.head.appendChild(script);
+  }
 })();

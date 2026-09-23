@@ -119,11 +119,11 @@ require __DIR__ . '/includes/header.php';
             <div class="product-duo mt-12">
                 <article class="product-panel">
                     <div><p class="eyebrow">Hotel Expert</p><h3>Limpia + Desinfecta + Aroma insignia</h3><p>Multiusos concentrado para la operación cotidiana del hotel.</p><a class="btn-outline mt-7" href="<?= e(url('productos/hotel-expert/')) ?>">Conocer Hotel Expert</a></div>
-                    <img src="<?= e(url('assets/img/bottle-std.svg')) ?>" alt="Presentación de Hotel Expert" loading="lazy" width="260" height="420">
+                    <img src="<?= e(url('assets/img/hotel-expert-2l.jpg')) ?>" alt="Bidón de 2 L de concentrado limpiador multiusos Hotel Expert" loading="lazy" width="819" height="1024">
                 </article>
                 <article class="product-panel product-panel-dual">
                     <div><p class="eyebrow text-aqua">Hotel Expert Dual</p><h3>Limpia + Desinfecta + Aroma insignia + Neutraliza malos olores</h3><p>Añade neutralización de malos olores para áreas donde esta necesidad requiere mayor atención.</p><a class="btn-ghost mt-7" href="<?= e(url('productos/hotel-expert-dual/')) ?>">Conocer Hotel Expert Dual</a></div>
-                    <img src="<?= e(url('assets/img/bottle-dual.svg')) ?>" alt="Presentación de Hotel Expert Dual" loading="lazy" width="260" height="420">
+                    <img src="<?= e(url('assets/img/hotel-expert-2l.jpg')) ?>" alt="Bidón de 2 L de concentrado limpiador multiusos Hotel Expert Dual" loading="lazy" width="819" height="1024">
                 </article>
             </div>
             <p class="mt-8 text-center font-heading font-semibold text-charcoal/55">Aromas · Spray · Difusores</p>

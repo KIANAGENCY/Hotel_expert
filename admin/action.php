@@ -167,6 +167,122 @@ switch ($action) {
         header('Location: ' . admin_url('config.php'));
         break;
 
+    case 'customer_verify':
+        $id = (int) ($_POST['id'] ?? 0);
+        $customer = $id > 0 ? customer_get($id) : null;
+        if (!$customer) {
+            admin_redirect_error('No se encontró esa cuenta.', admin_url('clientes.php'));
+        }
+        customer_mark_verified($id);
+        admin_flash('Cuenta activada: ' . (string) $customer['email'] . '. Ya puede iniciar sesión.');
+        header('Location: ' . admin_url('clientes.php'));
+        break;
+
+    case 'customer_resend':
+        require_once __DIR__ . '/../includes/customer-auth.php';
+        $id = (int) ($_POST['id'] ?? 0);
+        $customer = $id > 0 ? customer_get($id) : null;
+        if (!$customer || !empty($customer['email_verified_at'])) {
+            admin_redirect_error('Esa cuenta no está pendiente de verificación.', admin_url('clientes.php'));
+        }
+        $url = customer_verification_url($id);
+        $sent = $url !== null && send_customer_email(
+            (string) $customer['email'],
+            'Verifica tu cuenta — Hotel Expert',
+            'Verifica tu correo',
+            'Confirma tu correo para acceder a tus pedidos, rastreo y recompra.',
+            'Verificar mi cuenta',
+            $url
+        );
+        if ($sent) {
+            admin_flash('Correo reenviado a ' . (string) $customer['email'] . '.');
+        } elseif ($url) {
+            admin_flash('El correo no salió. Enlace manual (válido 24 h): ' . $url, 'warning');
+        } else {
+            admin_redirect_error('No se pudo generar el enlace de verificación.', admin_url('clientes.php'));
+        }
+        header('Location: ' . admin_url('clientes.php'));
+        break;
+
+    case 'totp_start':
+        if (admin_totp_is_enabled(admin_user())) {
+            admin_redirect_error('La verificación en dos pasos ya está activa.', admin_url('config.php'));
+        }
+        admin_totp_begin_setup();
+        admin_flash('Escanea el código QR y confirma con un código de 6 dígitos.');
+        header('Location: ' . admin_url('config.php'));
+        break;
+
+    case 'totp_cancel':
+        admin_totp_clear_setup();
+        unset($_SESSION['admin_totp_recovery_plain']);
+        admin_flash('Activación de 2FA cancelada.');
+        header('Location: ' . admin_url('config.php'));
+        break;
+
+    case 'totp_confirm':
+        $setupSecret = admin_totp_setup_secret();
+        $password = (string) ($_POST['confirm_password'] ?? '');
+        $code = (string) ($_POST['totp_code'] ?? '');
+        if ($setupSecret === '') {
+            admin_redirect_error('La activación expiró. Vuelve a iniciar el proceso.', admin_url('config.php'));
+        }
+        if (!admin_verify(admin_user(), $password)) {
+            admin_redirect_error('La contraseña actual no es correcta.', admin_url('config.php'));
+        }
+        if (totp_verify($setupSecret, $code) === null) {
+            admin_redirect_error('El código de 6 dígitos no es válido. Revisa la hora de tu teléfono e inténtalo de nuevo.', admin_url('config.php'));
+        }
+        $recovery = totp_recovery_codes();
+        admin_totp_enable(admin_user(), $setupSecret, $recovery);
+        admin_totp_clear_setup();
+        $_SESSION['admin_totp_recovery_plain'] = $recovery;
+        admin_flash('2FA activado. Guarda los códigos de recuperación en un lugar seguro.');
+        header('Location: ' . admin_url('config.php'));
+        break;
+
+    case 'totp_ack_recovery':
+        unset($_SESSION['admin_totp_recovery_plain']);
+        admin_flash('Códigos de recuperación confirmados.');
+        header('Location: ' . admin_url('config.php'));
+        break;
+
+    case 'totp_recovery_regenerate':
+        if (!admin_totp_is_enabled(admin_user())) {
+            admin_redirect_error('Activa 2FA antes de generar códigos de recuperación.', admin_url('config.php'));
+        }
+        if (!admin_verify(admin_user(), (string) ($_POST['recovery_password'] ?? ''))) {
+            admin_redirect_error('La contraseña actual no es correcta.', admin_url('config.php'));
+        }
+        if (!admin_totp_consume(admin_user(), (string) ($_POST['totp_code'] ?? ''))) {
+            admin_redirect_error('El código de verificación no es válido.', admin_url('config.php'));
+        }
+        $recovery = totp_recovery_codes();
+        admin_totp_replace_recovery(admin_user(), $recovery);
+        $_SESSION['admin_totp_recovery_plain'] = $recovery;
+        admin_flash('Se generaron códigos de recuperación nuevos. Los anteriores ya no sirven.');
+        header('Location: ' . admin_url('config.php'));
+        break;
+
+    case 'totp_disable':
+        if (!admin_totp_is_enabled(admin_user())) {
+            admin_flash('La verificación en dos pasos ya estaba desactivada.');
+            header('Location: ' . admin_url('config.php'));
+            break;
+        }
+        if (!admin_verify(admin_user(), (string) ($_POST['disable_password'] ?? ''))) {
+            admin_redirect_error('La contraseña actual no es correcta.', admin_url('config.php'));
+        }
+        if (!admin_totp_consume(admin_user(), (string) ($_POST['disable_code'] ?? ''))) {
+            admin_redirect_error('El código de verificación no es válido.', admin_url('config.php'));
+        }
+        admin_totp_disable(admin_user());
+        admin_totp_clear_setup();
+        unset($_SESSION['admin_totp_recovery_plain']);
+        admin_flash('La verificación en dos pasos quedó desactivada.');
+        header('Location: ' . admin_url('config.php'));
+        break;
+
     case 'deployment_test_db':
         require_once __DIR__ . '/../includes/env-file.php';
         $validated = admin_validate_deploy_db_payload($_POST);
@@ -177,6 +293,25 @@ switch ($action) {
             admin_redirect_error('No se pudo conectar a la base de datos con esas credenciales.', admin_url('deploy.php'));
         }
         admin_flash('Conexión a la base de datos correcta.');
+        header('Location: ' . admin_url('deploy.php'));
+        break;
+
+    case 'deployment_test_mail':
+        require_once __DIR__ . '/../includes/mailer.php';
+        [$fromEmail] = mailer_from();
+        $ok = send_customer_email(
+            $fromEmail,
+            'Prueba de correo — Hotel Expert',
+            'El correo del sitio funciona',
+            'Si lees este mensaje, Hotel Expert ya puede enviar correos desde el servidor.',
+            'Ir al panel',
+            rtrim(env('APP_URL', SITE_ORIGIN), '/') . '/admin/deploy.php'
+        );
+        if ($ok) {
+            admin_flash('Correo de prueba enviado a ' . $fromEmail . '. Revisa bandeja de entrada y spam.');
+        } else {
+            admin_redirect_error('No se pudo enviar el correo de prueba. Revisa usuario, contraseña y servidor SMTP.', admin_url('deploy.php'));
+        }
         header('Location: ' . admin_url('deploy.php'));
         break;
 

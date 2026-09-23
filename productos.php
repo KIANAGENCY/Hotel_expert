@@ -24,21 +24,25 @@ require __DIR__ . '/includes/header.php';
     <section class="py-16 lg:py-24 bg-hielo">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 grid md:grid-cols-2 xl:grid-cols-3 gap-6">
             <article class="elah-card bg-white p-8 io-reveal flex flex-col">
+                <img class="product-line-photo" src="<?= e(url('assets/img/hotel-expert-2l.jpg')) ?>" alt="Bidón de 2 L de concentrado limpiador multiusos Hotel Expert" width="819" height="1024" loading="lazy">
                 <h2 class="font-heading font-extrabold text-2xl text-expert">Hotel Expert</h2>
                 <p class="mt-4 text-charcoal/70 flex-1">Limpieza + desinfección + aroma insignia.</p>
                 <a class="btn-outline mt-6 self-start" href="<?= e(url('productos/hotel-expert/')) ?>">Ver Hotel Expert</a>
             </article>
             <article class="elah-card bg-white p-8 io-reveal flex flex-col">
+                <img class="product-line-photo" src="<?= e(url('assets/img/hotel-expert-2l.jpg')) ?>" alt="Bidón de 2 L de concentrado limpiador multiusos Hotel Expert Dual" width="819" height="1024" loading="lazy">
                 <h2 class="font-heading font-extrabold text-2xl text-expert">Hotel Expert Dual</h2>
                 <p class="mt-4 text-charcoal/70 flex-1">Limpieza + desinfección + aroma insignia + neutralización de malos olores.</p>
                 <a class="btn-outline mt-6 self-start" href="<?= e(url('productos/hotel-expert-dual/')) ?>">Ver Hotel Expert Dual</a>
             </article>
             <article id="aromas" class="elah-card bg-white p-8 io-reveal flex flex-col scroll-mt-32">
+                <img class="product-line-photo" src="<?= e(url('assets/img/hotel-expert-2l.jpg')) ?>" alt="Aroma para difusor Hotel Expert" width="819" height="1024" loading="lazy">
                 <h2 class="font-heading font-extrabold text-2xl text-expert">Aromas para difusor</h2>
                 <p class="mt-4 text-charcoal/70 flex-1">Soluciones aromáticas para reforzar la identidad olfativa del establecimiento.</p>
                 <a class="btn-outline mt-6 self-start" href="<?= e(url('producto.php?slug=aroma-difusor')) ?>">Ver aromas para difusor</a>
             </article>
             <article id="difusores" class="elah-card bg-white p-8 io-reveal flex flex-col scroll-mt-32">
+                <img class="product-line-photo" src="<?= e(url('assets/img/hotel-expert-2l.jpg')) ?>" alt="Difusores Hotel Expert" width="819" height="1024" loading="lazy">
                 <h2 class="font-heading font-extrabold text-2xl text-expert">Difusores</h2>
                 <p class="mt-4 text-charcoal/70 flex-1">Aromatización continua para espacios seleccionados del hotel.</p>
                 <div class="mt-6 flex flex-wrap gap-2">
@@ -47,6 +51,7 @@ require __DIR__ . '/includes/header.php';
                 </div>
             </article>
             <article class="elah-card bg-white p-8 io-reveal flex flex-col">
+                <img class="product-line-photo" src="<?= e(url('assets/img/hotel-expert-2l.jpg')) ?>" alt="Spray ambiental Hotel Expert" width="819" height="1024" loading="lazy">
                 <h2 class="font-heading font-extrabold text-2xl text-expert">Spray ambiental</h2>
                 <p class="mt-4 text-charcoal/70 flex-1">Refuerzo aromático puntual en zonas o momentos específicos.</p>
                 <a class="btn-outline mt-6 self-start" href="<?= e(url('producto.php?slug=caja-aromas')) ?>">Ver spray ambiental</a>

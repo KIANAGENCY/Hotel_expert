@@ -13,7 +13,12 @@
 }
 
 html {
+  color-scheme: light only;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 body.menu-open {
@@ -23,6 +28,29 @@ body.menu-open {
 body {
   font-family: "Source Sans 3", sans-serif;
   background: var(--blanco-pure);
+  color-scheme: light;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+input, textarea, select, button {
+  color-scheme: light;
+}
+
+img, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.site-header,
+.header-shell,
+.header-inner,
+main,
+.section-shell,
+.site-footer {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
 h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
@@ -53,7 +81,8 @@ h1, h2, h3, h4, .font-heading, .btn-primary, .btn-ghost, .nav-link {
 
 .site-header .header-shell {
   background: rgba(11, 35, 69, 0.72);
-  backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 10px 40px rgba(11, 35, 69, 0.18);
   transition: background 0.35s ease, box-shadow 0.35s ease;
@@ -274,6 +303,31 @@ body > main:not([data-scroll-flow]),
   gap: clamp(0.7rem, 1.25vw, 1.35rem);
   min-width: 0;
   min-height: 4.35rem;
+}
+
+@media (max-width: 1279px) {
+  .header-inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .header-nav {
+    display: none !important;
+  }
+
+  .menu-btn {
+    display: inline-grid !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .header-nav {
+    display: flex !important;
+  }
+
+  .menu-btn,
+  .mobile-menu {
+    display: none !important;
+  }
 }
 
 .header-nav {
@@ -875,6 +929,16 @@ body > main:not([data-scroll-flow]),
   max-width: 70%;
 }
 
+.elah-card .product-line-photo,
+.elah-compare .product-line-photo {
+  display: block;
+  width: 100%;
+  max-width: 14rem;
+  max-height: 14rem;
+  margin: 0 auto 1.25rem;
+  object-fit: contain;
+}
+
 .quantity-control {
   display: inline-flex;
   align-items: center;
@@ -1298,8 +1362,20 @@ html.has-scroll-flow { scroll-snap-type: y proximity; }
   .header-sample-cta { padding-inline: .7rem; font-size: .61rem; }
   .brand-lockup-logo,
   .brand-lockup img { height: clamp(2.85rem, 12vw, 3.35rem); max-width: min(100%, 12rem); }
-  .product-panel { grid-template-columns: 1fr 6rem; min-height: 25rem; }
-  .product-panel img { max-height: 16rem; }
+  .product-panel {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    justify-items: start;
+  }
+  .product-panel img {
+    max-height: 14rem;
+    justify-self: center;
+  }
+  .elah-card .product-line-photo,
+  .elah-compare .product-line-photo {
+    max-width: 11rem;
+    max-height: 11rem;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
@@ -1707,6 +1783,45 @@ html.has-scroll-flow { scroll-snap-type: y proximity; }
   .header-sample-cta { min-height: 2.55rem; padding-inline: .72rem; }
   .brand-lockup { margin-right: 0; }
   .brand-lockup-logo, .brand-lockup img { height: 2.8rem; max-width: 9.5rem; }
+  .elah-equation,
+  .elah-hero-lockup,
+  .section-title,
+  .display,
+  .feature-statement {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .elah-equation {
+    width: auto;
+    font-size: clamp(1.05rem, 5.5vw, 1.35rem);
+  }
+  .identity-row {
+    flex-wrap: wrap;
+  }
+  .home-hero-content .flex,
+  .sample-section .flex,
+  .elah-close .flex,
+  .site-footer .flex {
+    flex-wrap: wrap;
+  }
+  .site-footer .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .site-footer nav[aria-label="Información legal"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+  .space-chips {
+    max-width: 100%;
+  }
+  .space-chips span {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
   .site-header.is-account-portal .account-portal-shell {
     flex-wrap: wrap;
     row-gap: .65rem;

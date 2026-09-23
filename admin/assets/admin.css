@@ -1478,3 +1478,83 @@ details p {
   grid-template-columns: minmax(0, 1fr) 90px;
   gap: 10px;
 }
+
+.admin-2fa-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 22px;
+  letter-spacing: 0.28em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.admin-2fa-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--admin-text-secondary);
+}
+
+.admin-totp-setup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  margin: 0 0 20px;
+}
+
+.admin-totp-qr {
+  width: 200px;
+  height: 200px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.admin-totp-qr img,
+.admin-totp-qr canvas {
+  display: block;
+  width: 176px;
+  height: 176px;
+}
+
+.admin-totp-secret-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--admin-text-muted);
+  margin: 0 0 8px;
+}
+
+.admin-totp-secret {
+  display: inline-block;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  word-break: break-all;
+  color: var(--admin-text);
+  background: rgba(15, 47, 74, 0.65);
+  border: 1px solid var(--admin-border-strong);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.admin-recovery-codes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.admin-recovery-codes code {
+  display: block;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(15, 47, 74, 0.65);
+  border: 1px solid var(--admin-border-strong);
+}
