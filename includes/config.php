@@ -110,6 +110,7 @@ $nav = [
     ['Productos', 'productos/', 'productos'],
     ['Aroma insignia', 'aroma-insignia/', 'aroma-insignia'],
     ['Recursos', 'recursos/', 'recursos'],
+    ['Blog', 'blog/', 'blog'],
     ['Nosotros', 'nosotros/', 'nosotros'],
     ['Contacto', 'contacto/', 'contacto'],
     ['Solicitar muestra', 'muestra/', 'muestra'],
@@ -146,3 +147,15 @@ $social = [
     'facebook' => site_setting('social_facebook') ?: null,
     'instagram' => site_setting('social_instagram') ?: null,
 ];
+
+function hotel_expert_strip_host_trackers(string $html): string
+{
+    $html = preg_replace('#<script\b[^>]*src=["\']https?://img1\.wsimg\.com[^"\']+["\'][^>]*>\s*</script>#i', '', $html) ?? $html;
+    $html = preg_replace('#<script\b[^>]*>\s*window\.trafficData\b[\s\S]*?</script>#i', '', $html) ?? $html;
+    return $html;
+}
+
+if (PHP_SAPI !== 'cli' && empty($GLOBALS['hotel_expert_tccl_buffer'])) {
+    $GLOBALS['hotel_expert_tccl_buffer'] = true;
+    ob_start('hotel_expert_strip_host_trackers');
+}

@@ -28,6 +28,9 @@ $canonical = SITE_ORIGIN . '/' . ltrim((string) $canonical_path, '/');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+    <meta name="theme-color" content="#0B2345">
     <title><?= e($page_title) ?></title>
     <meta name="description" content="<?= e($page_description) ?>">
     <meta name="author" content="Hotel Expert">
@@ -48,41 +51,15 @@ $canonical = SITE_ORIGIN . '/' . ltrim((string) $canonical_path, '/');
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        html, body { background: #fff; }
+        html { color-scheme: light only; }
+        html, body { background: #fff; color-scheme: light; }
         .site-header { position: fixed; inset: 0 0 auto 0; z-index: 50; }
         .site-header .header-shell { background: rgba(11, 35, 69, 0.94); }
         body > main:not([data-scroll-flow]) { padding-top: 7.15rem; }
     </style>
     <link rel="stylesheet" href="<?= e(url('assets/css/custom.css')) ?>?v=<?= (int) filemtime(ROOT_PATH . '/assets/css/custom.css') ?>">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        expert: '#0B2345',
-                        turquesa: '#008C95',
-                        aqua: '#52C8C8',
-                        hielo: '#EAF5F5',
-                        arena: '#F3F0EA',
-                        charcoal: '#222326',
-                        eco: '#4D7C4D',
-                    },
-                    fontFamily: {
-                        heading: ['Montserrat', 'sans-serif'],
-                        body: ['"Source Sans 3"', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        glass: '0 8px 40px rgba(11, 35, 69, 0.12)',
-                        lift: '0 24px 60px rgba(11, 35, 69, 0.18)',
-                    },
-                    backgroundImage: {
-                        brand: 'linear-gradient(135deg, #0B2345 0%, #008C95 100%)',
-                    },
-                }
-            }
-        }
-    </script>
+    <!-- Load utility classes last so contextual utilities such as text-white win over base component colors. -->
+    <link rel="stylesheet" href="<?= e(url('assets/css/tailwind.css')) ?>?v=<?= (int) filemtime(ROOT_PATH . '/assets/css/tailwind.css') ?>">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
