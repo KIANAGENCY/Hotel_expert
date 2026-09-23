@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/mailer.php';
+require_once __DIR__ . '/includes/checkout-validation.php';
 
 $returnPath = static function (string $origin): string {
     return match ($origin) {
@@ -71,8 +72,13 @@ if ($authenticatedCustomer) {
     $lead['email'] = (string) $authenticatedCustomer['email'];
 }
 
-if ($lead['nombre'] === '' || $lead['hotel'] === '' || !filter_var($lead['email'], FILTER_VALIDATE_EMAIL)) {
-    $_SESSION['form_error'] = 'Revisa nombre, hotel y un correo válido.';
+$validationError = $lead['origen'] === 'cotizacion'
+    ? checkout_form_validation_error(array_merge($lead, ['contact_consent' => $_POST['contact_consent'] ?? '']), true)
+    : (($lead['nombre'] === '' || $lead['hotel'] === '' || !filter_var($lead['email'], FILTER_VALIDATE_EMAIL))
+        ? 'Revisa nombre, hotel y un correo válido.'
+        : null);
+if ($validationError !== null) {
+    $_SESSION['form_error'] = $validationError;
     header('Location: ' . url($returnPath((string) $lead['origen'])));
     exit;
 }
@@ -119,4 +125,3 @@ $hubspot = [
 $_SESSION['last_request_type'] = $lead['origen'];
 header('Location: ' . url('gracias.php'));
 exit;
-

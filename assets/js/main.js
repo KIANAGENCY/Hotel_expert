@@ -374,24 +374,6 @@
     };
   };
 
-  const syncPayForm = (items = cartItems()) => {
-    const payJson = document.querySelector("[data-cart-pay-json]");
-    if (payJson) {
-      payJson.value = JSON.stringify(items.map(({ slug, qty }) => ({ slug, qty })));
-    }
-    const quoteForm = document.querySelector("[data-quote-form]");
-    if (!quoteForm) return;
-    const setField = (selector, name) => {
-      const source = quoteForm.querySelector(`[name="${name}"]`);
-      const target = document.querySelector(selector);
-      if (source && target) target.value = source.value.trim();
-    };
-    setField("[data-cart-pay-nombre]", "nombre");
-    setField("[data-cart-pay-hotel]", "hotel");
-    setField("[data-cart-pay-email]", "email");
-    setField("[data-cart-pay-telefono]", "telefono");
-  };
-
   const syncQuoteField = (cart = readCart()) => {
     const field = document.getElementById("cart-json");
     if (field) field.value = JSON.stringify(cartItems(cart));
@@ -421,7 +403,6 @@
           <a class="btn-primary mt-6" href="${base}/catalogo.php">Explorar la tienda</a>
         </div>`;
       syncQuoteField({});
-      syncPayForm([]);
       return;
     }
 
@@ -465,42 +446,44 @@
       whatsapp.href = `https://wa.me/${window.ELAH_WHATSAPP || ''}?text=${encodeURIComponent(message)}`;
     }
     syncQuoteField(readCart());
-    syncPayForm(items);
   };
 
-  document.querySelector("[data-cart-pay-form]")?.addEventListener("submit", (event) => {
+  const quoteForm = document.querySelector("[data-quote-form]");
+  const quoteConsent = quoteForm?.querySelector("[data-quote-consent]");
+  const phoneField = quoteForm?.elements.namedItem("telefono");
+  const validateCheckoutPhone = () => {
+    if (!phoneField) return;
+    const phone = phoneField.value.trim();
+    const digits = phone.replace(/\D/g, "").length;
+    const valid = /^[0-9+() .-]+$/.test(phone) && digits >= 7 && digits <= 15;
+    phoneField.setCustomValidity(phone !== "" && !valid ? "Ingresa un teléfono válido con lada (de 7 a 15 dígitos)." : "");
+  };
+  phoneField?.addEventListener("input", validateCheckoutPhone);
+  quoteConsent?.addEventListener("change", () => quoteConsent.setCustomValidity(""));
+
+  quoteForm?.addEventListener("submit", (event) => {
+    validateCheckoutPhone();
+    if (!quoteForm.checkValidity()) {
+      event.preventDefault();
+      quoteForm.reportValidity();
+      return;
+    }
+
     const totals = cartTotals();
     if (!totals.items.length) {
       event.preventDefault();
-      showToast("Agrega al menos un producto antes de pagar");
+      showToast("Agrega al menos un producto para continuar");
       return;
     }
-    syncPayForm(totals.items);
-    const quoteForm = document.querySelector("[data-quote-form]");
-    const nombre = quoteForm?.querySelector('[name="nombre"]')?.value.trim() || "";
-    const hotel = quoteForm?.querySelector('[name="hotel"]')?.value.trim() || "";
-    const email = quoteForm?.querySelector('[name="email"]')?.value.trim() || "";
-    if (!nombre || !hotel || !email) {
-      event.preventDefault();
-      showToast("Completa nombre, hotel y correo en el formulario antes de pagar");
-      quoteForm?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  });
 
-  document.querySelector("[data-cart-pay-trigger]")?.addEventListener("click", () => {
-    const payForm = document.querySelector("[data-cart-pay-form]");
-    if (payForm) {
-      syncPayForm(cartItems());
-      payForm.requestSubmit();
-      return;
-    }
-    document.querySelector("[data-quote-form]")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-
-  document.querySelector("[data-quote-form]")?.addEventListener("submit", (event) => {
-    if (!cartItems().length) {
+    syncQuoteField();
+    const intent = event.submitter?.dataset.checkoutIntent || "quote";
+    const endpoint = intent === "payment" ? "stripe-iniciar.php" : "procesar-contacto.php";
+    quoteForm.action = new URL(`/${endpoint}`, window.location.origin).href;
+    if (intent === "quote" && quoteConsent && !quoteConsent.checked) {
       event.preventDefault();
-      showToast("Agrega al menos un producto a tu cotización");
+      quoteConsent.setCustomValidity("Acepta el contacto para poder enviar la solicitud de cotización.");
+      quoteConsent.reportValidity();
     }
   });
 

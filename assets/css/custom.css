@@ -1038,6 +1038,27 @@ body > main:not([data-scroll-flow]),
   box-shadow: 0 18px 50px rgba(11, 35, 69, 0.08);
 }
 
+.checkout-summary {
+  order: -1;
+}
+
+.checkout-actions {
+  grid-column: 1 / -1;
+}
+
+.checkout-payment-unavailable {
+  border-radius: 1rem;
+  background: rgba(11, 35, 69, 0.06);
+  padding: 1rem;
+  color: rgba(34, 35, 38, 0.72);
+}
+
+@media (min-width: 1024px) {
+  .checkout-summary {
+    order: 0;
+  }
+}
+
 .cart-empty {
   padding: 3rem 1.5rem;
   text-align: center;

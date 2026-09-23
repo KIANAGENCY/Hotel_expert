@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/cart-pricing.php';
 require_once __DIR__ . '/includes/stripe-checkout.php';
+require_once __DIR__ . '/includes/checkout-validation.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Location: ' . url('cotizacion/'));
@@ -34,8 +35,14 @@ $hotel = trim((string) ($_POST['hotel'] ?? ($customer['hotel'] ?? '')));
 $email = trim((string) ($_POST['email'] ?? ($customer['email'] ?? '')));
 $telefono = trim((string) ($_POST['telefono'] ?? ($customer['telefono'] ?? '')));
 
-if ($nombre === '' || $hotel === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $_SESSION['form_error'] = 'Para pagar, completa nombre, hotel y un correo válido en el formulario.';
+$validationError = checkout_form_validation_error(array_merge($_POST, [
+    'nombre' => $nombre,
+    'hotel' => $hotel,
+    'email' => $email,
+    'telefono' => $telefono,
+]), false);
+if ($validationError !== null) {
+    $_SESSION['form_error'] = $validationError;
     header('Location: ' . url('cotizacion/'));
     exit;
 }
